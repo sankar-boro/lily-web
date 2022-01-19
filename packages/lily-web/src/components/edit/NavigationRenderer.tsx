@@ -1,4 +1,4 @@
-import { createChapter, createSection } from "./crud/create";
+import { createChapter, createSection } from "lily-components";
 import { useBookContext} from "../../service/BookServiceProvider";
 
 const Sections = (props: any) => {

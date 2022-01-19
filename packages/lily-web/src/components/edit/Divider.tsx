@@ -1,4 +1,4 @@
-import { createSubSection } from "./crud/create/index";
+import { createSubSection } from "lily-components";
 import { useBookContext } from "../../service/BookServiceProvider";
 
 const AddSubSection = (props: any) => {

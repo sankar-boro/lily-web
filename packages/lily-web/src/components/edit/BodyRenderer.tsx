@@ -2,7 +2,6 @@ import { useHistory } from "react-router-dom";
 import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 import { deleteSection, deletePage, deleteSubSection } from "lily-components";
 
-// import { deleteSection, deletePage, deleteSubSection } from "./crud/delete/index";
 import Divider from "./Divider";
 import Update from "../forms/Update";
 import AddSection from "../forms/Section";
