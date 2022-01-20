@@ -2,9 +2,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "../components/home";
 import Login from "../components/auth/Login";
 import Signup from "../components/auth/Signup";
-import AuthServiceProvider, {
-    useAuthContext,
-} from "../service/AuthServiceProvider";
+import { useAuthContext, AuthServiceProvider } from "lily-service";
 
 //
 const AuthRoute = () => {

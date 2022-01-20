@@ -2,9 +2,8 @@ import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import Body from "./Body";
 import NavigationRenderer from "./NavigationRenderer";
-import { useAuthContext } from "../../service/AuthServiceProvider";
-import BookServiceProvider, { useBookContext} from "lily-service";
-import FormServiceProvider from "../../service/FormServiceProvider";
+import { useAuthContext } from "lily-service";
+import { useBookContext, BookServiceProvider, FormServiceProvider } from "lily-service";
 
 const Main = () => {
     const context = useBookContext();

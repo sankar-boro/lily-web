@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuthContext } from "../../service/AuthServiceProvider";
+import { useAuthContext } from "lily-service";
 import { Link } from "react-router-dom";
 import { login } from "./util";
 import { constants } from "../../globals/constants";

@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { UserInfo } from "../../service/AuthServiceProvider";
+import { UserInfo } from "lily-service";
 
 function login(props: any) {
     const {email, password, context} = props;

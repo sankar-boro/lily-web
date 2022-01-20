@@ -32,11 +32,14 @@ export const AuthContext = React.createContext<AuthService>({
     error: {},
     setError: (e: any) => {},
 });
+
 export const useAuthContext = () => useContext(AuthContext);
+
 function clearAllStorage() {
     localStorage.removeItem("auth");
 }
-const AuthServiceProvider = (props: { children: object }) => {
+
+export const AuthServiceProvider = (props: { children: object }) => {
     const [initializing, setInitializing] = useState(true);
     const [read, setRead_] = useState(false);
     const [authUserData, setAuthUserData] = useState<Option<UserInfo>>(
@@ -99,4 +102,3 @@ const AuthServiceProvider = (props: { children: object }) => {
         </AuthContext.Provider>
     );
 };
-export default AuthServiceProvider;

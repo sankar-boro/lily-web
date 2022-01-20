@@ -2,8 +2,8 @@ import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
-import { useAuthContext } from "../../service/AuthServiceProvider";
-import BookServiceProvider, { useBookContext } from 'lily-service';
+import { useAuthContext } from "lily-service";
+import { useBookContext, BookServiceProvider } from 'lily-service';
 
 const Body = () => {
     const context = useBookContext();

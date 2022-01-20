@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { Node } from "../globals/types/book";
+import axios from "axios";
 
 export type HomeState = {
     books: Node[],
@@ -47,7 +46,7 @@ const fetchHomeData = (state: HomeState, dispatch: Function) => {
     .get("http://localhost:8000/book/all", {
         withCredentials: true,
     })
-    .then((res: AxiosResponse<[]>) => {
+    .then((res: any) => {
         if (
             res.status &&
             typeof res.status === "number" &&
@@ -60,7 +59,7 @@ const fetchHomeData = (state: HomeState, dispatch: Function) => {
             });
         }
     })
-    .catch((err: AxiosError<any>) => {
+    .catch((err: any) => {
         dispatch({
             ...state,
             type: 'ERROR',
@@ -69,7 +68,7 @@ const fetchHomeData = (state: HomeState, dispatch: Function) => {
     });
 }
 
-export default function HomeServiceProvider(props: { children: object }){
+export const HomeServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, homeState);
     
     useEffect(() => {

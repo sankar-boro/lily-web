@@ -114,7 +114,7 @@ const reducer = (state: any, action: any) => {
     }
 }
 
-export default function BookServiceProvider(props: { children: object }){
+export const BookServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, bookState);
     const { bookId } = state;
     

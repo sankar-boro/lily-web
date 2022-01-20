@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { logout } from "./util";
-import { useAuthContext } from "../../service/AuthServiceProvider";
+import { useAuthContext } from "lily-service";
 
 const Header = () => {
     const context = useAuthContext();
