@@ -1,8 +1,8 @@
 {
-  "name": "lily-service",
+  "name": "lily-types",
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
-    "lily-types": "1.0.0"
+    "ts-results": "^3.3.0"
   }
 }

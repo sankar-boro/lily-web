@@ -8,9 +8,8 @@ import AddSection from "../forms/Section";
 import AddChapter from "../forms/Chapter";
 import SubSectionForm from "../forms/SubSection";
 import CreateUpdate from "../forms/CreateUpdate";
-import { Node, FORM_TYPE } from "../../globals/types/index";
+import { constants, FORM_TYPE } from "lily-types";
 import { useBookContext } from "lily-service";
-import { constants } from "../../globals/constants";
 
 const { topBar } = constants.heights.fromTopNav;
 

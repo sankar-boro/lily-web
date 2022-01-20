@@ -1,8 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { MdHome, MdSearch } from 'react-icons/md';
-import { Node } from "../../globals/types/book";
+import { constants } from "lily-types";
 import { useBookContext } from "lily-service";
-import { constants } from "../../globals/constants";
 
 const { topBar } = constants.heights.fromTopNav;
 
@@ -16,7 +15,7 @@ const SubSections = (props: any) => {
     if (!Array.isArray(activePage.child)) return null;
     const sections = activePage.child;
 
-    return sections.map((x: Node) => {
+    return sections.map((x: any) => {
         return (
             <div key={x.uniqueId}>
                 <h4 className="h4" id={x.uniqueId}>{x.title}</h4>
@@ -46,7 +45,7 @@ const Divider = (props: any) => {
         <div className="li-item hover" onClick={editNavigate}>Edit</div>
         <div className="li-item hover">Delete</div>
         <div>
-            {identity === 105 && activePage.child.map((x: Node, subSectionIndex: number) => {
+            {identity === 105 && activePage.child.map((x: any, subSectionIndex: number) => {
                 return <div className="li-item hover">
                     <a href={`#${x.uniqueId}`}>    
                         {x.title}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { textareaRows, textareaCols } from "../../globals/forms";
+import { textareaRows, textareaCols } from "lily-types";
 import { useBookContext, useFormContext } from "lily-service";
 import { useHistory } from "react-router";
 

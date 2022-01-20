@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuthContext } from "lily-service";
 import { Link } from "react-router-dom";
 import { login } from "./util";
-import { constants } from "../../globals/constants";
+import { constants } from "lily-types";
 
 const inputs = {
     email: {

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { FORM_TYPE, BOOK_SERVICE } from "./BHTypes";
+import { FORM_TYPE, BOOK_SERVICE } from "lily-types";
 import { BookHandler } from "./BookService";
 
 const bookState = {

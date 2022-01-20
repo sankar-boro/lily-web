@@ -1,4 +1,4 @@
-import { FORM_TYPE } from './types';
+import { FORM_TYPE } from 'lily-types';
 
 export const createChapter = (props: any) => {
     const { page, pageIndex, context } = props;

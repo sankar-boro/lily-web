@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Node } from "../../globals/types";
+import { Node } from "lily-types";
 
 type Book = {
     bookId: string;

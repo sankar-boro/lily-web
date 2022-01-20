@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 
 import { sortAll } from "./util";
 import CreateBook from "../forms/CreateNewBook";
-import { Node, Form, FORM_TYPE } from "../../globals/types";
+import { Node, Form, FORM_TYPE } from "lily-types";
 import { BookNavigation } from "./BookNavigation";
 
 import Form102 from "../forms/Form102";

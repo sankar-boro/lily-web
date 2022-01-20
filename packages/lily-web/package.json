@@ -13,7 +13,8 @@
     "react-router-dom": "^5.2.0",
     "ts-results": "^3.3.0",
     "lily-components": "1.0.0",
-    "lily-service": "1.0.0"
+    "lily-service": "1.0.0",
+    "lily-types": "1.0.0"
   },
   "scripts": {
     "start": "webpack serve --config ./config/webpack.config.js --env env=dev",

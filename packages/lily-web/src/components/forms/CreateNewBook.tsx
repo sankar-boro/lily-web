@@ -1,8 +1,8 @@
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Node } from "../../globals/types/book";
-import { Form } from "../../globals/types";
-import { textareaRows, textareaCols } from "../../globals/forms";
+import { Form } from "lily-types";
+import { textareaRows, textareaCols } from "lily-types";
 
 const submitBook = (props: {
     title: string;

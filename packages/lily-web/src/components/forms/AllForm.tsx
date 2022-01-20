@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { textareaRows, textareaCols } from "../../globals/forms";
+import { textareaRows, textareaCols } from "lily-types";
 import { useBookContext} from "lily-service";
 import { createNode } from "lily-components";
 

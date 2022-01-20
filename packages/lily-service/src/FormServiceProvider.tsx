@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { BOOK_SERVICE } from "../../lily-web/src/globals/types";
+import { BOOK_SERVICE } from "lily-types";
 
 const bookState = {
     cache: {},

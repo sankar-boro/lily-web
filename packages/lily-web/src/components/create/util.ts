@@ -1,5 +1,5 @@
 import { Some, Option, None } from "ts-results";
-import { Node } from "../../globals/types"
+import { Node } from "lily-types"
 
 type FormData = {
     topUniqueId: string;

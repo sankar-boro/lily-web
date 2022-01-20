@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { textareaRows, textareaCols } from "../../globals/forms";
+import { textareaRows, textareaCols } from "lily-types";
 import { useBookContext} from "lily-service";
 
 const createNewChapter = (props: {

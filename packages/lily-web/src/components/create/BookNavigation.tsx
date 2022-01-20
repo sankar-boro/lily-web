@@ -1,5 +1,5 @@
 import { getChapterData } from "./util";
-import { Form, FORM_TYPE } from "../../globals/types";
+import { Form, FORM_TYPE } from "lily-types";
 import { None, Some } from "ts-results";
 import { Dispatch, SetStateAction } from "react";
 
