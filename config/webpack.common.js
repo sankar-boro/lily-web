@@ -30,8 +30,6 @@ const alias = findPackages().reduce((alias, { dir, name }) => {
   return alias;
 }, {});
 
-console.log(alias);
-
 module.exports = {
   entry: path.resolve(__dirname, '..', './packages/lily-web/src/index.tsx'),
   resolve: {

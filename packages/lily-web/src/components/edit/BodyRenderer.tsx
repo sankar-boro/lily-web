@@ -6,7 +6,7 @@ import Divider from "./Divider";
 import Update from "../forms/Update";
 import AddSection from "../forms/Section";
 import AddChapter from "../forms/Chapter";
-import SubSection from "../forms/SubSection";
+import SubSectionForm from "../forms/SubSection";
 import CreateUpdate from "../forms/CreateUpdate";
 import { Node, FORM_TYPE } from "../../globals/types/index";
 import { useBookContext } from "../../service/BookServiceProvider";
@@ -23,7 +23,7 @@ const FormView = (props: any) => {
         return <AddSection />;
     }
     if (state === FORM_TYPE.SUB_SECTION) {
-        return <SubSection />;
+        return <SubSectionForm />;
     }
     if (state === FORM_TYPE.CREATE_UPDATE) {
         return <CreateUpdate />;
@@ -34,16 +34,44 @@ const FormView = (props: any) => {
     return null;
 };
 
-const logger = (identity: number) => {
-    if (identity === 104) {
-        console.log("Page");
-    } else if (identity === 105) {
-        console.log("Section");
-    } else {
-        console.log("Home");
-    }
-}
+const SubSection = (props: {
+    subSection: any,
+    dispatch: any,
+    activePage: any,
+    bookId: any
+}) => {
+    const { subSection, dispatch, activePage, bookId } = props;
+    const { child, ...others } = subSection;
 
+    const _delete = () => {
+        deleteSubSection({
+            section: activePage, 
+            subSection,
+            bookId,
+        });
+    }
+    
+    const _edit = () => {
+        dispatch({
+            type: 'FORM_PAGE_SETTER',
+            viewType: FORM_TYPE.UPDATE,
+            payload: others,
+        });
+    }
+
+    return <div key={subSection.uniqueId}>
+        <div className="flex center">
+            <div className="con-95">
+                <h3 className="h3">{subSection.title}</h3>
+            </div>
+            <div className="con-5 hover">
+                <MdModeEdit onClick={_edit}/>
+                <MdDelete onClick={_delete}/>
+            </div>
+        </div>
+        <div className="description">{subSection.body}</div>
+    </div>
+}
 
 const SubSections = (props: any) => {
     const { activePage, context } = props;
@@ -55,31 +83,12 @@ const SubSections = (props: any) => {
     const subSections = activePage.child;
 
     return subSections.map((subSection: any, sectionIndex: number) => {
-        return (
-            <div key={subSection.uniqueId}>
-                <div className="flex center">
-                    <div className="con-95">
-                        <h3 className="h3">{subSection.title}</h3>
-                    </div>
-                    <div className="con-5 hover">
-                        <MdModeEdit onClick={() => {
-                            const { child, ...others } = subSection;
-                            dispatch({
-                                type: 'FORM_PAGE_SETTER',
-                                viewType: FORM_TYPE.UPDATE,
-                                payload: others,
-                            });
-                        }}/>
-                        <MdDelete onClick={() => {deleteSubSection({
-                            section: activePage, 
-                            subSection,
-                            bookId,
-                        })}}/>
-                    </div>
-                </div>
-                <div className="description">{subSection.body}</div>
-            </div>
-        );
+        return <SubSection 
+            subSection={subSection}
+            dispatch={dispatch}
+            activePage={activePage}
+            bookId={bookId}
+        />
     })
 }
 

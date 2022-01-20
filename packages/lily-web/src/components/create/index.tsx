@@ -6,7 +6,6 @@ import { useHistory } from "react-router-dom";
 import { sortAll } from "./util";
 import CreateBook from "../forms/CreateNewBook";
 import { Node, Form, FORM_TYPE } from "../../globals/types";
-import CreateBodyComponent from "./BodyComponent";
 import { BookNavigation } from "./BookNavigation";
 
 import Form102 from "../forms/Form102";
@@ -26,8 +25,6 @@ const EditBook = () => {
         };
     } = useHistory();
     const { location } = history;
-    // const { state } = location;
-    // const { title, bookId } = state.main;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [bookId, setBookId] = useState<string | null>(null);
@@ -51,8 +48,8 @@ const EditBook = () => {
     }, [bookRows]);
 
     return (
-        <CreateBodyComponent
-            leftComponent={
+        <div style={{display: "flex", flexDirection: "row"}}>
+            <div className="navbar-left">
                 <BookNavigation
                     title={title}
                     allPages={allPages}
@@ -63,22 +60,21 @@ const EditBook = () => {
                     sectionId={sectionId}
                     setParentId={setParentId}
                 />
-            }
-            bookId={bookId}
-            allPages={allPages}
-        >
-            <RenderBody
-                sectionId={sectionId}
-                currentFormType={currentFormType}
-                setCurrentFormType={setCurrentFormType}
-                allPages={allPages}
-                bookId={bookId}
-                parentId={parentId}
-                activeId={activeId}
-                setBookRows={setBookRows}
-                bookRows={bookRows}
-            />
-        </CreateBodyComponent>
+            </div>
+            <div className="home-page-container">
+                <RenderBody
+                    sectionId={sectionId}
+                    currentFormType={currentFormType}
+                    setCurrentFormType={setCurrentFormType}
+                    allPages={allPages}
+                    bookId={bookId}
+                    parentId={parentId}
+                    activeId={activeId}
+                    setBookRows={setBookRows}
+                    bookRows={bookRows}
+                />
+            </div>
+        </div>
     );
 };
 
