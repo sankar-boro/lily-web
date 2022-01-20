@@ -1,4 +1,4 @@
-import { useBookContext} from "../../service/BookServiceProvider";
+import { useBookContext} from "lily-service";
 import { constants } from "../../globals/constants";
 
 const { leftBar } = constants.heights.fromTopNav;

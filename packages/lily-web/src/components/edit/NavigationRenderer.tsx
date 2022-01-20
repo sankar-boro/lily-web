@@ -1,5 +1,5 @@
 import { createChapter, createSection } from "lily-components";
-import { useBookContext} from "../../service/BookServiceProvider";
+import { useBookContext} from "lily-service";
 
 const Sections = (props: any) => {
     const { page, context } = props;

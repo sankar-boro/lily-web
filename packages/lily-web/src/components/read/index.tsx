@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Body from "./Body";
 import NavigationRenderer from "./NavigationRenderer";
 import { useAuthContext } from "../../service/AuthServiceProvider";
-import BookServiceProvider, { useBookContext} from "../../service/BookServiceProvider";
+import BookServiceProvider, { useBookContext} from "lily-service";
 import FormServiceProvider from "../../service/FormServiceProvider";
 
 const Main = () => {

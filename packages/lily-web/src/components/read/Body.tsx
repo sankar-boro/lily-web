@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { MdHome, MdSearch } from 'react-icons/md';
 import { Node } from "../../globals/types/book";
-import { useBookContext } from "../../service/BookServiceProvider";
+import { useBookContext } from "lily-service";
 import { constants } from "../../globals/constants";
 
 const { topBar } = constants.heights.fromTopNav;

@@ -20,8 +20,10 @@
       "paths": {
         "lily-web/*": ["packages/lily-web/src/*"],
         "lily-web": ["packages/lily-web/src"],
-        "lily-components": [ "packages/lily-components/src" ],
-        "lily-components/*": [ "packages/lily-components/src/*" ]
+        "lily-components": [ "packages/lily-components/src"],
+        "lily-components/*": [ "packages/lily-components/src/*"],
+        "lily-service": [ "packages/lily-service/src"],
+        "lily-service/*": [ "packages/lily-service/src/*"]
       },
       "baseUrl": ".",
     }

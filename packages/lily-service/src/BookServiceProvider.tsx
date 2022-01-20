@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { FORM_TYPE, BOOK_SERVICE } from "../globals/types";
-import { BookHandler } from "./handlers/BookService";
+import { FORM_TYPE, BOOK_SERVICE } from "./BHTypes";
+import { BookHandler } from "./BookService";
 
 const bookState = {
     apiData: null,

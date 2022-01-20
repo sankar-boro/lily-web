@@ -1,5 +1,5 @@
 import { createSubSection } from "lily-components";
-import { useBookContext } from "../../service/BookServiceProvider";
+import { useBookContext } from "lily-service";
 
 const AddSubSection = (props: any) => {
     const { activePage } = props;
