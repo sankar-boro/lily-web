@@ -1,4 +1,3 @@
-import { getChapterData } from "./util";
 import { Form, FORM_TYPE } from "lily-types";
 import { None, Some } from "ts-results";
 import { Dispatch, SetStateAction } from "react";
@@ -41,17 +40,10 @@ const BookNavigation = (props: BookNavigationProps) => {
 
     return (
         <div>
-            {allPages.map((value: any, index: number) => {
-                const { chapterData, formData, key } = getChapterData(
-                    value,
-                    index,
-                    totalChapters,
-                    allPages,
-                    props
-                );
-                const { sections, chapter } = chapterData;
+            {allPages.map((chapter: any, index: number) => {
+                const sections = chapter.child;
                 return (
-                    <div key={key}>
+                    <div key={index}>
                         <div
                             style={{
                                 borderLeft: "1px solid #ccc",

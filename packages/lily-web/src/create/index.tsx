@@ -3,7 +3,7 @@ import { None } from "ts-results";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-import { sortAll } from "./util";
+import { sortAll } from "lily-service";
 import CreateBook from "../forms/CreateNewBook";
 import { Node, Form, FORM_TYPE } from "lily-types";
 import { BookNavigation } from "./BookNavigation";
@@ -43,7 +43,7 @@ const EditBook = () => {
     };
 
     useEffect(() => {
-        let pages = sortAll(bookRows);
+        let pages: any = sortAll(bookRows);
         setAllPages(pages);
     }, [bookRows]);
 
