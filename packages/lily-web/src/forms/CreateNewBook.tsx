@@ -1,17 +1,13 @@
 import { useState } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { Node } from "../../globals/types/book";
-import { Form } from "lily-types";
+import axios from "axios";
 import { textareaRows, textareaCols } from "lily-types";
 
 const submitBook = (props: {
     title: string;
     body: string;
-    identity: number;
-    setBookRows: Function;
-    bookRows: Node[];
+    identity: number
 }) => {
-    const { title, body, identity, setBookRows, bookRows } = props;
+    const { title, body, identity } = props;
     axios
         .post(
             "http://localhost:8000/book/create/new/book",
@@ -24,35 +20,16 @@ const submitBook = (props: {
                 withCredentials: true,
             }
         )
-        .then((res: AxiosResponse<{ status: number; data: Node }>) => {
-            if (
-                res.status &&
-                typeof res.status === "number" &&
-                res.status === 200
-            ) {
-                setBookRows([...bookRows, ...[res.data]]);
-            }
-        })
-        .catch((err: AxiosError<any>) => {
+        .then(() => {})
+        .catch(() => {
             // console.log("SignupError", err.response);
         });
 };
 
-const CreateNewBook = (props: {
-    sectionId: string | null;
-    currentFormType: Form;
-    setCurrentFormType: Function;
-    allPages: any;
-    bookId: string | null;
-    parentId: string | null;
-    activeId: string | null;
-    setBookRows: Function;
-    bookRows: Node[];
-}) => {
+const CreateNewBook = () => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
 
-    const { allPages, setBookRows, bookRows } = props;
     return (
         <div className="container">
             <div className="con-65">
@@ -99,9 +76,7 @@ const CreateNewBook = (props: {
                                 submitBook({
                                     title,
                                     body,
-                                    identity: 101,
-                                    setBookRows,
-                                    bookRows,
+                                    identity: 101
                                 });
                             }}
                         >

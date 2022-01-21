@@ -104,7 +104,17 @@ const groupChapters = (parentId: string, chapters: any) => {
     return orders;
 };
 
-export const sortAll = (data: Node[]) => {
+export const sortAll = (_data: Node[], removeIds: any[] = []) => {
+    let data = _data;
+    if (removeIds.length > 0) {
+        data = _data.filter((d: any) => {
+            if (removeIds.includes(d.uniqueId)) {
+                return false;
+            }
+            return true;
+        });
+    }
+
     let gs = groups(data);
     let ozf = gs[105];
     let ozs = gs[106];
@@ -119,3 +129,19 @@ export const sortAll = (data: Node[]) => {
     return chapters;
 };
 
+export const setActivePageFn = (props: any) => {
+    const { apiData, sectionId } = props;
+    let activePage = null;
+
+        apiData.forEach((page: any) => {
+            page.child.forEach((section: any) => {
+                    if (section.uniqueId === sectionId) {
+                        const { child, ...others } = section;
+                        activePage = section;
+                    }
+                })
+        });
+    
+
+    return activePage;
+}

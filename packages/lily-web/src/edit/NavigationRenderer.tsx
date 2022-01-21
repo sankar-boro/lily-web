@@ -1,5 +1,4 @@
 import { createChapter, createSection } from "lily-components";
-import { useBookContext} from "lily-service";
 
 const Sections = (props: any) => {
     const { page, context } = props;
@@ -16,7 +15,7 @@ const Sections = (props: any) => {
 
     return <div> {sections.map((section: any, sectionIndex: number) => {
         return (
-            <div key={`${sectionIndex}`}>
+            <div key={`${sectionIndex}`} className="Section">
                 <div
                     onClick={(e) => {
                         e.preventDefault();
@@ -27,9 +26,11 @@ const Sections = (props: any) => {
                         })
                     }}
                     key={section.uniqueId}
-                    className="section-nav hover"
+                    className="section-nav hover tooltip"
+                    onMouseEnter={() => {}}
                 >
                     {section.title}
+                    <span className="tooltiptext">{section.uniqueId}</span>
                 </div>
                 <AddSection {...props} sectionIndex={sectionIndex} sections={sections} />
             </div>
@@ -39,8 +40,7 @@ const Sections = (props: any) => {
 }
 
 const PageTitle = (props: any) => {
-    const { page } = props;
-    const context = useBookContext();
+    const { page, context } = props;
     const { dispatch } = context;
     
     const setActivePage = (e: any) => {
@@ -53,9 +53,10 @@ const PageTitle = (props: any) => {
 
     return <div
         onClick={setActivePage}
-        className="chapter-nav hover"
+        className="chapter-nav hover tooltip"
     >
         {page.title}
+        <span className="tooltiptext">{page.uniqueId}</span>
     </div>
 }
 
@@ -103,8 +104,8 @@ const NavigationPages = (props: any) => {
     )
 }
 
-const Main = () => {
-    const context: any = useBookContext();
+const Main = (props: any) => {
+    const { context } = props;
     const { apiData: pages } = context;
     return (
         <div className="con-19 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>

@@ -1,8 +1,30 @@
 import { Result, Ok, Err } from "ts-results";
 import axios from "axios";
 
-const log = true;
+const log = false;
 const UPDATE_OR_DELETE = "http://localhost:8000/book/update_or_delete";
+
+const updateOrDelete = async (data: {
+  deleteData: any,
+  updateData: any,
+}, bookId: string) => {
+
+  if (log) {
+    console.log(data);
+    return;
+  }
+
+  await axios.post(UPDATE_OR_DELETE, {
+    bookId,
+    json: JSON.stringify(data),
+  }, {
+    withCredentials: true,
+  })
+  .then((res: any) => {
+    console.log(data);
+    return res;
+  });
+}
 
 export const deleteSection = (bookContext: any) => {
     const { apiData, activePage: activeSection, bookId } = bookContext;
@@ -60,51 +82,38 @@ export const deleteSection = (bookContext: any) => {
     return Ok('')
 }
 
-export const deleteSubSection = (props: any) => {
+export const deleteSubSection = async (props: any) => {
     const { bookId, section, subSection } = props;
     let totalSubSections = section.child.length;    
   	let parentData = section;
   	let childData = null;
   	let deleteType = null;
     let subSections = section.child;
-	const deleteData = [subSection.uniqueId];
+    const deleteData = [subSection.uniqueId];
 
-  	for (let i=0; i < totalSubSections; i++) {
-    	if (!subSections[i] || !subSections[i].uniqueId) return Err(`no data for index ${i}`);
-    	if (subSections[i].uniqueId === subSection.uniqueId) {
-        	if (subSections[i + 1]) {
-            	childData = subSections[i + 1];
-        	}
-        	break;
-    	}
-    	parentData = subSections[i];
-	}
+    for (let i=0; i < totalSubSections; i++) {
+        if (!subSections[i] || !subSections[i].uniqueId) return Err(`no data for index ${i}`);
+        if (subSections[i].uniqueId === subSection.uniqueId) {
+            if (subSections[i + 1]) {
+                childData = subSections[i + 1];
+            }
+            break;
+        }
+        parentData = subSections[i];
+    }
 
-	let updateData = null;
+    let updateData = null;
 
-	if (parentData && childData) {
-		updateData = {
-		  topUniqueId: parentData.uniqueId,
-		  botUniqueId: childData.uniqueId
-		}
-	};
-	
-	updateOrDelete({updateData, deleteData}, bookId);
+    if (parentData && childData) {
+      updateData = {
+        topUniqueId: parentData.uniqueId,
+        botUniqueId: childData.uniqueId
+      }
+    };
+    
+    await updateOrDelete({updateData, deleteData}, bookId);
 
-	return Ok('')
-}
-
-const updateOrDelete = (data: any, bookId: string) => {
-  if (log) {
-    console.log(data);
-    return;
-  }
-  axios.post(UPDATE_OR_DELETE, {
-    bookId,
-    json: JSON.stringify(data),
-  }, {
-    withCredentials: true,
-  });
+    return Ok("Deleted")
 }
 
 export const deletePage = (context: any): Result<string, string> => {
@@ -130,8 +139,6 @@ export const deletePage = (context: any): Result<string, string> => {
   let parentData: any = null;
 
   for (let i=0; i < totalChapters; i++) {
-    if (!apiData[i]) return Err(`!apiData[i]`);
-    if (!apiData[i].uniqueId) return Err(`!apiData[i].uniqueId`);
     if (apiData[i].uniqueId === activePageId) {
       if (apiData[i+1]) {
         childData = apiData[i + 1];

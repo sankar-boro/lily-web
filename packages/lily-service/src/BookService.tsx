@@ -5,6 +5,7 @@ interface BookService {
     readonly data: any[];
     readonly err: any;
     payload: any;
+    rawData: any;
 
     fetch(bookId: string): any;
     map_res(): any;
@@ -21,6 +22,7 @@ class BookHandler implements BookService {
     data: any;
     err: any;
     payload: any;
+    rawData: any;
 
     fetch(bookId: string): Promise<any> {
         const prefix = "http://localhost:8000/book/getall/";
@@ -42,6 +44,7 @@ class BookHandler implements BookService {
         const { payload } = this;
         const { status, data } = payload;
         if (status && data && status === 200) {
+            this.rawData = data;
             this.data = sortAll(data);
         }
         return this;

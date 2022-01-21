@@ -3,6 +3,7 @@ import { FORM_TYPE, BOOK_SERVICE } from "lily-types";
 import { BookHandler } from "./BookService";
 
 const bookState = {
+    rawData: null,
     apiData: null,
     bookId: '',
     parentId: '',
@@ -19,6 +20,7 @@ const bookState = {
 }
 
 export const BookContext = React.createContext({
+    rawData: null,
     apiData: null,
     service: new BookHandler(),
     bookId: '',
@@ -31,7 +33,7 @@ export const BookContext = React.createContext({
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
-    viewState: FORM_TYPE.NONE,
+    viewState: FORM_TYPE.NONE || "UPDATING",
 });
 
 export const useBookContext = () => useContext(BookContext);
@@ -41,11 +43,16 @@ const fetchData = (state: any, dispatch: Function) => {
     // We only want this function to be performed once
     if (apiState) return;
     service.fetch(bookId).then((context: any) => {
-        let res = context.map_res().data;
+        let { data, rawData } = context.map_res();
         dispatch({
             type: BOOK_SERVICE.SETTER,
             _setter: 'apiData',
-            payload: res,
+            payload: data,
+        });
+        dispatch({
+            type: BOOK_SERVICE.SETTER,
+            _setter: 'rawData',
+            payload: rawData,
         });
         dispatch({
             type: BOOK_SERVICE.SETTER,
@@ -57,7 +64,8 @@ const fetchData = (state: any, dispatch: Function) => {
 
 const setter = (state: any, action: any) => {
     const { payload, _setter } = action;
-    return { ...state, [_setter]: payload };
+    let data = { ...state, [_setter]: payload };
+    return data;
 }
 
 const setActivePage = (state: any, action: any) => {

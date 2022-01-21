@@ -9,7 +9,7 @@ const Body = () => {
     const context = useBookContext();
     const authContext = useAuthContext();
     const history: any = useHistory();
-    const { dispatch, apiState } = context;
+    const { dispatch, apiState, viewState } = context;
     const { setRead } = authContext;
     const { bookId } = history.location.state;
 
@@ -31,14 +31,15 @@ const Body = () => {
 
     useEffect(initState, [dispatch, setRead, bookId, apiState]);
 
-    if(!context.apiData) return <div>Fetching...</div>;
-    return <Renderer />;
+    if(!context.activePage) return <div>Fetching...</div>;
+
+    return <Renderer context={context} />;
 }
 
-const Renderer = () => {
+const Renderer = (props: any) => {
     return <div className="flex">
-        <NavigationRenderer />
-        <BodyRenderer />
+        <NavigationRenderer context={props.context} />
+        <BodyRenderer context={props.context} />
     </div>  
 }
 

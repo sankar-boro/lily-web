@@ -8,8 +8,8 @@ import AddSection from "../forms/Section";
 import AddChapter from "../forms/Chapter";
 import SubSectionForm from "../forms/SubSection";
 import CreateUpdate from "../forms/CreateUpdate";
-import { constants, FORM_TYPE } from "lily-types";
-import { useBookContext } from "lily-service";
+import { constants, FORM_TYPE, BOOK_SERVICE } from "lily-types";
+import { sortAll, setActivePageFn } from "lily-service";
 
 const { topBar } = constants.heights.fromTopNav;
 
@@ -33,92 +33,16 @@ const FormView = (props: any) => {
     return null;
 };
 
-const SubSection = (props: {
-    subSection: any,
-    dispatch: any,
-    activePage: any,
-    bookId: any
-}) => {
-    const { subSection, dispatch, activePage, bookId } = props;
-    const { child, ...others } = subSection;
-
-    const _delete = () => {
-        deleteSubSection({
-            section: activePage, 
-            subSection,
-            bookId,
-        });
-    }
-    
-    const _edit = () => {
-        dispatch({
-            type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.UPDATE,
-            payload: others,
-        });
-    }
-
-    return <div key={subSection.uniqueId}>
-        <div className="flex center">
-            <div className="con-95">
-                <h3 className="h3">{subSection.title}</h3>
-            </div>
-            <div className="con-5 hover">
-                <MdModeEdit onClick={_edit}/>
-                <MdDelete onClick={_delete}/>
-            </div>
-        </div>
-        <div className="description">{subSection.body}</div>
-    </div>
-}
-
-const SubSections = (props: any) => {
-    const { activePage, context } = props;
-    const { hideSection, dispatch, bookId } = context;
-    if (hideSection) return null;
-    if (!activePage) return null;
-    if (!activePage.child) return null;
-    if (!Array.isArray(activePage.child)) return null;
-    const subSections = activePage.child;
-
-    return subSections.map((subSection: any, sectionIndex: number) => {
-        return <SubSection 
-            subSection={subSection}
-            dispatch={dispatch}
-            activePage={activePage}
-            bookId={bookId}
-        />
-    })
-}
-
-const Body = () => {
-    const context: any = useBookContext();
-    const { dispatch, activePage, viewState } = context;
-    
-    if (activePage === null) return null;
+const BodyRenderer = (props: any) => {
+    const { context } = props;
+    const history: any = useHistory();
+    const { title } = history.location.state;
+    const { dispatch, activePage, viewState, bookId, rawData, apiData: _apiDAta } = context;
     const { child, ...activePageDetails } = activePage;
     const { identity } = activePageDetails;
-    
-    if (viewState !== FORM_TYPE.NONE) {
-        return (
-            <div className="flex">
-                <div className="con-80 flex">
-                    <div className="con-10" />
-                    <div className="con-80">
-                        <FormView state={viewState} />
-                    </div>
-                    <div className="con-10" />
-                </div>
-                <Divider {...context} />
-            </div>
-        );
-    }
 
-    /** 
-     * This sections only contains delete and edit for
-     * 104, 105.
-     * 101 not yet implemented.
-     */
+    const goHome = () => { history.replace({ pathname: "/"})};
+
     const Edit = () => {
         const edit = () => dispatch({
             type: 'FORM_PAGE_SETTER',
@@ -141,8 +65,57 @@ const Body = () => {
         return null;
     }
 
-    return (
-        <div className="flex">
+
+    const _delete = async (subSection: any) => {
+        await deleteSubSection({
+            section: activePage, 
+            subSection,
+            bookId,
+        });
+        const newData = sortAll(rawData, [subSection.uniqueId]);
+        const newActivePage = setActivePageFn({
+            apiData: newData,
+            sectionId: activePage.uniqueId,
+            pageId: null,
+        });
+        dispatch({
+            type: BOOK_SERVICE.SETTER,
+            _setter: 'activePage',
+            payload: newActivePage,
+        });
+        dispatch({
+            type: BOOK_SERVICE.SETTER,
+            _setter: 'apiData',
+            payload: newData,
+        });
+    }
+    
+    const _edit = (subSection: any) => {
+        dispatch({
+            type: 'FORM_PAGE_SETTER',
+            viewType: FORM_TYPE.UPDATE,
+            payload: subSection,
+        });
+    }
+
+    const Body = () => {
+
+        if (viewState !== FORM_TYPE.NONE) {
+            return (
+                <div className="flex">
+                    <div className="con-80 flex">
+                        <div className="con-10" />
+                        <div className="con-80">
+                            <FormView state={viewState} />
+                        </div>
+                        <div className="con-10" />
+                    </div>
+                    <Divider {...context} />
+                </div>
+            );
+        }
+        
+        return <div className="flex">
             <div className="con-80 flex">
                 <div className="con-10" />
                 <div className="con-80" style={{ paddingTop: 50 }}>
@@ -156,40 +129,49 @@ const Body = () => {
                         </div>
                     </div>
                     <div className="description">{activePage.body}</div>
-                    <SubSections activePage={activePage} context={context} />
+                    {
+                        activePage.child.map((subSection: any, sectionIndex: number) => {
+                            return <div key={subSection.uniqueId}>
+                                <div className="flex center">
+                                    <div className="con-95">
+                                        <h3 className="h3 tooltip">
+                                            {subSection.title}
+                                            <span className="tooltiptext">
+                                                {subSection.uniqueId}
+                                            </span>
+                                        </h3>
+                                    </div>
+                                    <div className="con-5 hover">
+                                        <MdModeEdit onClick={() => { _edit(subSection) }}/>
+                                        <MdDelete onClick={() => {_delete(subSection)}}/>
+                                    </div>
+                                </div>
+                                <div className="description">{subSection.body}</div>
+                            </div>
+                        })
+                    }
                 </div>
                 <div className="con-10" />
             </div>
             <Divider {...context} />
         </div>
-    );
-}
+    }
 
-const Header = () => {
-    const history: any = useHistory();
-    const { title } = history.location.state;
-
-    const goHome = () => { history.replace({ pathname: "/"})};
-
-    return <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>
-        <div className="con-80 flex">
-            <div className="flex con-10" style={{ alignItems: "center" }}>
-                <MdSearch className="hover" style={{ padding: 15 }}/>
-            </div>
-            <div className="con-80 flex center">
-                <h2 className="h2 book-title">{title}</h2>
-            </div>
-            <div className="con-10" />
-        </div>
-        <div className="con-20 flex">
-            <MdHome className="hover" onClick={goHome}/>
-        </div>
-    </div>
-}
-
-const BodyRenderer = () => {
     return <div className="con-80" style={{ marginLeft: "20%" }}>
-        <Header />
+        <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>
+            <div className="con-80 flex">
+                <div className="flex con-10" style={{ alignItems: "center" }}>
+                    <MdSearch className="hover" style={{ padding: 15 }}/>
+                </div>
+                <div className="con-80 flex center">
+                    <h2 className="h2 book-title">{title}</h2>
+                </div>
+                <div className="con-10" />
+            </div>
+            <div className="con-20 flex">
+                <MdHome className="hover" onClick={goHome}/>
+            </div>
+        </div>
         <Body />
     </div>
 };
