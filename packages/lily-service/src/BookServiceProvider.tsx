@@ -69,12 +69,11 @@ const setter = (state: any, action: any) => {
 }
 
 const setActivePage = (state: any, action: any) => {
-    const { service } = state;
-    const { data } = service;
+    const { apiData } = state;
     const { pageId, sectionId } = action;
     let __state = state;
     if (action.sectionId && action.pageId) {
-        data.forEach((page: any) => {
+        apiData.forEach((page: any) => {
             if (page.uniqueId === pageId) {
                 page.child.forEach((section: any) => {
                     if (section.uniqueId === sectionId) {
@@ -85,7 +84,7 @@ const setActivePage = (state: any, action: any) => {
             }
         });
     } else {
-        data.forEach((page: any) => {
+        apiData.forEach((page: any) => {
             if (page.uniqueId === pageId) {
                 const { child, ...others } = page;
                 __state = { ...state, activePage: page, viewData: others, hideSection: true, viewState: FORM_TYPE.NONE };

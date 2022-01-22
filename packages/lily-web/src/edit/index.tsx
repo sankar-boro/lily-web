@@ -39,7 +39,7 @@ const Body = () => {
 const Renderer = (props: any) => {
     return <div className="flex">
         <NavigationRenderer context={props.context} />
-        <BodyRenderer context={props.context} />
+        <BodyRenderer />
     </div>  
 }
 

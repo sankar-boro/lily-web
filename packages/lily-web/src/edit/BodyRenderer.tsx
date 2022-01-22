@@ -9,7 +9,8 @@ import AddChapter from "../forms/Chapter";
 import SubSectionForm from "../forms/SubSection";
 import CreateUpdate from "../forms/CreateUpdate";
 import { constants, FORM_TYPE, BOOK_SERVICE } from "lily-types";
-import { sortAll, setActivePageFn } from "lily-service";
+import { sortAll, setActivePageFn, useBookContext } from "lily-service";
+import SubSection from "../forms/SubSection";
 
 const { topBar } = constants.heights.fromTopNav;
 
@@ -33,38 +34,11 @@ const FormView = (props: any) => {
     return null;
 };
 
-const BodyRenderer = (props: any) => {
-    const { context } = props;
-    const history: any = useHistory();
-    const { title } = history.location.state;
-    const { dispatch, activePage, viewState, bookId, rawData, apiData: _apiDAta } = context;
-    const { child, ...activePageDetails } = activePage;
-    const { identity } = activePageDetails;
+const SubSectionBody = (props: any) => {
+    const { subSection } = props;
 
-    const goHome = () => { history.replace({ pathname: "/"})};
-
-    const Edit = () => {
-        const edit = () => dispatch({
-            type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.UPDATE,
-            payload: activePageDetails,
-        });
-        return <MdModeEdit onClick={edit}/>
-    }
-    const Delete = () => {
-        const _deletePage = (e: any) => {
-            e.preventDefault();
-            deletePage(context);
-        };
-        const _deleteSection = (e: any) => {
-            e.preventDefault();
-            deleteSection(context);
-        };
-        if (identity === 104) return <MdDelete onClick={_deletePage}/>
-        if (identity === 105) return <MdDelete onClick={_deleteSection}/>
-        return null;
-    }
-
+    const context: any = useBookContext();
+    const { rawData, bookId, dispatch, activePage } = context;
 
     const _delete = async (subSection: any) => {
         await deleteSubSection({
@@ -98,6 +72,57 @@ const BodyRenderer = (props: any) => {
         });
     }
 
+    return <div key={subSection.uniqueId}>
+        <div className="flex center">
+            <div className="con-95">
+                <h3 className="h3 tooltip">
+                    {subSection.title}
+                    <span className="tooltiptext">
+                        {subSection.uniqueId}
+                    </span>
+                </h3>
+            </div>
+            <div className="con-5 hover">
+                <MdModeEdit onClick={() => { _edit(subSection) }}/>
+                <MdDelete onClick={() => {_delete(subSection)}}/>
+            </div>
+        </div>
+        <div className="description">{subSection.body}</div>
+    </div>
+}
+
+const BodyRenderer = () => {
+    const history: any = useHistory();
+    const context: any = useBookContext();
+    const { title } = history.location.state;
+    const { dispatch, activePage, viewState, bookId, rawData, apiData: _apiDAta } = context;
+    const { child, ...activePageDetails } = activePage;
+    const { identity } = activePageDetails;
+
+    const goHome = () => { history.replace({ pathname: "/"})};
+
+    const Edit = () => {
+        const edit = () => dispatch({
+            type: 'FORM_PAGE_SETTER',
+            viewType: FORM_TYPE.UPDATE,
+            payload: activePageDetails,
+        });
+        return <MdModeEdit onClick={edit}/>
+    }
+    const Delete = () => {
+        const _deletePage = (e: any) => {
+            e.preventDefault();
+            deletePage(context);
+        };
+        const _deleteSection = (e: any) => {
+            e.preventDefault();
+            deleteSection(context);
+        };
+        if (identity === 104) return <MdDelete onClick={_deletePage}/>
+        if (identity === 105) return <MdDelete onClick={_deleteSection}/>
+        return null;
+    }
+
     const Body = () => {
 
         if (viewState !== FORM_TYPE.NONE) {
@@ -114,6 +139,12 @@ const BodyRenderer = (props: any) => {
                 </div>
             );
         }
+
+        const SectionBody = () => {
+            return activePage.child.map((subSection: any, sectionIndex: number) => {
+                return <SubSectionBody subSection={subSection} />
+            })
+        }
         
         return <div className="flex">
             <div className="con-80 flex">
@@ -129,27 +160,7 @@ const BodyRenderer = (props: any) => {
                         </div>
                     </div>
                     <div className="description">{activePage.body}</div>
-                    {
-                        activePage.child.map((subSection: any, sectionIndex: number) => {
-                            return <div key={subSection.uniqueId}>
-                                <div className="flex center">
-                                    <div className="con-95">
-                                        <h3 className="h3 tooltip">
-                                            {subSection.title}
-                                            <span className="tooltiptext">
-                                                {subSection.uniqueId}
-                                            </span>
-                                        </h3>
-                                    </div>
-                                    <div className="con-5 hover">
-                                        <MdModeEdit onClick={() => { _edit(subSection) }}/>
-                                        <MdDelete onClick={() => {_delete(subSection)}}/>
-                                    </div>
-                                </div>
-                                <div className="description">{subSection.body}</div>
-                            </div>
-                        })
-                    }
+                    <SectionBody />
                 </div>
                 <div className="con-10" />
             </div>

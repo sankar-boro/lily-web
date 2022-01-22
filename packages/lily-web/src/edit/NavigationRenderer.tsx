@@ -19,6 +19,8 @@ const Sections = (props: any) => {
                 <div
                     onClick={(e) => {
                         e.preventDefault();
+                        console.log(context.activePage);
+                        console.log(context.apiData);
                         dispatch({
                             type: 'ACTIVE_PAGE',
                             pageId: page.uniqueId,
@@ -45,6 +47,8 @@ const PageTitle = (props: any) => {
     
     const setActivePage = (e: any) => {
         e.preventDefault();
+        console.log(context.activePage);
+        console.log(context.apiData);
         dispatch({
             type: 'ACTIVE_PAGE',
             pageId: page.uniqueId,
