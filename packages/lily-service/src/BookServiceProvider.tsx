@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useReducer } from "react";
 import { FORM_TYPE, BOOK_SERVICE } from "lily-types";
 import { BookHandler } from "./BookService";
+import { deleteSubSection } from "./DataHandler";
 
 const bookState = {
     rawData: null,
@@ -96,12 +97,12 @@ const setActivePage = (state: any, action: any) => {
 }
 
 const setters = (state: any, action: any) => {
-    const { _setters, _payloads } = action;
-    let _state = state;
-    _setters.forEach((s: string, index: number) => {
-        _state[s] = _payloads[index];
-    });
-    return _state;
+    const { setters } = action;
+    const updateData: any = {};
+    setters.forEach((setter: any) => {
+        updateData[setter.key] = setter.value;
+    })
+    return { ...state, ...updateData };
 }
 
 const reducer = (state: any, action: any) => {
@@ -116,15 +117,39 @@ const reducer = (state: any, action: any) => {
             return { ...state, viewState: viewType, formData: payload };
         case BOOK_SERVICE.ACTIVE_PAGE:
             return setActivePage(state, action);
+        case 'newState':
+            return action.payload;
         default:
             throw new Error(`Unknown type: ${action.type}`);
     }
 }
 
+const deleter = (props: any, state: any) => {
+    const { action } = props;
+    switch (action) {
+        case 'deleteSubSection': 
+            return deleteSubSection(props, state);
+        default: 
+            throw new Error(`Unknown action.`);
+    }
+}
+
+const useDeleter = (deleter: any, dispatch: any, state: any) => {
+    const work = (props: any) => {
+        const newstate = deleter(props, state);
+        if (newstate) dispatch({
+            type: 'newState',
+            payload: newstate
+        });
+    };
+    return [work];
+}
+
 export const BookServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, bookState);
+    const [deleteDispatch] = useDeleter(deleter, dispatch, state);
+
     const { bookId } = state;
-    
     useEffect(() => {
         if (bookId) {
             fetchData(state, dispatch);
@@ -135,7 +160,8 @@ export const BookServiceProvider = (props: { children: object }) => {
         <BookContext.Provider
             value={{
                 ...state,
-                dispatch: dispatch,
+                dispatch,
+                deleteDispatch
             }}
         >
             {props.children}

@@ -1,5 +1,7 @@
 import { Result, Ok, Err } from "ts-results";
 import axios from "axios";
+import { sortAll } from "lily-service";
+import { BOOK_SERVICE } from "lily-types";
 
 const log = false;
 const UPDATE_OR_DELETE = "http://localhost:8000/book/update_or_delete";
@@ -79,11 +81,14 @@ export const deleteSection = (bookContext: any) => {
 
     updateOrDelete({updateData, deleteData}, bookId);
     
-    return Ok('')
+    return Ok(deleteData)
 }
 
-export const deleteSubSection = async (props: any) => {
-    const { bookId, section, subSection } = props;
+export const deleteSubSection = async (context:any, subSection: any) => {
+    // const { bookId, section } = props;
+    console.log(context, subSection);
+    const { activePage, bookId, rawData, dispatch } = context;
+    const section = activePage;
     let totalSubSections = section.child.length;    
   	let parentData = section;
   	let childData = null;
@@ -102,7 +107,7 @@ export const deleteSubSection = async (props: any) => {
         parentData = subSections[i];
     }
 
-    let updateData = null;
+    let updateData: any = null;
 
     if (parentData && childData) {
       updateData = {
@@ -112,6 +117,50 @@ export const deleteSubSection = async (props: any) => {
     };
     
     await updateOrDelete({updateData, deleteData}, bookId);
+
+    let newRawData = rawData.filter((node: any) => {
+      if (node.uniqueId === subSection.uniqueId) return false;
+      return true;
+    });
+
+    if (updateData && updateData.topUniqueId && updateData.botUniqueId) {
+        newRawData = newRawData.map((node: any) => {
+          if (node.uniqueId === updateData.botUniqueId) {
+            return { ...node, parentId: updateData.topUniqueId };
+          }
+          return node;
+        })
+    }
+    console.log('newRawData', newRawData);
+
+    const newApiData = sortAll(newRawData, deleteData);
+
+    let newActivePage = null;
+    newApiData.forEach((page: any) => {
+        page.child.forEach((currentSection: any) => {
+            if (currentSection.uniqueId === section.uniqueId) {
+                newActivePage = currentSection;
+            }
+        })
+    });
+
+    dispatch({
+      type: BOOK_SERVICE.SETTER,
+      _setter: 'rawData',
+      payload: newRawData
+    })
+
+    dispatch({
+      type: BOOK_SERVICE.SETTER,
+      _setter: 'apiData',
+      payload: newApiData
+    })
+
+    dispatch({
+      type: BOOK_SERVICE.SETTER,
+      _setter: 'activePage',
+      payload: newActivePage
+    })
 
     return Ok("Deleted")
 }

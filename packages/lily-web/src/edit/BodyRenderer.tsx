@@ -8,9 +8,8 @@ import AddSection from "../forms/Section";
 import AddChapter from "../forms/Chapter";
 import SubSectionForm from "../forms/SubSection";
 import CreateUpdate from "../forms/CreateUpdate";
-import { constants, FORM_TYPE, BOOK_SERVICE } from "lily-types";
-import { sortAll, setActivePageFn, useBookContext } from "lily-service";
-import SubSection from "../forms/SubSection";
+import { constants, FORM_TYPE } from "lily-types";
+import { useBookContext } from "lily-service";
 
 const { topBar } = constants.heights.fromTopNav;
 
@@ -36,32 +35,12 @@ const FormView = (props: any) => {
 
 const SubSectionBody = (props: any) => {
     const { subSection } = props;
-
     const context: any = useBookContext();
-    const { rawData, bookId, dispatch, activePage } = context;
+    const { bookId, dispatch, activePage, deleteDispatch } = context;
 
-    const _delete = async (subSection: any) => {
-        await deleteSubSection({
-            section: activePage, 
-            subSection,
-            bookId,
-        });
-        const newData = sortAll(rawData, [subSection.uniqueId]);
-        const newActivePage = setActivePageFn({
-            apiData: newData,
-            sectionId: activePage.uniqueId,
-            pageId: null,
-        });
-        dispatch({
-            type: BOOK_SERVICE.SETTER,
-            _setter: 'activePage',
-            payload: newActivePage,
-        });
-        dispatch({
-            type: BOOK_SERVICE.SETTER,
-            _setter: 'apiData',
-            payload: newData,
-        });
+    const _delete = async (e: any) => {
+        e.preventDefault();
+        await deleteSubSection(context, subSection);
     }
     
     const _edit = (subSection: any) => {
@@ -83,19 +62,33 @@ const SubSectionBody = (props: any) => {
                 </h3>
             </div>
             <div className="con-5 hover">
-                <MdModeEdit onClick={() => { _edit(subSection) }}/>
-                <MdDelete onClick={() => {_delete(subSection)}}/>
+                <MdModeEdit onClick={_edit}/>
+                <MdDelete onClick={_delete}/>
             </div>
         </div>
         <div className="description">{subSection.body}</div>
     </div>
 }
 
+const DeleteBody = (context: any, identity: number) => {
+    const _deletePage = (e: any) => {
+        e.preventDefault();
+        deletePage(context);
+    };
+    const _deleteSection = (e: any) => {
+        e.preventDefault();
+        let deleteData = deleteSection(context);
+    };
+    if (identity === 104) return <MdDelete onClick={_deletePage}/>
+    if (identity === 105) return <MdDelete onClick={_deleteSection}/>
+    return null;
+}
+
 const BodyRenderer = () => {
     const history: any = useHistory();
     const context: any = useBookContext();
     const { title } = history.location.state;
-    const { dispatch, activePage, viewState, bookId, rawData, apiData: _apiDAta } = context;
+    const { dispatch, activePage, viewState, apiData: _apiDAta } = context;
     const { child, ...activePageDetails } = activePage;
     const { identity } = activePageDetails;
 
@@ -108,19 +101,6 @@ const BodyRenderer = () => {
             payload: activePageDetails,
         });
         return <MdModeEdit onClick={edit}/>
-    }
-    const Delete = () => {
-        const _deletePage = (e: any) => {
-            e.preventDefault();
-            deletePage(context);
-        };
-        const _deleteSection = (e: any) => {
-            e.preventDefault();
-            deleteSection(context);
-        };
-        if (identity === 104) return <MdDelete onClick={_deletePage}/>
-        if (identity === 105) return <MdDelete onClick={_deleteSection}/>
-        return null;
     }
 
     const Body = () => {
@@ -156,7 +136,10 @@ const BodyRenderer = () => {
                         </div>
                         <div className="con-5 hover">
                             <Edit />
-                            <Delete />
+                            <DeleteBody 
+                                context={context}
+                                identity={identity}
+                            />
                         </div>
                     </div>
                     <div className="description">{activePage.body}</div>
