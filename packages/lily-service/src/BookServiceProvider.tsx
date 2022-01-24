@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useReducer } from "react";
 import { FORM_TYPE, BOOK_SERVICE } from "lily-types";
 import { BookHandler } from "./BookService";
-import { deleteSubSection } from "./DataHandler";
 
 const bookState = {
     rawData: null,
@@ -124,30 +123,8 @@ const reducer = (state: any, action: any) => {
     }
 }
 
-const deleter = (props: any, state: any) => {
-    const { action } = props;
-    switch (action) {
-        case 'deleteSubSection': 
-            return deleteSubSection(props, state);
-        default: 
-            throw new Error(`Unknown action.`);
-    }
-}
-
-const useDeleter = (deleter: any, dispatch: any, state: any) => {
-    const work = (props: any) => {
-        const newstate = deleter(props, state);
-        if (newstate) dispatch({
-            type: 'newState',
-            payload: newstate
-        });
-    };
-    return [work];
-}
-
 export const BookServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, bookState);
-    const [deleteDispatch] = useDeleter(deleter, dispatch, state);
 
     const { bookId } = state;
     useEffect(() => {
@@ -160,8 +137,7 @@ export const BookServiceProvider = (props: { children: object }) => {
         <BookContext.Provider
             value={{
                 ...state,
-                dispatch,
-                deleteDispatch
+                dispatch
             }}
         >
             {props.children}
