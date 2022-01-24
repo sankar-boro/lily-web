@@ -70,7 +70,8 @@ const SubSectionBody = (props: any) => {
     </div>
 }
 
-const DeleteBody = (context: any, identity: number) => {
+const DeleteBody = (props: any) => {
+    const { context, identity } = props;
     const _deletePage = (e: any) => {
         e.preventDefault();
         deletePage(context);
@@ -104,7 +105,6 @@ const BodyRenderer = () => {
     }
 
     const Body = () => {
-
         if (viewState !== FORM_TYPE.NONE) {
             return (
                 <div className="flex">
@@ -121,6 +121,7 @@ const BodyRenderer = () => {
         }
 
         const SectionBody = () => {
+            if (activePage.identity === 104) return null;
             return activePage.child.map((subSection: any, sectionIndex: number) => {
                 return <SubSectionBody subSection={subSection} />
             })
