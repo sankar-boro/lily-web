@@ -105,21 +105,21 @@ export const deleteSection = async (bookContext: any) => {
     });
 
     dispatch({
-      type: BOOK_SERVICE.SETTER,
-      _setter: 'rawData',
-      payload: newRawData
-    })
-
-    dispatch({
-      type: BOOK_SERVICE.SETTER,
-      _setter: 'apiData',
-      payload: newApiData
-    })
-
-    dispatch({
-      type: BOOK_SERVICE.SETTER,
-      _setter: 'activePage',
-      payload: newActivePage
+      type: BOOK_SERVICE.SETTERS,
+      setters: [
+        {
+          key: 'rawData',
+          value: newRawData
+        },
+        {
+          key: 'apiData',
+          value: newApiData,
+        },
+        {
+          key: 'activePage',
+          value: newActivePage
+        }
+      ]
     })
     
     return Ok(deleteData)
@@ -182,21 +182,21 @@ export const deleteSubSection = async (context:any, subSection: any) => {
     });
 
     dispatch({
-      type: BOOK_SERVICE.SETTER,
-      _setter: 'rawData',
-      payload: newRawData
-    })
-
-    dispatch({
-      type: BOOK_SERVICE.SETTER,
-      _setter: 'apiData',
-      payload: newApiData
-    })
-
-    dispatch({
-      type: BOOK_SERVICE.SETTER,
-      _setter: 'activePage',
-      payload: newActivePage
+      type: BOOK_SERVICE.SETTERS,
+      setters: [
+        {
+          key: 'rawData',
+          value: newRawData
+        },
+        {
+          key: 'apiData',
+          value: newApiData
+        },
+        {
+          key: 'activePage',
+          value: newActivePage
+        }
+      ]
     })
 
     return Ok("Deleted")
@@ -270,21 +270,21 @@ export const deletePage = async (context: any) => {
   });
 
   dispatch({
-    type: BOOK_SERVICE.SETTER,
-    _setter: 'rawData',
-    payload: newRawData
-  })
-
-  dispatch({
-    type: BOOK_SERVICE.SETTER,
-    _setter: 'apiData',
-    payload: newApiData
-  })
-
-  dispatch({
-    type: BOOK_SERVICE.SETTER,
-    _setter: 'activePage',
-    payload: newActivePage
+    type: BOOK_SERVICE.SETTERS,
+    setters: [
+      {
+        key: 'rawData',
+        value: newRawData,
+      },
+      {
+        key: 'apiData',
+        value: newApiData,
+      },
+      {
+        key: 'activePage',
+        value: newActivePage
+      }
+    ]
   })
 
   return Ok("Success.");

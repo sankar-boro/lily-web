@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { textareaRows, textareaCols } from "lily-types";
-import { useBookContext, useFormContext } from "lily-service";
+import { useBookContext, useFormContext, updateData } from "lily-service";
 import { useHistory } from "react-router";
 
 const submitBook = (data: any, props: any) => {
-    const { history, formContext, context } = props;
     const url = "http://localhost:8000/book/update";
     axios.post(
         url,
@@ -14,44 +13,7 @@ const submitBook = (data: any, props: any) => {
             withCredentials: true,
         }
     ).then((res) => {
-        const { apiData } = context;
-        let newApiData = apiData.map((chapter: any) => {
-            if (data.identity === 104 && chapter.uniqueId === data.uniqueId) {
-                return {
-                    ...chapter,
-                    title: data.title,
-                    body: data.body,
-                }
-            } else {
-                return chapter.child.map((section: any) => {
-                    if (data.identity === 105 && section.uniqueId === data.uniqueId) {
-                        return {
-                            ...section,
-                            title: data.title,
-                            body: data.body,
-                        }
-                    } else {
-                        return section.child.map((subSection: any) => {
-                            if (subSection.uniqueId === data.uniqueId) {
-                                return {
-                                    ...subSection,
-                                    title: subSection.title,
-                                    body: subSection.body,
-                                }
-                            }
-                            return subSection;
-                        });
-                    }
-                });
-            }
-        });
-
-        context.dispatch({
-            type: 'SETTER',
-            apiData: newApiData
-        })
-    }).then(() => {
-        history.goBack();
+        updateData(data, props);
     });
 };
 
