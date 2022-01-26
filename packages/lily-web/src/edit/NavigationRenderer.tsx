@@ -1,8 +1,10 @@
 import { createChapter, createSection } from "lily-components";
+import { setActivePageFn } from "lily-service";
+import { BOOK_SERVICE } from "lily-types";
 
 const Sections = (props: any) => {
     const { page, context } = props;
-    const { dispatch } = context;
+    const { dispatch, apiData } = context;
 
     let sections: any = null;
 
@@ -13,42 +15,66 @@ const Sections = (props: any) => {
     if (!sections) return null;
     if (sections && sections.length === 0) return null;
 
-    return <div> {sections.map((section: any, sectionIndex: number) => {
-        return (
-            <div key={`${sectionIndex}`} className="Section">
-                <div
-                    onClick={(e) => {
-                        e.preventDefault();
-                        dispatch({
-                            type: 'ACTIVE_PAGE',
-                            pageId: page.uniqueId,
-                            sectionId: section.uniqueId,
-                        })
-                    }}
-                    key={section.uniqueId}
-                    className="section-nav hover tooltip"
-                    onMouseEnter={() => {}}
-                >
-                    {section.title}
-                    <span className="tooltiptext">{section.uniqueId}</span>
-                </div>
-                <AddSection {...props} sectionIndex={sectionIndex} sections={sections} />
+    const setActiveSection = (section: any) => {
+        const activeSection = setActivePageFn({
+            apiData,
+            compareId: section.uniqueId,
+        });
+        dispatch({
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'activePage',
+                    value: activeSection
+                }
+            ]
+        })
+    }
+
+    const Section = (props: any) => {
+        const { section, sectionIndex } = props;
+        return <div key={`${sectionIndex}`} className="Section">
+            <div
+                onClick={setActiveSection}
+                key={section.uniqueId}
+                className="section-nav hover tooltip"
+                onMouseEnter={() => {}}
+            >
+                {section.title}
+                <span className="tooltiptext">{section.uniqueId}</span>
             </div>
-        );
+            <AddSection {...props} sectionIndex={sectionIndex} sections={sections} />
+        </div>
+    }
+
+    return <div> {sections.map((section: any, sectionIndex: number) => {
+        return <Section 
+            section={section}
+            sectionIndex={sectionIndex}
+        />;
     })} 
     </div>
 }
 
 const PageTitle = (props: any) => {
     const { page, context } = props;
-    const { dispatch } = context;
+    const { dispatch, apiData } = context;
     
     const setActivePage = (e: any) => {
         e.preventDefault();
-        dispatch({
-            type: 'ACTIVE_PAGE',
-            pageId: page.uniqueId,
+        const activePage = setActivePageFn({
+            apiData,
+            compareId: page.uniqueId
         });
+        dispatch({
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'activePage',
+                    value: activePage
+                }
+            ]
+        })
     };
 
     return <div

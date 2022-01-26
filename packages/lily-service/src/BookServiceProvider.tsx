@@ -38,63 +38,6 @@ export const BookContext = React.createContext({
 
 export const useBookContext = () => useContext(BookContext);
 
-const fetchData = (state: any, dispatch: Function) => {
-    const { apiState, service, bookId } = state;
-    // We only want this function to be performed once
-    if (apiState) return;
-    service.fetch(bookId).then((context: any) => {
-        let { data, rawData } = context.map_res();
-        dispatch({
-            type: BOOK_SERVICE.SETTER,
-            _setter: 'apiData',
-            payload: data,
-        });
-        dispatch({
-            type: BOOK_SERVICE.SETTER,
-            _setter: 'rawData',
-            payload: rawData,
-        });
-        dispatch({
-            type: BOOK_SERVICE.SETTER,
-            _setter: 'apiState',
-            payload: 'SUCCESS',
-        });
-    })
-}
-
-const setter = (state: any, action: any) => {
-    const { payload, _setter } = action;
-    let data = { ...state, [_setter]: payload };
-    return data;
-}
-
-const setActivePage = (state: any, action: any) => {
-    const { apiData } = state;
-    const { pageId, sectionId } = action;
-    let __state = state;
-    if (action.sectionId && action.pageId) {
-        apiData.forEach((page: any) => {
-            if (page.uniqueId === pageId) {
-                page.child.forEach((section: any) => {
-                    if (section.uniqueId === sectionId) {
-                        const { child, ...others } = section;
-                        __state = { ...state, activePage: section, viewData: others, hideSection: false, viewState: FORM_TYPE.NONE };
-                    }
-                })
-            }
-        });
-    } else {
-        apiData.forEach((page: any) => {
-            if (page.uniqueId === pageId) {
-                const { child, ...others } = page;
-                __state = { ...state, activePage: page, viewData: others, hideSection: true, viewState: FORM_TYPE.NONE };
-            }
-        });
-    }
-
-    return __state;
-}
-
 const setters = (state: any, action: any) => {
     const { setters } = action;
     const updateData: any = {};
@@ -105,19 +48,11 @@ const setters = (state: any, action: any) => {
 }
 
 const reducer = (state: any, action: any) => {
-    const { type, payload, viewType } = action;
+    const { type } = action;
     
-    switch (type) { 
-        case BOOK_SERVICE.SETTER:
-            return setter(state, action);
+    switch (type) {
         case BOOK_SERVICE.SETTERS:
             return setters(state, action);
-        case BOOK_SERVICE.FORM_PAGE_SETTER: 
-            return { ...state, viewState: viewType, formData: payload };
-        case BOOK_SERVICE.ACTIVE_PAGE:
-            return setActivePage(state, action);
-        case 'newState':
-            return action.payload;
         default:
             throw new Error(`Unknown type: ${action.type}`);
     }
@@ -125,13 +60,6 @@ const reducer = (state: any, action: any) => {
 
 export const BookServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, bookState);
-
-    const { bookId } = state;
-    useEffect(() => {
-        if (bookId) {
-            fetchData(state, dispatch);
-        }
-    },[bookId, state]);
 
     return (
         <BookContext.Provider

@@ -2,10 +2,12 @@ import axios from "axios";
 import { sortAll } from './DataHandler';
 
 interface BookService {
-    readonly data: any[];
+    readonly bookId: any;
+    readonly apiData: any[];
     readonly err: any;
     payload: any;
     rawData: any;
+    activePage: any;
 
     fetch(bookId: string): any;
     map_res(): any;
@@ -19,12 +21,15 @@ const getAllBookData = async (url: string) => {
 }
 
 class BookHandler implements BookService {
-    data: any;
+    bookId: any;
+    apiData: any;
     err: any;
     payload: any;
     rawData: any;
+    activePage: any;
 
     fetch(bookId: string): Promise<any> {
+        this.bookId = bookId;
         const prefix = "http://localhost:8000/book/getall/";
         const url = `${prefix}${bookId}`;
         return new Promise(async (resolve, reject) => {
@@ -45,7 +50,12 @@ class BookHandler implements BookService {
         const { status, data } = payload;
         if (status && data && status === 200) {
             this.rawData = data;
-            this.data = sortAll(data);
+            this.apiData = sortAll(data);
+            this.apiData.forEach((page: any) => {
+                if (page.uniqueId === this.bookId) {
+                    this.activePage = page;
+                }
+            });
         }
         return this;
     }

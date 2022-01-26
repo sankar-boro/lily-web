@@ -1,65 +1,82 @@
-import { useBookContext} from "lily-service";
-import { constants } from "lily-types";
+import { useBookContext, setActivePageFn } from "lily-service";
+import { BOOK_SERVICE, constants } from "lily-types";
 
 const { leftBar } = constants.heights.fromTopNav;
 
 const ReadBookNavigation = (props: any) => {
     const context: any = useBookContext();
-    const { apiData } = context;
+    const { apiData, dispatch } = context;
 
-    const doSome = (data: any) => {
-        let child = [];
-        if (data && data.child && Array.isArray(data.child)) {
-            child = data.child;
+    const Page = (props: any) => {
+        const { page } = props;
+        const { uniqueId: pageId, child: sections } = page;
+        const {} = page;
+        
+        const setActivePage = (e: any) => {
+            e.preventDefault();
+            const page = setActivePageFn({
+                apiData,
+                compareId: pageId, 
+            });
+
+            dispatch({
+                type: BOOK_SERVICE.SETTERS,
+                setters: [
+                    {
+                        key: 'activePage',
+                        value: page,
+                    }
+                ]
+            });
         }
 
-        return {
-            chapter: data,
-            sections: child,
-        };
-    };
+        const setActiveSection = (section: any) => {
+            const page = setActivePageFn({
+                apiData,
+                compareId: section.uniqueId, 
+            });
+
+            dispatch({
+                type: BOOK_SERVICE.SETTERS,
+                setters: [
+                    {
+                        key: 'activePage',
+                        value: page,
+                    }
+                ]
+            });
+        }
+
+        return <div key={page.title}>
+            <div
+                onClick={setActivePage}
+                className="chapter-nav"
+            >
+                {page.title}
+            </div>
+            <div>
+                {sections.map((section: any) => {
+                    return (
+                        <div
+                            onClick={() => setActiveSection(section)}
+                            key={section.uniqueId}
+                            className="section-nav hover"
+                        >
+                            {section.title}
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    }
+
     return (
         <div className="con-19 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>
             <div style={{height: leftBar }}/>
             {apiData.map((value: any, index: number) => {
-                const { chapter, sections } = doSome(value);
-                return (
-                    <div key={chapter.title}>
-                        <div
-                            onClick={(e) => {
-                                e.preventDefault();
-                                context.dispatch({
-                                    type: 'ACTIVE_PAGE',
-                                    pageId: chapter.uniqueId,
-                                    sectionId: null,
-                                });
-                            }}
-                            className="chapter-nav hover"
-                        >
-                            {chapter.title}
-                        </div>
-                        <div>
-                            {sections.map((c: any) => {
-                                return (
-                                    <div
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            context.dispatch({
-                                                type: 'ACTIVE_PAGE',
-                                                pageId: chapter.uniqueId,
-                                                sectionId: c.uniqueId,
-                                            });
-                                        }}
-                                        key={c.uniqueId}
-                                        className="section-nav hover"
-                                    >
-                                        {c.title}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                );
+                return <Page 
+                    page={value}
+                />;
             })}
         </div>
     );

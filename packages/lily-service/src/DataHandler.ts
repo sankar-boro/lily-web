@@ -130,19 +130,20 @@ export const sortAll = (_data: Node[], removeIds: any[] = []) => {
 };
 
 export const setActivePageFn = (props: any) => {
-    const { apiData, sectionId } = props;
+    const { apiData, compareId } = props;
     let activePage = null;
-
-        apiData.forEach((page: any) => {
-            page.child.forEach((section: any) => {
-                    if (section.uniqueId === sectionId) {
-                        const { child, ...others } = section;
-                        activePage = section;
-                    }
-                })
-        });
+    let found = false;
+    apiData.forEach((page: any) => {
+        if (!found && page.uniqueId === compareId) {
+            activePage = page;
+        }
+        page.child.forEach((section: any) => {
+            if (!found && section.uniqueId === compareId) {
+                activePage = section;
+            }
+        })
+    });
     
-
     return activePage;
 }
 

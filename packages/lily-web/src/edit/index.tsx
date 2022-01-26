@@ -2,34 +2,45 @@ import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
-import { useAuthContext } from "lily-service";
+import { BookHandler, useAuthContext } from "lily-service";
 import { useBookContext, BookServiceProvider } from 'lily-service';
+import { BOOK_SERVICE } from "lily-types";
 
 const Body = () => {
     const context = useBookContext();
-    const authContext = useAuthContext();
+    const { dispatch } = context;
     const history: any = useHistory();
-    const { dispatch, apiState, viewState } = context;
-    const { setRead } = authContext;
     const { bookId } = history.location.state;
-
-    const initState = () => {
-        dispatch({
-            type: 'SETTER',
-            _setter: 'bookId',
-            payload: bookId,
-        });
-        setRead(true);
-        if (apiState === "SUCCESS") {
+    
+    useEffect(() => {
+        const service = new BookHandler();
+        service.fetch(bookId)
+        .then((res) => res.map_res())
+        .then((res) => {
+            const { rawData, apiData, activePage } = res;
             dispatch({
-                type: 'ACTIVE_PAGE',
-                pageId: bookId,
-                sectionId: null,
-            });
-        }
-    }
-
-    useEffect(initState, [dispatch, setRead, bookId, apiState]);
+                type: BOOK_SERVICE.SETTERS,
+                setters: [
+                    {
+                        key: 'rawData',
+                        value: rawData
+                    },
+                    {
+                        key: 'apiData',
+                        value: apiData
+                    },
+                    {
+                        key: 'activePage',
+                        value: activePage,
+                    },
+                    {
+                        key: 'bookId',
+                        value: bookId
+                    }
+                ]
+            })
+        });
+    }, []);
 
     if(!context.activePage) return <div>Fetching...</div>;
 

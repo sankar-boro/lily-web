@@ -8,7 +8,7 @@ import AddSection from "../forms/Section";
 import AddChapter from "../forms/Chapter";
 import SubSectionForm from "../forms/SubSection";
 import CreateUpdate from "../forms/CreateUpdate";
-import { constants, FORM_TYPE } from "lily-types";
+import { BOOK_SERVICE, constants, FORM_TYPE } from "lily-types";
 import { useBookContext } from "lily-service";
 
 const { topBar } = constants.heights.fromTopNav;
@@ -36,7 +36,7 @@ const FormView = (props: any) => {
 const SubSectionBody = (props: any) => {
     const { subSection } = props;
     const context: any = useBookContext();
-    const { bookId, dispatch, activePage, deleteDispatch } = context;
+    const { dispatch } = context;
 
     const _delete = async (e: any) => {
         e.preventDefault();
@@ -45,9 +45,17 @@ const SubSectionBody = (props: any) => {
     
     const _edit = (subSection: any) => {
         dispatch({
-            type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.UPDATE,
-            payload: subSection,
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'formData',
+                    value: subSection,
+                },
+                {
+                    key: 'viewState',
+                    value: FORM_TYPE.UPDATE
+                }
+            ]
         });
     }
 
@@ -78,7 +86,7 @@ const DeleteBody = (props: any) => {
     };
     const _deleteSection = (e: any) => {
         e.preventDefault();
-        let deleteData = deleteSection(context);
+        deleteSection(context);
     };
     if (identity === 104) return <MdDelete onClick={_deletePage}/>
     if (identity === 105) return <MdDelete onClick={_deleteSection}/>
@@ -97,10 +105,19 @@ const BodyRenderer = () => {
 
     const Edit = () => {
         const edit = () => dispatch({
-            type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.UPDATE,
-            payload: activePageDetails,
-        });
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'viewType',
+                    value: FORM_TYPE.UPDATE
+                },
+                {
+                    key: 'formData',
+                    value: activePageDetails
+                }
+            ]
+        })
+
         return <MdModeEdit onClick={edit}/>
     }
 

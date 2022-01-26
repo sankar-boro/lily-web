@@ -4,3 +4,4 @@ export * from './AuthServiceProvider';
 export * from './FormServiceProvider';
 export * from './DataHandler';
 export * from './UpdateHandler';
+export * from './BookService';

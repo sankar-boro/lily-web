@@ -1,85 +1,45 @@
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 
 export type HomeState = {
-    books: Node[],
-    error: string;
-    dispatch: Function,
+    books: Node[]
 };
 
 const homeState = {
     books: [],
-    error: '',
-    dispatch: () => {},
 }
 
 export const HomeContext = React.createContext<HomeState>({
     books: [],
-    error: '',
-    dispatch: () => {},
 });
 
 export const useHomeContext = () => useContext(HomeContext);
 
-const reducer = (state: any, action: any) => {
-    switch (action.type) {
-        case 'INIT':
-          return { ...state, apiState: 'INIT' };
-    
-        case 'SUCCESS':
-          return { ...state, books: action.payload, apiState: 'SUCCESS' };
-    
-        case 'ERROR':
-          return { ...state, apiError: action.payload, apiState: 'ERROR' };
-            
-        default:
-            throw new Error(`Unknown type: ${action.type}`);
-    }
-}
-
-const fetchHomeData = (state: HomeState, dispatch: Function) => {
-    dispatch({
-        ...state,
-        type: 'INIT',
-    })
-    axios
-    .get("http://localhost:8000/book/all", {
-        withCredentials: true,
-    })
-    .then((res: any) => {
-        if (
-            res.status &&
-            typeof res.status === "number" &&
-            res.status === 200
-        ) {
-            dispatch({
-                ...state,
-                type: 'SUCCESS',
-                payload: res.data,
-            });
-        }
-    })
-    .catch((err: any) => {
-        dispatch({
-            ...state,
-            type: 'ERROR',
-            payload: err.response,
-        });
-    });
-}
-
 export const HomeServiceProvider = (props: { children: object }) => {
-    const [state, dispatch] = useReducer(reducer, homeState);
+    const [books, setBooks] = useState<any>(null);
     
     useEffect(() => {
-        fetchHomeData(state, dispatch);
+        axios
+        .get("http://localhost:8000/book/all", {
+            withCredentials: true,
+        })
+        .then((res: any) => {
+            if (
+                res.status &&
+                typeof res.status === "number" &&
+                res.status === 200
+            ) {
+                setBooks(res.data)
+            }
+        });
     },[]);
+
+    if (!books) return null;
 
     return (
         <HomeContext.Provider
             value={{
-                ...state,
-                dispatch: dispatch,
+                books,
             }}
         >
             {props.children}

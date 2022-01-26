@@ -1,4 +1,4 @@
-import { FORM_TYPE } from 'lily-types';
+import { BOOK_SERVICE, FORM_TYPE } from 'lily-types';
 
 export const createChapter = (props: any) => {
     const { page, pageIndex, context } = props;
@@ -6,29 +6,40 @@ export const createChapter = (props: any) => {
     if (!apiData && !apiData[pageIndex]) return;
     const lastPageIndex = apiData.length - 1;
     
+    let _formData: any = {};
+    let viewType: any = null;
+
     if (pageIndex === lastPageIndex) {
-        dispatch({
-            type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.CHAPTER,
-            payload: {
-                parentId: page.uniqueId,
-                identity: 104,
-            }
-        });
+        _formData = {
+            parentId: page.uniqueId,
+            identity: 104
+        };
+        viewType = FORM_TYPE.CHAPTER
     } else {
         if (!apiData && !apiData[pageIndex]) return;
         const topUniqueId = apiData[pageIndex].uniqueId;
         const botUniqueId = apiData[pageIndex + 1].uniqueId;
-        dispatch({
-            type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.CREATE_UPDATE,
-            payload: {
-                topUniqueId,
-                botUniqueId,
-                identity: 104,
-            }
-        });
+        _formData = {
+            topUniqueId,
+            botUniqueId,
+            identity: 104
+        };
+        viewType = FORM_TYPE.CREATE_UPDATE
     }
+
+    dispatch({
+        type: BOOK_SERVICE.SETTERS,
+        setters: [
+            {
+                key: 'viewType',
+                value: viewType
+            },
+            {
+                key: 'formData',
+                value: _formData
+            }
+        ]
+    })
 };
 
 export const createSection = (
@@ -69,26 +80,42 @@ export const createSection = (
 
     if (formType === "newSection") {
         dispatch({
-            type: 'FORM_PAGE_SETTER',
-            payload: {
-                parentId,
-                identity,
-            },
-            viewType: FORM_TYPE.SECTION,
-        });
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'viewType',
+                    value: FORM_TYPE.SECTION
+                },
+                {
+                    key: 'formData',
+                    value: {
+                        parentId,
+                        identity
+                    }
+                }
+            ]
+        })
         return;
     }
 
     if (formType === "createUpdate") {
         dispatch({
-            type: 'FORM_PAGE_SETTER',
-            payload: {
-                topUniqueId,
-                botUniqueId,
-                identity,
-            },
-            viewType: FORM_TYPE.CREATE_UPDATE,
-        });
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'viewType',
+                    value: FORM_TYPE.CREATE_UPDATE
+                },
+                {
+                    key: 'formData',
+                    value: {
+                        topUniqueId,
+                        botUniqueId,
+                        identity,
+                    }
+                }
+            ]
+        })
         return;
     }
 
@@ -103,13 +130,21 @@ export const createSubSection = (props: any) => {
 
     if (subSections.length === 0) {
         dispatch({
-            type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.SUB_SECTION,
-            payload: {
-                parentId: sectionId,
-                identity: 106,
-            }
-        });
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'viewType',
+                    value: FORM_TYPE.SUB_SECTION
+                },
+                {
+                    key: 'formData',
+                    value: {
+                        parentId: sectionId,
+                        identity: 106,
+                    }
+                }
+            ]
+        })
         return;
     }
 
@@ -118,14 +153,22 @@ export const createSubSection = (props: any) => {
         let topUniqueId = sectionId;
         let botUniqueId = subSections[0].uniqueId;
         dispatch({
-            type: 'FORM_PAGE_SETTER',
-            payload: {
-                topUniqueId,
-                botUniqueId,
-                identity: 106,
-            },
-            viewType: FORM_TYPE.CREATE_UPDATE,
-        });
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'viewType',
+                    value: FORM_TYPE.CREATE_UPDATE
+                },
+                {
+                    key: 'formData',
+                    value: {                        
+                        topUniqueId,
+                        botUniqueId,
+                        identity: 106,
+                    }
+                }
+            ]
+        })
         return;
     }
 
@@ -135,26 +178,42 @@ export const createSubSection = (props: any) => {
         let topUniqueId = subSections[subSectionIndex].uniqueId;
         let botUniqueId = subSections[subSectionIndex+1].uniqueId;
         dispatch({
-            type: 'FORM_PAGE_SETTER',
-            payload: {
-                topUniqueId,
-                botUniqueId,
-                identity: 106,
-            },
-            viewType: FORM_TYPE.CREATE_UPDATE,
-        });
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'viewType',
+                    value: FORM_TYPE.CREATE_UPDATE
+                },
+                {
+                    key: 'formData',
+                    value: {                        
+                        topUniqueId,
+                        botUniqueId,
+                        identity: 106,
+                    }
+                }
+            ]
+        })
         return;
     }
 
     if (subSection && subSectionIndex === subSectionsLength) {
         let topUniqueId = subSections[subSectionIndex].uniqueId;
         dispatch({
-            type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.SUB_SECTION,
-            payload: {
-                parentId: topUniqueId,
-                identity: 106,
-            },
-        });
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'viewType',
+                    value: FORM_TYPE.SUB_SECTION
+                },
+                {
+                    key: 'formData',
+                    value: {                        
+                        parentId: topUniqueId,
+                        identity: 106,
+                    }
+                }
+            ]
+        })
     }
 }
