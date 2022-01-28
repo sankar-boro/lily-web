@@ -12,7 +12,6 @@ const updateOrDelete = async (data: {
 }, bookId: string) => {
 
   if (log) {
-    console.log(data);
     return;
   }
 
@@ -23,7 +22,6 @@ const updateOrDelete = async (data: {
     withCredentials: true,
   })
   .then((res: any) => {
-    console.log(data);
     return res;
   });
 }

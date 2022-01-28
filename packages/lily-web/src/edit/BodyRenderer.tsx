@@ -3,32 +3,16 @@ import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 import { deleteSection, deletePage, deleteSubSection } from "lily-components";
 
 import Divider from "./Divider";
-import Update from "../forms/Update";
-import AddSection from "../forms/Section";
-import AddChapter from "../forms/Chapter";
-import SubSectionForm from "../forms/SubSection";
-import CreateUpdate from "../forms/CreateUpdate";
-import { BOOK_SERVICE, constants, FORM_TYPE } from "lily-types";
+import { BOOK_SERVICE, constants, FORM_TYPE, VUE } from "lily-types";
 import { useBookContext } from "lily-service";
+import AllForm from "lily-web/forms/AllForm";
 
 const { topBar } = constants.heights.fromTopNav;
 
 const FormView = (props: any) => {
     const { state } = props;
-    if (state === FORM_TYPE.CHAPTER) {
-        return <AddChapter />;
-    }
-    if (state === FORM_TYPE.SECTION) {
-        return <AddSection />;
-    }
-    if (state === FORM_TYPE.SUB_SECTION) {
-        return <SubSectionForm />;
-    }
-    if (state === FORM_TYPE.CREATE_UPDATE) {
-        return <CreateUpdate />;
-    }
-    if (state === FORM_TYPE.UPDATE) {
-        return <Update />;
+    if (state === VUE.FORM) {
+        return <AllForm />;
     }
     return null;
 };
@@ -52,7 +36,7 @@ const SubSectionBody = (props: any) => {
                     value: subSection,
                 },
                 {
-                    key: 'viewState',
+                    key: 'vue',
                     value: FORM_TYPE.UPDATE
                 }
             ]
@@ -93,15 +77,30 @@ const DeleteBody = (props: any) => {
     return null;
 }
 
-const BodyRenderer = () => {
-    const history: any = useHistory();
+const Body = () => {
     const context: any = useBookContext();
-    const { title } = history.location.state;
-    const { dispatch, activePage, viewState, apiData: _apiDAta } = context;
-    const { child, ...activePageDetails } = activePage;
-    const { identity } = activePageDetails;
+    const { vue, activePage, dispatch } = context;
+    if (vue === VUE.FORM) {
+        return (
+            <div className="flex">
+                <div className="con-80 flex">
+                    <div className="con-10" />
+                    <div className="con-80">
+                        <FormView state={vue} />
+                    </div>
+                    <div className="con-10" />
+                </div>
+                <Divider {...context} />
+            </div>
+        );
+    }
 
-    const goHome = () => { history.replace({ pathname: "/"})};
+    const SectionBody = () => {
+        if (activePage.identity === 104) return null;
+        return activePage.child.map((subSection: any, sectionIndex: number) => {
+            return <SubSectionBody subSection={subSection} />
+        })
+    }
 
     const Edit = () => {
         const edit = () => dispatch({
@@ -113,61 +112,45 @@ const BodyRenderer = () => {
                 },
                 {
                     key: 'formData',
-                    value: activePageDetails
+                    value: activePage
                 }
             ]
         })
 
         return <MdModeEdit onClick={edit}/>
     }
-
-    const Body = () => {
-        if (viewState !== FORM_TYPE.NONE) {
-            return (
-                <div className="flex">
-                    <div className="con-80 flex">
-                        <div className="con-10" />
-                        <div className="con-80">
-                            <FormView state={viewState} />
-                        </div>
-                        <div className="con-10" />
+    
+    return <div className="flex">
+        <div className="con-80 flex">
+            <div className="con-10" />
+            <div className="con-80" style={{ paddingTop: 50 }}>
+                <div className="flex center">
+                    <div className="con-95">
+                        <h3 className="h3">{activePage.title}</h3>
                     </div>
-                    <Divider {...context} />
-                </div>
-            );
-        }
-
-        const SectionBody = () => {
-            if (activePage.identity === 104) return null;
-            return activePage.child.map((subSection: any, sectionIndex: number) => {
-                return <SubSectionBody subSection={subSection} />
-            })
-        }
-        
-        return <div className="flex">
-            <div className="con-80 flex">
-                <div className="con-10" />
-                <div className="con-80" style={{ paddingTop: 50 }}>
-                    <div className="flex center">
-                        <div className="con-95">
-                            <h3 className="h3">{activePage.title}</h3>
-                        </div>
-                        <div className="con-5 hover">
-                            <Edit />
-                            <DeleteBody 
-                                context={context}
-                                identity={identity}
-                            />
-                        </div>
+                    <div className="con-5 hover">
+                        <Edit />
+                        <DeleteBody 
+                            context={context}
+                            identity={activePage.identity}
+                        />
                     </div>
-                    <div className="description">{activePage.body}</div>
-                    <SectionBody />
                 </div>
-                <div className="con-10" />
+                <div className="description">{activePage.body}</div>
+                <SectionBody />
             </div>
-            <Divider {...context} />
+            <div className="con-10" />
         </div>
-    }
+        <Divider {...context} />
+    </div>
+}
+
+const BodyRenderer = () => {
+    const history: any = useHistory();
+    const context: any = useBookContext();
+    const { title } = history.location.state;
+    const { apiData: _apiDAta } = context;
+    const goHome = () => { history.replace({ pathname: "/"})};
 
     return <div className="con-80" style={{ marginLeft: "20%" }}>
         <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>

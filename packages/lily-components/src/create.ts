@@ -9,7 +9,7 @@ export const createNode = (props: {
 }) => {
     const { bookContext, identity, formData } = props;
     const { bookId } = bookContext;
-    const { parentId, title, body } = formData;
+    const { parentId, title, body, topUniqueId, botUniqueId } = formData;
 
     let uploadData: any = {
         title,
@@ -19,9 +19,10 @@ export const createNode = (props: {
     if (parentId) uploadData = {...uploadData, parentId };
     if (bookId) uploadData = { ...uploadData, bookId };
     if (identity) uploadData = { ...uploadData, identity };
+    if (topUniqueId) uploadData = { ...uploadData, topUniqueId };
+    if (botUniqueId) uploadData = { ...uploadData, botUniqueId };
 
     if (log) {
-        console.log(uploadData);
         return;
     }
 

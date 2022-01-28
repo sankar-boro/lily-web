@@ -60,7 +60,7 @@ export const updateData = (data: any, props: any) => {
                 value: newActivePage
             },
             {
-                key: 'viewState',
+                key: 'vue',
                 value: 'NONE'
             }
         ]       

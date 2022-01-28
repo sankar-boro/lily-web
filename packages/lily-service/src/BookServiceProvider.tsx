@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { FORM_TYPE, BOOK_SERVICE } from "lily-types";
+import { VUE, BOOK_SERVICE } from "lily-types";
 import { BookHandler } from "./BookService";
 
 const bookState = {
@@ -15,7 +15,7 @@ const bookState = {
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
-    viewState: FORM_TYPE.NONE,
+    vue: VUE.DOCUMENT,
     service: new BookHandler(),
 }
 
@@ -33,7 +33,7 @@ export const BookContext = React.createContext({
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
-    viewState: FORM_TYPE.NONE || "UPDATING",
+    vue: VUE.DOCUMENT,
 });
 
 export const useBookContext = () => useContext(BookContext);

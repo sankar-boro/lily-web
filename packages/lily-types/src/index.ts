@@ -116,3 +116,11 @@ export enum Request {
 
 export const textareaRows = 10;
 export const textareaCols = 50;
+export const VUE = {
+    FORM: 'FORM',
+    NONE: 'NONE',
+    UPDATING: 'UPDATING',
+    INIT: 'INIT',
+    ERROR: 'ERROR',
+    DOCUMENT: 'DOCUMENT'
+}

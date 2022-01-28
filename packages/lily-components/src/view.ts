@@ -1,123 +1,28 @@
 import { BOOK_SERVICE, FORM_TYPE } from 'lily-types';
 
-export const createChapter = (props: any) => {
-    const { page, pageIndex, context } = props;
-    const { apiData, dispatch } = context;
-    if (!apiData && !apiData[pageIndex]) return;
-    const lastPageIndex = apiData.length - 1;
-    
-    let _formData: any = {};
-    let viewType: any = null;
-
-    if (pageIndex === lastPageIndex) {
-        _formData = {
-            parentId: page.uniqueId,
-            identity: 104
-        };
-        viewType = FORM_TYPE.CHAPTER
-    } else {
-        if (!apiData && !apiData[pageIndex]) return;
-        const topUniqueId = apiData[pageIndex].uniqueId;
-        const botUniqueId = apiData[pageIndex + 1].uniqueId;
-        _formData = {
-            topUniqueId,
-            botUniqueId,
-            identity: 104
-        };
-        viewType = FORM_TYPE.CREATE_UPDATE
-    }
+export const createChapter = (context: any, _formData: any) => {
+    const { dispatch } = context;
+    const { viewType, ...formData } = _formData;
 
     dispatch({
         type: BOOK_SERVICE.SETTERS,
         setters: [
             {
                 key: 'viewType',
-                value: viewType
+                value: viewType 
             },
             {
                 key: 'formData',
-                value: _formData
+                value: formData
             }
         ]
     })
 };
 
 export const createSection = (
+    context: any,
     props: any,
 ) => {
-    const { sectionIndex, page, context } = props;
-    let sections = page.child;
-    let totalSections = sections.length;
-    const { dispatch } = context;
-    let formType = "";
-    let parentId = "";
-    let identity = 105;
-    let topUniqueId = "";
-    let botUniqueId = "";
-
-    if (sectionIndex === undefined || sectionIndex === null) {
-        if (totalSections === 0) {
-            formType = "newSection";
-            parentId = page.uniqueId;
-        } else if (totalSections > 0) {
-            formType = "createUpdate";
-            topUniqueId = page.uniqueId;
-            botUniqueId = sections[0].uniqueId;
-        }
-    }
-
-    if (sectionIndex !== undefined && typeof sectionIndex === "number") {
-        const lastSectionIndex = totalSections - 1;
-        if (sectionIndex === lastSectionIndex) {
-            formType = "newSection";
-            parentId = sections[sectionIndex].uniqueId;
-        } else if (sectionIndex !== lastSectionIndex) {
-            formType = "createUpdate";
-            topUniqueId = sections[sectionIndex].uniqueId;
-            botUniqueId = sections[sectionIndex + 1].uniqueId;
-        }
-    }
-
-    if (formType === "newSection") {
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'viewType',
-                    value: FORM_TYPE.SECTION
-                },
-                {
-                    key: 'formData',
-                    value: {
-                        parentId,
-                        identity
-                    }
-                }
-            ]
-        })
-        return;
-    }
-
-    if (formType === "createUpdate") {
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'viewType',
-                    value: FORM_TYPE.CREATE_UPDATE
-                },
-                {
-                    key: 'formData',
-                    value: {
-                        topUniqueId,
-                        botUniqueId,
-                        identity,
-                    }
-                }
-            ]
-        })
-        return;
-    }
 
 };
 
