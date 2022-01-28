@@ -2,21 +2,16 @@ import axios from "axios";
 
 const log = true;
 
-export const createNode = (props: {
-    bookContext: any, 
-    identity: number,
-    formData: any
-}) => {
-    const { bookContext, identity, formData } = props;
-    const { bookId } = bookContext;
-    const { parentId, title, body, topUniqueId, botUniqueId } = formData;
+export const createNode = (context: any, __formData: any) => {
+    const { formData, bookId } = context;
+    const { identity, topUniqueId, botUniqueId } = formData;
+    const { title, body } = __formData;
 
     let uploadData: any = {
         title,
         body,
     };
 
-    if (parentId) uploadData = {...uploadData, parentId };
     if (bookId) uploadData = { ...uploadData, bookId };
     if (identity) uploadData = { ...uploadData, identity };
     if (topUniqueId) uploadData = { ...uploadData, topUniqueId };

@@ -1,4 +1,4 @@
-import { createChapter } from "lily-components";
+// import { createChapter } from "lily-components";
 import { setActivePageFn, useBookContext } from "lily-service";
 import { BOOK_SERVICE, VUE } from "lily-types";
 
@@ -20,7 +20,8 @@ const AddNewSectionInner = (props: {
 
     const formData = {
         topUniqueId,
-        botUniqueId
+        botUniqueId,
+        identity: 105
     }
 
     const createSection = () => {
@@ -91,28 +92,25 @@ const Sections = (props: {
     pageIndex: number
 }) => {
     const { page } = props;
-
     let sections: any = null;
-
     if (page.child && Array.isArray(page.child) && page.child.length > 0) {
         sections = page.child;
     }
-
     if (!sections) return null;
     if (sections && sections.length === 0) return null;
 
-    return <div> {sections.map((section: any, sectionIndex: number) => {
-        return <Section section={section} sections={sections} key={sectionIndex} />;
-    })} 
+    return <div> 
+        {sections.map((section: any, sectionIndex: number) => {
+            return <Section section={section} sections={sections} key={sectionIndex} />;
+        })} 
     </div>
 }
 
 const PageTitle = (props: any) => {
     const { page } = props;
-    const { dispatch, apiData, activePage } = useBookContext();
+    const { dispatch, apiData } = useBookContext();
     
-    const setActivePage = (e: any) => {
-        e.preventDefault();
+    const setActivePage = () => {
         const activePage = setActivePageFn({
             apiData,
             compareId: page.uniqueId
@@ -144,26 +142,56 @@ const PageTitle = (props: any) => {
 const AddChapter = (props: {
     page: any,
     pageIndex: number,
+    pages: any
 }) => {
+    const { page, pages } = props;
     const context = useBookContext();
+    const { dispatch } = context;
+    const topUniqueId = page.uniqueId;
+    let botUniqueId: any = null;
+    pages.forEach((_page: any, pageIndex: number) => {
+        if (_page.uniqueId === page.uniqueId && pages[pageIndex + 1]) {
+            botUniqueId = pages[pageIndex + 1].uniqueId;
+        }
+    })
+    const formData = {
+        topUniqueId,
+        botUniqueId,
+        identity: 104
+    }
+    const createNewChapter = () => {
+        dispatch({
+            type: BOOK_SERVICE.SETTERS,
+            setters: [
+                {
+                    key: 'vue',
+                    value: VUE.FORM,
+                },
+                {
+                    key: 'formData',
+                    value: formData,
+                }
+            ]
+        })
+    }
     return (
         <div
             style={{marginTop:5}}
             className="hover"
-            onClick={(e: any) => {
-                e.preventDefault();
-                createChapter(context, props);
-            }}
+            onClick={createNewChapter}
         >
             <span style={{ fontSize: 12 }}>+ Add chapter</span>
         </div>
     );
 }
 
-const AddNewSectionUpper = (props: any) => {
+const AddNewSectionUpper = (props: {
+    page: any,
+    pageIndex: number
+}) => {
     const context = useBookContext();
     const { dispatch } = context;
-    const { page, pageIndex } = props;
+    const { page } = props;
     const { child: sections } = page;
     const topUniqueId = page.uniqueId;
     let botUniqueId = null;
@@ -173,6 +201,7 @@ const AddNewSectionUpper = (props: any) => {
     let formData = {
         topUniqueId,
         botUniqueId,
+        identity: 105
     }
 
     const createNewSection = () => {
@@ -202,7 +231,8 @@ const AddNewSectionUpper = (props: any) => {
 
 const NavigationPages = (props: {
     page: any,
-    pageIndex: number
+    pageIndex: number,
+    pages: any
 }) => {
     return (
         <div style={styles.chapter} key={props.page.uniqueId}>
@@ -220,7 +250,7 @@ const Main = (props: any) => {
     return (
         <div className="con-19 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>
             <div style={{ height: 35 }}/>
-            {pages.map((page: any, pageIndex: number) => <NavigationPages page={page} pageIndex={pageIndex} key={pageIndex} />)}
+            {pages.map((page: any, pageIndex: number) => <NavigationPages page={page} pageIndex={pageIndex} key={pageIndex} pages={pages}/>)}
         </div>
     );
 };

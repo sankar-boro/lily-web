@@ -3,7 +3,6 @@ import Header from "./Header";
 import ViewBook from "../read";
 import Profile from "../profile";
 import NewBook from "../create";
-import NewBlog from "../forms/blog";
 import EditBook from "../edit/index";
 import Home from "./Home";
 
@@ -23,7 +22,7 @@ const Main = () => {
                         <NewBook />
                     </Route>
                     <Route path="/new/blog">
-                        <NewBlog />
+                        <></>
                     </Route>
                     <Route path="/book/edit/:bookId">
                         <EditBook />

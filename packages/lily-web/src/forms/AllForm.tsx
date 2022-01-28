@@ -5,12 +5,16 @@ import { createNode } from "lily-components";
 
 export default function AllForm() {
     const context = useBookContext();
-    const { formData } = context;
-    console.log(formData);
     
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    const _submit = () => {}
+    const _submit = () => {
+        const __formData = {
+            title,
+            body,
+        }
+        createNode(context, __formData);
+    }
 
     return (
         <div className="flex">

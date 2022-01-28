@@ -1,31 +1,5 @@
 import { BOOK_SERVICE, FORM_TYPE } from 'lily-types';
 
-export const createChapter = (context: any, _formData: any) => {
-    const { dispatch } = context;
-    const { viewType, ...formData } = _formData;
-
-    dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: [
-            {
-                key: 'viewType',
-                value: viewType 
-            },
-            {
-                key: 'formData',
-                value: formData
-            }
-        ]
-    })
-};
-
-export const createSection = (
-    context: any,
-    props: any,
-) => {
-
-};
-
 export const createSubSection = (props: any) => {
     const { context, subSectionIndex, activePage, subSection } = props;
     const { viewData } = context;
