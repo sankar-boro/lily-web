@@ -2,7 +2,7 @@ import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import Body from "./Body";
 import NavigationRenderer from "./NavigationRenderer";
-import { useAuthContext, BookHandler } from "lily-service";
+import { BookHandler } from "lily-service";
 import { useBookContext, BookServiceProvider, FormServiceProvider } from "lily-service";
 import { BOOK_SERVICE } from "lily-types";
 

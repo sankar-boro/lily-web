@@ -3,7 +3,7 @@ import { BOOK_SERVICE, constants } from "lily-types";
 
 const { leftBar } = constants.heights.fromTopNav;
 
-const ReadBookNavigation = (props: any) => {
+const ReadBookNavigation = () => {
     const context: any = useBookContext();
     const { apiData, dispatch } = context;
 
@@ -74,9 +74,7 @@ const ReadBookNavigation = (props: any) => {
         <div className="con-19 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>
             <div style={{height: leftBar }}/>
             {apiData.map((value: any, index: number) => {
-                return <Page 
-                    page={value}
-                />;
+                return <Page page={value} key={index} />;
             })}
         </div>
     );

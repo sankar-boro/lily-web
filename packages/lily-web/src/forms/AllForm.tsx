@@ -19,19 +19,21 @@ export default function AllForm() {
         createNode(context, __formData);
     }
 
-    const _identity = identity.toString();
+    const _identity = identity && identity.toString();
     const createName: any = {
         "104": "Chapter",
         "105": "Section",
         "106": "Sub Section"
     }
 
+    let name = createName[_identity] ? createName[_identity] : 'Book';
+
     return (
         <div className="flex">
             <div className="con-80 flex">
                 <div className="con-10" />
                 <div className="con-80">
-                    <div className="h3">Create {createName[_identity]}</div>
+                    <div className="h3">Create {name}</div>
                     <div className="container-form">
                         <form action="#" method="post">
                             <div className="group-form-input">
