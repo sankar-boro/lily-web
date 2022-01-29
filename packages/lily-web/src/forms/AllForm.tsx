@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { textareaRows, textareaCols } from "lily-types";
-import { useBookContext} from "lily-service";
+import { useBookContext, useFormContext} from "lily-service";
 import { createNode } from "lily-components";
 
 export default function AllForm() {
     const context = useBookContext();
+    const { formData } = useBookContext();
+    const { identity }: any = formData;
     
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    const _submit = () => {
+    const _submit = (e: any) => {
+        e.preventDefault();
         const __formData = {
             title,
             body,
@@ -16,12 +19,19 @@ export default function AllForm() {
         createNode(context, __formData);
     }
 
+    const _identity = identity.toString();
+    const createName: any = {
+        "104": "Chapter",
+        "105": "Section",
+        "106": "Sub Section"
+    }
+
     return (
         <div className="flex">
             <div className="con-80 flex">
                 <div className="con-10" />
                 <div className="con-80">
-                    <div className="h3">Create Chapter</div>
+                    <div className="h3">Create {createName[_identity]}</div>
                     <div className="container-form">
                         <form action="#" method="post">
                             <div className="group-form-input">

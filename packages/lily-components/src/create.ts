@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const log = true;
+const log = false;
 
 export const createNode = (context: any, __formData: any) => {
     const { formData, bookId } = context;
@@ -23,7 +23,7 @@ export const createNode = (context: any, __formData: any) => {
 
     axios
         .post(
-            "http://localhost:8000/book/create/new/section",
+            "http://localhost:8000/book/create/update/any",
             uploadData,
             {
                 withCredentials: true,

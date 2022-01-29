@@ -1,7 +1,7 @@
 import { useBookContext } from "lily-service";
 import { BOOK_SERVICE, VUE } from "lily-types";
 
-const createSubSection = (dispatch: any, formData: any) => {
+const __create = (dispatch: any, formData: any) => {
     dispatch({
         type: BOOK_SERVICE.SETTERS,
         setters: [
@@ -33,7 +33,7 @@ const AddSubSectionOuter = (props: {
         botUniqueId,
         identity: 106,
     }
-    const click = () => createSubSection(dispatch, formData);
+    const click = () => __create(dispatch, formData);
 
     return (
         <div 
@@ -69,7 +69,7 @@ const AddSubSectionInner = (props: {
         identity: 106
     }
     
-    const click = () => createSubSection(dispatch, formData);
+    const click = () => __create(dispatch, formData);
     
     return (
         <div 
@@ -81,20 +81,19 @@ const AddSubSectionInner = (props: {
     )
 }
 
-const Divider = (props: any) => {
-    const { activePage } = props;
+const Divider = () => {
+    const { dispatch, activePage }: any = useBookContext();
+    const props = { activePage, dispatch, subSection: null };
     const { identity } = activePage;
-    const { dispatch } = useBookContext();
-    const newProps = { ...props, dispatch, subSection: null };
-
+    
     return <div className="con-20">
         <div className="li-item hover">Delete</div>
-        <AddSubSectionOuter {...newProps } />
+        <AddSubSectionOuter { ...props } />
         {identity === 105 && activePage.child.map((subSection: any, subSectionIndex: number) => {
             return <div key={subSection.uniqueId}>
                 {subSection.title}
                 <AddSubSectionInner 
-                    {...newProps}
+                    { ...props }
                     subSection={subSection}
                 />
             </div>;

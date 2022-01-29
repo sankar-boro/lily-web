@@ -141,7 +141,7 @@ const Body = () => {
             </div>
             <div className="con-10" />
         </div>
-        <Divider {...context} />
+        <Divider />
     </div>
 }
 
