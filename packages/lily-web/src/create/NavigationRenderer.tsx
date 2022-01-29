@@ -214,9 +214,8 @@ const NavigationPages = (props: {
     )
 }
 
-const Main = (props: any) => {
-    const { context } = props;
-    const { apiData: pages, activePage } = context;
+const Main = () => {
+    const { apiData: pages, activePage }: any = useBookContext();
 
     if (!activePage) return null;
     return (

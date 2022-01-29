@@ -129,7 +129,10 @@ export const sortAll = (_data: Node[], removeIds: any[] = []) => {
     return chapters;
 };
 
-export const setActivePageFn = (props: any) => {
+export const setActivePageFn = (props: {
+    apiData: any,
+    compareId: any,
+}) => {
     const { apiData, compareId } = props;
     let activePage = null;
     let found = false;

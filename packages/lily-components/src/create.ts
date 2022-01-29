@@ -1,8 +1,10 @@
 import axios from "axios";
+import { Result, Ok, Err } from "ts-results";
 
 const log = false;
 
-export const createNode = (context: any, __formData: any) => {
+
+export const createNode = async (context: any, __formData: any): Promise<Result<any, string>> => {
     const { formData, bookId } = context;
     const { identity, topUniqueId, botUniqueId } = formData;
     const { title, body } = __formData;
@@ -19,21 +21,21 @@ export const createNode = (context: any, __formData: any) => {
 
     if (log) {
         console.log('uploadData', uploadData)
-        return;
+        return new Promise((resolve) => {
+            resolve(Ok(null))
+        });
     }
 
-    axios
+    let url = "http://localhost:8000/book/create/update/any";
+    if (formData.url) url = formData.url;
+    return await axios
         .post(
-            "http://localhost:8000/book/create/update/any",
+            url,
             uploadData,
             {
                 withCredentials: true,
             }
         )
-        .then((res: any) => {
-            console.log('res', res)
-        })
-        .catch((err: any) => {
-            console.log('err', err);
-        });
+        .then((res) => Ok(res.data))
+        .catch((err) => Err(err));
 }

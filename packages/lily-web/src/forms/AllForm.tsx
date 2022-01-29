@@ -1,22 +1,64 @@
-import { useState } from "react";
-import { textareaRows, textareaCols } from "lily-types";
-import { useBookContext, useFormContext} from "lily-service";
+import { useEffect, useState } from "react";
+import { textareaRows, textareaCols, BOOK_SERVICE } from "lily-types";
+import { setActivePageFn, sortAll, useBookContext, useFormContext} from "lily-service";
 import { createNode } from "lily-components";
+import { Ok, Err } from 'ts-results';
 
 export default function AllForm() {
     const context = useBookContext();
-    const { formData } = useBookContext();
+    const { formData, rawData, dispatch } = context;
     const { identity }: any = formData;
     
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    const _submit = (e: any) => {
+    const _submit = async (e: any) => {
         e.preventDefault();
         const __formData = {
             title,
             body,
         }
-        createNode(context, __formData);
+        let res = await createNode(context, __formData);
+        if (res.err) {
+            console.log(res.val);
+            return;
+        }
+        if (!res.val) {
+            console.log("App in debug mode.");
+            return;
+        }
+        if (res.val) {
+            if (!rawData) {
+                let resData: any = res.val;
+                let bookId = resData.uniqueId;
+                let newRawData = [resData];
+                let newApiData = sortAll(newRawData, []);
+                let newActivePage = setActivePageFn({
+                    apiData: newApiData,
+                    compareId: bookId
+                });
+                dispatch({
+                    type: BOOK_SERVICE.SETTERS,
+                    setters: [
+                        {
+                            key: 'rawData',
+                            value: rawData
+                        },
+                        {
+                            key: 'apiData',
+                            value: newApiData
+                        },
+                        {
+                            key: 'activePage',
+                            value: newActivePage,
+                        },
+                        {
+                            key: 'bookId',
+                            value: bookId
+                        }
+                    ]
+                })
+            }
+        }
     }
 
     const _identity = identity && identity.toString();
@@ -27,6 +69,23 @@ export default function AllForm() {
     }
 
     let name = createName[_identity] ? createName[_identity] : 'Book';
+
+    useEffect(() => {
+        if (name === 'Book') {
+            dispatch({
+                type: BOOK_SERVICE.SETTERS,
+                setters: [
+                    {
+                        key: 'formData',
+                        value: {
+                            url: "http://localhost:8000/book/create/new/book",
+                            identity: 101,
+                        }
+                    }
+                ]
+            });
+        }
+    }, []);
 
     return (
         <div className="flex">
