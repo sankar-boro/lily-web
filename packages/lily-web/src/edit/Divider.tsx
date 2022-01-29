@@ -95,6 +95,7 @@ const Divider = () => {
                 <AddSubSectionInner 
                     { ...props }
                     subSection={subSection}
+                    key={subSectionIndex}
                 />
             </div>;
         })}

@@ -2,6 +2,38 @@
 import { setActivePageFn, useBookContext } from "lily-service";
 import { BOOK_SERVICE, VUE } from "lily-types";
 
+const __create = (dispatch: any, formData: any) => {
+    dispatch({
+        type: BOOK_SERVICE.SETTERS,
+        setters: [
+            {
+                key: 'vue',
+                value: VUE.FORM,
+            },
+            {
+                key: 'formData',
+                value: formData
+            }
+        ]
+    })
+}
+
+const __set = (dispatch: any, activePage: any) => {
+    dispatch({
+        type: BOOK_SERVICE.SETTERS,
+        setters: [
+            {
+                key: 'vue',
+                value: VUE.DOCUMENT
+            },
+            {
+                key: 'activePage',
+                value: activePage
+            }
+        ]
+    })
+}
+
 const AddNewSectionInner = (props: {
     section: any,
     sections: any,
@@ -13,7 +45,7 @@ const AddNewSectionInner = (props: {
     let botUniqueId: any = null;
 
     sections.forEach((_section: any, sectionIndex: number) => {
-        if (_section.uniqueId === section.uniqueId && section[sectionIndex + 1]) {
+        if (_section.uniqueId === section.uniqueId && sections[sectionIndex + 1]) {
             botUniqueId = sections[sectionIndex + 1].uniqueId;
         }
     })
@@ -24,21 +56,7 @@ const AddNewSectionInner = (props: {
         identity: 105
     }
 
-    const createSection = () => {
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'vue',
-                    value: VUE.FORM,
-                },
-                {
-                    key: 'formData',
-                    value: formData
-                }
-            ]
-        })
-    }
+    const createSection = () => __create(dispatch, formData);
 
     return <div 
         className="hover" 
@@ -59,19 +77,7 @@ const Section = (props: any) => {
             apiData,
             compareId: section.uniqueId
         });
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'activePage',
-                    value: activePage
-                },
-                {
-                    key: 'vue',
-                    value: VUE.DOCUMENT
-                }
-            ]
-        })
+        __set(dispatch, activePage);
     };
 
     return <div key={`${section.uniqueId}`} className="Section">
@@ -115,19 +121,7 @@ const PageTitle = (props: any) => {
             apiData,
             compareId: page.uniqueId
         });
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'activePage',
-                    value: activePage
-                },
-                {
-                    key: 'vue',
-                    value: VUE.DOCUMENT
-                }
-            ]
-        })
+        __set(dispatch, activePage);
     };
 
     return <div
@@ -160,19 +154,7 @@ const AddChapter = (props: {
         identity: 104
     }
     const createNewChapter = () => {
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'vue',
-                    value: VUE.FORM,
-                },
-                {
-                    key: 'formData',
-                    value: formData,
-                }
-            ]
-        })
+        __create(dispatch, formData);
     }
     return (
         <div
@@ -205,19 +187,7 @@ const AddNewSectionUpper = (props: {
     }
 
     const createNewSection = () => {
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'vue',
-                    value: VUE.FORM,
-                },
-                {
-                    key: 'formData',
-                    value: formData
-                }
-            ]
-        })
+        __create(dispatch, formData);
     }
 
     return <div 

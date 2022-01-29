@@ -97,8 +97,8 @@ const Body = () => {
 
     const SectionBody = () => {
         if (activePage.identity === 104) return null;
-        return activePage.child.map((subSection: any, sectionIndex: number) => {
-            return <SubSectionBody subSection={subSection} />
+        return activePage.child.map((subSection: any, subSectionIndex: number) => {
+            return <SubSectionBody subSection={subSection} key={subSectionIndex} />
         })
     }
 

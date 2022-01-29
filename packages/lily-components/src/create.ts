@@ -18,6 +18,7 @@ export const createNode = (context: any, __formData: any) => {
     if (botUniqueId) uploadData = { ...uploadData, botUniqueId };
 
     if (log) {
+        console.log('uploadData', uploadData)
         return;
     }
 
