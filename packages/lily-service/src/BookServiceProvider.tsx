@@ -2,6 +2,11 @@ import React, { useContext, useEffect, useReducer } from "react";
 import { VUE, BOOK_SERVICE } from "lily-types";
 import { BookHandler } from "./BookService";
 
+type ApiResponse = any;
+type InitFormData = any;
+
+export type FormData = ApiResponse | InitFormData;
+
 const bookState = {
     rawData: null,
     apiData: null,
@@ -17,6 +22,7 @@ const bookState = {
     dispatch: (data: any) => {},
     vue: VUE.DOCUMENT,
     service: new BookHandler(),
+    notifications: null,
 }
 
 export const BookContext = React.createContext({
@@ -34,6 +40,7 @@ export const BookContext = React.createContext({
     error: '',
     dispatch: (data: any) => {},
     vue: VUE.DOCUMENT,
+    notifications: null,
 });
 
 export const useBookContext = () => useContext(BookContext);

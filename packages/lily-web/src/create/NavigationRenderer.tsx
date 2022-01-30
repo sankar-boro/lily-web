@@ -1,6 +1,7 @@
 // import { createChapter } from "lily-components";
 import { setActivePageFn, useBookContext } from "lily-service";
 import { BOOK_SERVICE, VUE } from "lily-types";
+import { useEffect } from "react";
 
 const __create = (dispatch: any, formData: any) => {
     dispatch({
@@ -53,7 +54,8 @@ const AddNewSectionInner = (props: {
     const formData = {
         topUniqueId,
         botUniqueId,
-        identity: 105
+        identity: 105,
+        type: 'NEW_NODE',
     }
 
     const createSection = () => __create(dispatch, formData);
@@ -151,7 +153,8 @@ const AddChapter = (props: {
     const formData = {
         topUniqueId,
         botUniqueId,
-        identity: 104
+        identity: 104,
+        type: 'NEW_NODE'
     }
     const createNewChapter = () => {
         __create(dispatch, formData);
@@ -183,7 +186,8 @@ const AddNewSectionUpper = (props: {
     let formData = {
         topUniqueId,
         botUniqueId,
-        identity: 105
+        identity: 105,
+        type: 'NEW_NODE'
     }
 
     const createNewSection = () => {
@@ -216,7 +220,7 @@ const NavigationPages = (props: {
 
 const Main = () => {
     const { apiData: pages, activePage }: any = useBookContext();
-
+    
     if (!activePage) return null;
     return (
         <div className="con-19 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>

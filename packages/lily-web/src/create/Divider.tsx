@@ -32,6 +32,7 @@ const AddSubSectionOuter = (props: {
         topUniqueId,
         botUniqueId,
         identity: 106,
+        type: 'NEW_NODE'
     }
     const click = () => __create(dispatch, formData);
 
@@ -66,7 +67,8 @@ const AddSubSectionInner = (props: {
     const formData = {
         topUniqueId,
         botUniqueId,
-        identity: 106
+        identity: 106,
+        type: 'NEW_NODE'
     }
     
     const click = () => __create(dispatch, formData);

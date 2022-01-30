@@ -5,7 +5,7 @@ const log = false;
 
 
 export const createNode = async (context: any, __formData: any): Promise<Result<any, string>> => {
-    const { formData, bookId } = context;
+    const { formData, bookId, activePage } = context;
     const { identity, topUniqueId, botUniqueId } = formData;
     const { title, body } = __formData;
 
@@ -27,7 +27,7 @@ export const createNode = async (context: any, __formData: any): Promise<Result<
     }
 
     let url = "http://localhost:8000/book/create/update/any";
-    if (formData.url) url = formData.url;
+    if (!activePage) url = formData.url;
     return await axios
         .post(
             url,
