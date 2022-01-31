@@ -174,9 +174,11 @@ const AddNewSectionUpper = (props: {
     page: any,
     pageIndex: number
 }) => {
+    const { page, pageIndex } = props;
+    if (pageIndex === 0) return null;
+    
     const context = useBookContext();
     const { dispatch } = context;
-    const { page } = props;
     const { child: sections } = page;
     const topUniqueId = page.uniqueId;
     let botUniqueId = null;

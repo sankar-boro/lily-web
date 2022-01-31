@@ -53,7 +53,8 @@ const AddNewSectionInner = (props: {
     const formData = {
         topUniqueId,
         botUniqueId,
-        identity: 105
+        identity: 105,
+        type: 'NEW_NODE'
     }
 
     const createSection = () => __create(dispatch, formData);
@@ -151,7 +152,8 @@ const AddChapter = (props: {
     const formData = {
         topUniqueId,
         botUniqueId,
-        identity: 104
+        identity: 104,
+        type: 'NEW_NODE'
     }
     const createNewChapter = () => {
         __create(dispatch, formData);
@@ -171,9 +173,10 @@ const AddNewSectionUpper = (props: {
     page: any,
     pageIndex: number
 }) => {
+    const { page, pageIndex } = props;
+    if (pageIndex === 0) return null;
     const context = useBookContext();
     const { dispatch } = context;
-    const { page } = props;
     const { child: sections } = page;
     const topUniqueId = page.uniqueId;
     let botUniqueId = null;
@@ -183,7 +186,8 @@ const AddNewSectionUpper = (props: {
     let formData = {
         topUniqueId,
         botUniqueId,
-        identity: 105
+        identity: 105,
+        type: 'NEW_NODE'
     }
 
     const createNewSection = () => {

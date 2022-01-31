@@ -2,13 +2,13 @@ import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
-import { BookHandler, useAuthContext } from "lily-service";
+import { BookHandler, updatePage } from "lily-service";
 import { useBookContext, BookServiceProvider } from 'lily-service';
 import { BOOK_SERVICE } from "lily-types";
 
 const Body = () => {
     const context = useBookContext();
-    const { dispatch } = context;
+    const { dispatch, notifications, rawData, activePage, formData }: any = context;
     const history: any = useHistory();
     const { bookId } = history.location.state;
     
@@ -41,6 +41,10 @@ const Body = () => {
             })
         });
     }, []);
+
+    useEffect(() => {
+        updatePage(context);
+    }, [notifications]);
 
     if(!context.activePage) return <div>Fetching...</div>;
 
