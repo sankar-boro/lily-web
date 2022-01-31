@@ -7,7 +7,7 @@ module.exports = {
   devServer: {
     hot: true,
     open: true,
-    port: 3000,
+    port: 2000,
     historyApiFallback: true
   },
   plugins: [

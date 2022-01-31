@@ -91,14 +91,17 @@ const groupChapters = (parentId: string, chapters: any) => {
     let currentParentId = parentId;
     let orders: any = [];
     let times = 0;
-    while (times !== 3) {
+    while (orders.length !== chapters.length) {
         // eslint-disable-next-line no-loop-func
-        chapters.forEach((chapter: any) => {
-            if (chapter.parentId === currentParentId) {
-                orders.push(chapter);
-                currentParentId = chapter.uniqueId;
+        for (let i=0; i < chapters.length; i++) {
+            const thisChapter = chapters[i];
+            if (currentParentId === thisChapter.parentId) {
+                orders.push(thisChapter);
+                currentParentId = thisChapter.uniqueId;
+                times++;
+                break;
             }
-        });
+        }
         times++;
     }
     return orders;

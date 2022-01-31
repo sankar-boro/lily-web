@@ -2,7 +2,7 @@ import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
 import { BookServiceProvider, setActivePageFn, sortAll, useBookContext } from 'lily-service';
 import { useEffect } from "react";
-import { BOOK_SERVICE } from "lily-types";
+import { BOOK_SERVICE, VUE } from "lily-types";
 
 const Body = () => {
     const context = useBookContext();
@@ -66,6 +66,14 @@ const Body = () => {
                             {
                                 key: 'notifications',
                                 value: null,
+                            },
+                            {
+                                key: 'formData',
+                                value: null,
+                            },
+                            {
+                                key: 'vue',
+                                value: VUE.DOCUMENT
                             }
                         ]
                     })
@@ -87,6 +95,22 @@ const Body = () => {
                 if (rawData && bookId && activePage) {
                     const { __formData } = notifications;
                     let resData: any = res.val;
+                    let __rawData: any[] = [];
+                    rawData.forEach((__page: any) => {
+                        __rawData.push(__page);
+                    });
+                    if (formData.topUniqueId && formData.botUniqueId) {
+                        __rawData = __rawData.map((__node: any) => {
+                            if (__node.uniqueId === formData.botUniqueId) {
+                                return {
+                                    ...__node,
+                                    parentId: resData.uniqueId,
+                                }
+                            }
+                            return __node;
+                        })
+                    }
+
                     let newResData = {
                         parentId: formData.topUniqueId,
                         uniqueId: resData.uniqueId,
@@ -97,7 +121,7 @@ const Body = () => {
                         bookId,
                         identity: formData.identity
                     };
-                    let newRawData = rawData;
+                    let newRawData = __rawData;
                     newRawData.push(newResData);
                     let newApiData = sortAll(newRawData, []);
                     let newActivePage = setActivePageFn({
@@ -109,7 +133,7 @@ const Body = () => {
                         setters: [
                             {
                                 key: 'rawData',
-                                value: rawData
+                                value: newRawData
                             },
                             {
                                 key: 'apiData',
@@ -122,6 +146,14 @@ const Body = () => {
                             {
                                 key: 'notifications',
                                 value: null,
+                            }, 
+                            {
+                                key: 'formData',
+                                value: null,
+                            },
+                            {
+                                key: 'vue',
+                                value: VUE.DOCUMENT
                             }
                         ]
                     })

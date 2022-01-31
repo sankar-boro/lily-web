@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { textareaRows, textareaCols, BOOK_SERVICE } from "lily-types";
-import { setActivePageFn, sortAll, useBookContext} from "lily-service";
+import { useBookContext} from "lily-service";
 import { createNode } from "lily-components";
 
 export default function AllForm() {
     const context = useBookContext();
     const { formData, rawData, dispatch }: any = context;
     const { identity }: any = formData;
-    
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const _submit = async (e: any) => {
@@ -17,6 +16,8 @@ export default function AllForm() {
             body,
         }
         let res = await createNode(context, __formData);
+        setTitle('');
+        setBody('');
         dispatch({
             type: BOOK_SERVICE.SETTERS,
             setters: [
