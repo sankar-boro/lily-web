@@ -24,6 +24,7 @@ export default function AllForm() {
                     key: 'notifications',
                     value: {
                         data: res,
+                        __formData,
                         type: formData.type
                     }
                 }

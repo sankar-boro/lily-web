@@ -6,16 +6,14 @@ import { useBookContext } from "lily-service";
 const { topBar } = constants.heights.fromTopNav;
 
 const SubSections = (props: any) => {
-    const { activePage, context } = props;
-    const { hideSection } = context;
+    const { activePage } = props;
 
-    if (hideSection) return null;
     if (!activePage) return null;
     if (!activePage.child) return null;
     if (!Array.isArray(activePage.child)) return null;
-    const sections = activePage.child;
+    const subSections = activePage.child;
 
-    return sections.map((x: any) => {
+    return subSections.map((x: any) => {
         return (
             <div key={x.uniqueId}>
                 <h4 className="h4" id={x.uniqueId}>{x.title}</h4>
@@ -30,7 +28,7 @@ const Padding_H_10 = () => {
 }
 
 const Divider = (props: any) => {
-    const { activePage, sectionId, context, subSectionIndex } = props;
+    const { activePage, context } = props;
     const { identity } = activePage;
     const history: any = useHistory();
     const { bookId } = context;
@@ -95,7 +93,7 @@ const Main = (props: any) => {
     );
 }
 
-const BodyRenderer = (props: any) => {
+const BodyRenderer = () => {
     const history: any = useHistory();
     const { title } = history.location.state;
     const context: any = useBookContext();
@@ -103,7 +101,6 @@ const BodyRenderer = (props: any) => {
     const temp = {title, activePage, sectionId, context, history };
 
     if (activePage === null) return null;
-
     return <Main {...temp} />
 };
 

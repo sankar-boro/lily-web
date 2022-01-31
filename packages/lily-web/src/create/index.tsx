@@ -5,7 +5,8 @@ import { useEffect } from "react";
 import { BOOK_SERVICE } from "lily-types";
 
 const Body = () => {
-    const { dispatch, notifications, rawData, bookId, activePage }: any = useBookContext();
+    const context = useBookContext();
+    const { dispatch, notifications, rawData, bookId, activePage, formData }: any = useBookContext();
     useEffect(() => {
         dispatch({
             type: BOOK_SERVICE.SETTERS,
@@ -48,7 +49,7 @@ const Body = () => {
                         setters: [
                             {
                                 key: 'rawData',
-                                value: rawData
+                                value: newRawData
                             },
                             {
                                 key: 'apiData',
@@ -72,7 +73,7 @@ const Body = () => {
             }
         }
 
-        if (notifications && notifications.type === 'NEW_NOE') {
+        if (notifications && notifications.type === 'NEW_NODE') {
             const res = notifications.data;
             if (res.err) {
                 console.log(res.val);
@@ -84,8 +85,20 @@ const Body = () => {
             }
             if (res.val) {
                 if (rawData && bookId && activePage) {
+                    const { __formData } = notifications;
                     let resData: any = res.val;
-                    let newRawData = [...rawData, resData];
+                    let newResData = {
+                        parentId: formData.topUniqueId,
+                        uniqueId: resData.uniqueId,
+                        title: __formData.title,
+                        body: __formData.body,
+                        createdAt: resData.uniqueId,
+                        updatedAt: resData.uniqueId,
+                        bookId,
+                        identity: formData.identity
+                    };
+                    let newRawData = rawData;
+                    newRawData.push(newResData);
                     let newApiData = sortAll(newRawData, []);
                     let newActivePage = setActivePageFn({
                         apiData: newApiData,
