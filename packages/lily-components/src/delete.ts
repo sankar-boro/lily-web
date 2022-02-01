@@ -1,7 +1,7 @@
 import { Result, Ok, Err } from "ts-results";
 import axios from "axios";
 import { sortAll } from "lily-service";
-import { BOOK_SERVICE } from "lily-types";
+import { BOOK_SERVICE, Page } from "lily-types";
 
 const log = false;
 const UPDATE_OR_DELETE = "http://localhost:8000/book/update_or_delete";
@@ -123,78 +123,101 @@ export const deleteSection = async (bookContext: any) => {
     return Ok(deleteData)
 }
 
-export const deleteSubSection = async (context:any, subSection: any) => {
-    const { activePage, bookId, rawData, dispatch } = context;
-    const section = activePage;
-    let totalSubSections = section.child.length;    
-  	let parentData = section;
-  	let childData = null;
-    let subSections = section.child;
-    const deleteData = [subSection.uniqueId];
+type ActivePageInfo = {
+	activePageUId: string, // activePageUniqueId
+	activePageNodes: any[], // activePageChildNodes
+	activePageNodesLen: number, // activePageChildNodesLen
+	parentData: any, // parentData
+};
 
-    for (let i=0; i < totalSubSections; i++) {
-        if (!subSections[i] || !subSections[i].uniqueId) return Err(`no data for index ${i}`);
-        if (subSections[i].uniqueId === subSection.uniqueId) {
-            if (subSections[i + 1]) {
-                childData = subSections[i + 1];
+
+const activePageInfo = (activePage: Page): ActivePageInfo => {
+	const { child, ...parentData } = activePage;
+	return {
+		activePageUId: activePage.uniqueId,
+		activePageNodes: activePage.child,
+		activePageNodesLen: activePage.child.length,
+		parentData
+	}
+}
+
+type TopBotUIdType = { topUniqueId: string, botUniqueId: string };
+
+const TopBotUId = (activePageInfo: ActivePageInfo, compareId: string): null | TopBotUIdType => {
+	const { activePageNodes, activePageNodesLen, parentData } = activePageInfo;
+	let botData = null;
+	let topData = parentData;
+	for (let i=0; i < activePageNodesLen; i++) {
+        if (activePageNodes[i].uniqueId === compareId) {
+            if (activePageNodes[i + 1]) {
+                botData = activePageNodes[i + 1];
             }
             break;
         }
-        parentData = subSections[i];
+        topData = activePageNodes[i];
     }
+	if (topData && botData) {
+		return {
+		  topUniqueId: topData.uniqueId,
+		  botUniqueId: botData.uniqueId
+		};
+	};
+	return null;
+}
 
-    let updateData: any = null;
+const removeNodes = (rawData: any[] = [], nodes: any[] = []) => {
+	return rawData.filter((node: any) => {
+		if (nodes.includes(node.uniqueId)) return false;
+      	return true;
+	});
+}
 
-    if (parentData && childData) {
-      updateData = {
-        topUniqueId: parentData.uniqueId,
-        botUniqueId: childData.uniqueId
-      }
-    };
-    
-    await updateOrDelete({updateData, deleteData}, bookId);
+const updateRawDataNodes = (rawData: any[] = [], updateData: TopBotUIdType) => {
+	const { topUniqueId, botUniqueId } = updateData;
+	return rawData.map((node: any) => {
+		if (node.uniqueId === botUniqueId) {
+		  return { ...node, parentId: topUniqueId };
+		}
+		return node;
+	})
+}
 
-    let newRawData = rawData.filter((node: any) => {
-      if (node.uniqueId === subSection.uniqueId) return false;
-      return true;
-    });
-
-    if (updateData && updateData.topUniqueId && updateData.botUniqueId) {
-        newRawData = newRawData.map((node: any) => {
-          if (node.uniqueId === updateData.botUniqueId) {
-            return { ...node, parentId: updateData.topUniqueId };
-          }
-          return node;
-        })
-    }
-
-    const newApiData = sortAll(newRawData, deleteData);
-
-    let newActivePage = null;
-    newApiData.forEach((page: any) => {
+const newActivePage = (apiData: any, compareId: string) => {
+	let newActivePage = null;
+	apiData.forEach((page: any) => {
         page.child.forEach((currentSection: any) => {
-            if (currentSection.uniqueId === section.uniqueId) {
+            if (currentSection.uniqueId === compareId) {
                 newActivePage = currentSection;
             }
         })
     });
+	return newActivePage;
+}
+
+export const deleteSubSection = async ({
+  context,
+  compareId
+}: any) => {
+    const { activePage, bookId, rawData, dispatch } = context;
+	const __activePageInfo = activePageInfo(activePage);
+	const { activePageUId } = __activePageInfo;
+	let deleteData = [compareId];
+    let updateData: null | TopBotUIdType = TopBotUId(__activePageInfo, compareId);
+	await updateOrDelete({updateData, deleteData}, bookId);
+    let RawData = removeNodes(rawData, deleteData);                               // :rawData
+    if (updateData) {
+        RawData = updateRawDataNodes(RawData, updateData);
+    }
+
+    const ApiData = sortAll(RawData, []);                                         // :apiData
+    let ActivePage = newActivePage(ApiData, activePageUId );                      // :activePage
 
     dispatch({
-      type: BOOK_SERVICE.SETTERS,
-      setters: [
-        {
-          key: 'rawData',
-          value: newRawData
-        },
-        {
-          key: 'apiData',
-          value: newApiData
-        },
-        {
-          key: 'activePage',
-          value: newActivePage
-        }
-      ]
+      type: BOOK_SERVICE.SETTERSV1,
+      settersv1: {
+		keys: ['rawData', 'apiData', 'activePage'],
+		values: [RawData, ApiData, ActivePage]
+	  }
     })
 
     return Ok("Deleted")

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { VUE, BOOK_SERVICE } from "lily-types";
+import { VUE, BOOK_SERVICE, BookContextType, BookActionType } from "lily-types";
 import { BookHandler } from "./BookService";
 
 type ApiResponse = any;
@@ -43,7 +43,7 @@ export const BookContext = React.createContext({
 
 export const useBookContext = () => useContext(BookContext);
 
-const setters = (state: any, action: any) => {
+const setters = (state: BookContextType, action: BookActionType) => {
     const { setters } = action;
     const updateData: any = {};
     setters.forEach((setter: any) => {
@@ -52,12 +52,26 @@ const setters = (state: any, action: any) => {
     return { ...state, ...updateData };
 }
 
-const reducer = (state: any, action: any) => {
+const settersv1 = (state: BookContextType, action: BookActionType) => {
+    const { settersv1 } = action;
+    const { keys, values } = settersv1;
+    const updateData: any = {};
+    if (keys.length === values.length) {
+        keys.forEach((keyName: any, keyIndex: any) => {
+            updateData[keyName] = values[keyIndex];
+        })
+    }
+    return { ...state, ...updateData };
+}
+
+const reducer = (state: BookContextType, action: BookActionType) => {
     const { type } = action;
     
     switch (type) {
         case BOOK_SERVICE.SETTERS:
             return setters(state, action);
+        case BOOK_SERVICE.SETTERSV1:
+            return settersv1(state, action);
         default:
             throw new Error(`Unknown type: ${action.type}`);
     }

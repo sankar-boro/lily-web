@@ -37,6 +37,7 @@ export enum BOOK_SERVICE {
     API_DATA = 'API_DATA',
     SETTER = 'SETTER',
     SETTERS = 'SETTERS',
+    SETTERSV1 = 'SETTERSV1',
     FORM_PAGE_SETTER = 'FORM_PAGE_SETTER',
     ACTIVE_PAGE = 'ACTIVE_PAGE'
 }
@@ -63,57 +64,40 @@ export const URLS = {
 export const ENV = {
     LOG: true,
 }
-
-export type Node = {
+type Common = {
     bookId: string;
     body: string;
     identity: number;
     title: string;
+    uniqueId: string;
+    authorId: string;
+    authorName: string;
+    createdAt: string;
+    updatedAt: string;
+}
+type ParentId = {
     parentId: string;
-    uniqueId: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-    updatedAt: string;
-};
-export type Section = {
-    bookId: string;
-    body: string;
-    child: Node[],
-    identity: number;
-    title: string;
-    uniqueId: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-    updatedAt: string;
 }
-export type Chapter = {
-    bookId: string;
-    body: string;
+type ParentNode = Common & ParentId;
+export type SubSection = ParentNode;
+type SubSections = {
+    child: SubSection[]
+}
+export type Section = Common & SubSections;
+type Sections = {
     child: Section[],
-    identity: number;
-    title: string;
-    uniqueId: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-    updatedAt: string;
 }
-export type ApiData = Chapter[];
-export type ChapterParentNode = Chapter;
-export type ChapterChildNode = Chapter;
-export type ParentChildNode = {
-    parentNode: Option<Chapter>,
-    childNode: Option<Chapter>,
-}
+export type Page = Common & Sections;
+type Pages = Page[];
+export type Documents = [Common, ...Pages];
+export type ApiData = Documents;
+export type RawData = [Common, ...Node[]];
 export enum Request {
     INIT = 'INIT',
     FETCH = 'FETCH',
     SUCCESS = 'SUCCESS',
     ERROR = 'ERROR'
 }
-
 export const textareaRows = 10;
 export const textareaCols = 50;
 export const VUE = {
@@ -123,4 +107,30 @@ export const VUE = {
     INIT: 'INIT',
     ERROR: 'ERROR',
     DOCUMENT: 'DOCUMENT'
+}
+
+export type BookContextType = {
+    rawData: RawData,
+    apiData: ApiData,
+    bookId: '',
+    parentId: '',
+    formData: {},
+    viewData: {},
+    editData: {},
+    activePage: null,
+    apiState: null,
+    error: '',
+    dispatch: (data: any) => {},
+    vue: string,
+    service: () => {},
+    notifications: null,
+}
+
+export type BookActionType = {
+    type: string,
+    setters: any[],
+    settersv1: {
+        keys: [],
+        values: [],
+    }
 }
