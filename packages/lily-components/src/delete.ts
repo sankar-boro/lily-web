@@ -1,7 +1,6 @@
-import { Result, Ok, Err } from "ts-results";
 import axios from "axios";
 import { sortAll } from "lily-service";
-import { BOOK_SERVICE, Page } from "lily-types";
+import { BOOK_SERVICE, Page, Common, ApiData, Section, RawData } from "lily-types";
 
 const log = false;
 const UPDATE_OR_DELETE = "http://localhost:8000/book/update_or_delete";
@@ -26,101 +25,70 @@ const updateOrDelete = async (data: {
   });
 }
 
-export const deleteSection = async (bookContext: any) => {
-    const { apiData, dispatch, activePage: activeSection, bookId, rawData } = bookContext;
-    if (!activeSection) return Err("");
-        
-    const deleteIds: any[] = [];
-    
-    deleteIds.push(activeSection.uniqueId);
+const createDeleteSectionIds = (activeSection: Section, deleteIds: string[]) => {
     activeSection.child.forEach((subSection: any) => {
         deleteIds.push(subSection.uniqueId);
     });
-    
-    let parentData = null;
-    let sectionsLenOfChapter: number | null = null;
-    let sectionsOfChapter: any = null;
-    let childData = null;
+}
 
-    apiData.forEach((chapter: any) => {
-        chapter.child.forEach((section: any) => {
-            if (section.uniqueId === activeSection.uniqueId) {
-                parentData = chapter;
-                sectionsLenOfChapter = chapter.child.length;
-                sectionsOfChapter = chapter.child;
-            }
-        });
-    });
+const createSectionTopAndBotId = (apiData: ApiData, activePage: ActivePageInfo) => {
+	const { activePageUId } = activePage;
 
+	let topData: any = null;
+	let botData: any = null;
+	let sections: any = null;
+	let totalSections: any = null;
 
-    if (sectionsOfChapter && sectionsLenOfChapter) {
-        let lastSectionIndex = sectionsLenOfChapter - 1;
-    
-        for (let i=0; i <= lastSectionIndex; i++) {
-            if (sectionsOfChapter[i].uniqueId === activeSection.uniqueId) {
-                if (sectionsOfChapter[i+1]) {
-                    childData = sectionsOfChapter[i + 1];
+	apiData.forEach((chapter: any) => {
+		chapter.child.forEach((section: any) => {
+			if (section.uniqueId === activePageUId) {
+			 	topData = chapter;
+				sections = chapter.child;
+				totalSections = sections.length;
+			}
+		});
+	});
+
+	if (sections && totalSections) {
+        for (let i=0; i < totalSections; i++) {
+            if (sections[i].uniqueId === activePageUId) {
+                if (sections[i + 1]) {
+                    botData = sections[i + 1];
                 }
                 break;
             }
-            parentData = sectionsOfChapter[i];
+	        topData = sections[i];
         }
     }
 
-    let updateData: any = null;
-    let deleteData = deleteIds;
+	if (topData && botData) {
+		return {
+		  topUniqueId: topData.uniqueId,
+		  botUniqueId: botData.uniqueId
+		};
+	};
+	return null;
+}
 
-    if (parentData && childData) {
-        updateData = {
-            topUniqueId: parentData.uniqueId,
-            botUniqueId: childData.uniqueId
-        }
-    };
-
+export const deleteSection = async (bookContext: any) => {
+    const { apiData, dispatch, activePage, bookId, rawData } = bookContext;
+	const __activePageInfo: ActivePageInfo = activePageInfo(activePage);
+	const { activePageUId } = __activePageInfo;
+    const deleteData: any[] = [activePageUId];
+    createDeleteSectionIds(activePage, deleteData);
+    let updateData = createSectionTopAndBotId(apiData, activePage);
     await updateOrDelete({updateData, deleteData}, bookId);
-
-    let newRawData = rawData.filter((node: any) => {
-      if (deleteIds.includes(node.uniqueId)) return false;
-      return true;
-    });
-
-    if (updateData && updateData.topUniqueId && updateData.botUniqueId) {
-        newRawData = newRawData.map((node: any) => {
-          if (node.uniqueId === updateData.botUniqueId) {
-            return { ...node, parentId: updateData.topUniqueId };
-          }
-          return node;
-        })
-    }
-
-    const newApiData = sortAll(newRawData, deleteData);
-
-    let newActivePage = null;
-    newApiData.forEach((page: any) => {
-        if (page.uniqueId === bookId) {
-          newActivePage = page;
-        }
-    });
-
+    let newRawData = removeNodes(rawData, deleteData);
+    if (updateData) newRawData = updateRawDataNodes(newRawData, updateData);
+    const newApiData = sortAll(newRawData, []);
+    let newActivePage = getActivePage(newApiData, bookId);
     dispatch({
       type: BOOK_SERVICE.SETTERS,
-      setters: [
-        {
-          key: 'rawData',
-          value: newRawData
-        },
-        {
-          key: 'apiData',
-          value: newApiData,
-        },
-        {
-          key: 'activePage',
-          value: newActivePage
-        }
-      ]
+      setters: {
+		  keys: ['rawData', 'apiData', 'activePage'],
+		  values: [newRawData, newApiData, newActivePage]
+	  }
     })
-    
-    return Ok(deleteData)
 }
 
 type ActivePageInfo = {
@@ -165,7 +133,7 @@ const TopBotUId = (activePageInfo: ActivePageInfo, compareId: string): null | To
 	return null;
 }
 
-const removeNodes = (rawData: any[] = [], nodes: any[] = []) => {
+const removeNodes = (rawData: RawData, nodes: any[] = []) => {
 	return rawData.filter((node: any) => {
 		if (nodes.includes(node.uniqueId)) return false;
       	return true;
@@ -182,15 +150,25 @@ const updateRawDataNodes = (rawData: any[] = [], updateData: TopBotUIdType) => {
 	})
 }
 
-const newActivePage = (apiData: any, compareId: string) => {
+const getActivePage = (apiData: ApiData, compareId: string) => {
 	let newActivePage = null;
-	apiData.forEach((page: any) => {
-        page.child.forEach((currentSection: any) => {
-            if (currentSection.uniqueId === compareId) {
-                newActivePage = currentSection;
-            }
-        })
-    });
+	for (let i=0; i < apiData.length; i++) {
+		let page: Common | Page = apiData[i];
+		if (apiData[i].uniqueId === compareId) {
+			newActivePage = apiData[i];
+			break;
+		}
+		const typeOfPage = (x: any): x is Page => !!x.child; 
+		if (typeOfPage(page)) {
+			const sections = page.child;
+			for (let j=0; j < sections.length; j++) {
+				if (sections[j].uniqueId === compareId) {
+					newActivePage = sections[j];
+					break;
+				}
+			}
+		}
+	}
 	return newActivePage;
 }
 
@@ -199,114 +177,72 @@ export const deleteSubSection = async ({
   compareId
 }: any) => {
     const { activePage, bookId, rawData, dispatch } = context;
-	const __activePageInfo = activePageInfo(activePage);
+	const __activePageInfo: ActivePageInfo = activePageInfo(activePage);
 	const { activePageUId } = __activePageInfo;
 	let deleteData = [compareId];
     let updateData: null | TopBotUIdType = TopBotUId(__activePageInfo, compareId);
 	await updateOrDelete({updateData, deleteData}, bookId);
     let RawData = removeNodes(rawData, deleteData);                               // :rawData
-    if (updateData) {
-        RawData = updateRawDataNodes(RawData, updateData);
-    }
-
+    if (updateData) RawData = updateRawDataNodes(RawData, updateData);
     const ApiData = sortAll(RawData, []);                                         // :apiData
-    let ActivePage = newActivePage(ApiData, activePageUId );                      // :activePage
-
+    let ActivePage = getActivePage(ApiData, activePageUId);                       // :activePage
     dispatch({
-      type: BOOK_SERVICE.SETTERSV1,
-      settersv1: {
-		keys: ['rawData', 'apiData', 'activePage'],
-		values: [RawData, ApiData, ActivePage]
-	  }
+      	type: BOOK_SERVICE.SETTERSV1,
+      	settersv1: {
+			keys: ['rawData', 'apiData', 'activePage'],
+			values: [RawData, ApiData, ActivePage]
+	  	}
     })
+}
 
-    return Ok("Deleted")
+const createDeletePageIds = (activePage: Page, deleteIds: any[]) => {
+	activePage.child.forEach((section: any) => {
+		deleteIds.push(section.uniqueId);
+		section.child.forEach((subSection: any) => {
+			deleteIds.push(subSection.uniqueId);
+		});
+	});
+}
+
+const createPageTopBotUId = (apiData: ApiData, activePageUId: string): null | TopBotUIdType => {
+	const totalChapters = apiData.length;
+	let childData: any = null;
+	let parentData: any = null;
+	for (let i=0; i < totalChapters; i++) {
+		if (apiData[i].uniqueId === activePageUId) {
+			if (apiData[i+1]) {
+				childData = apiData[i + 1];
+			}
+			break;
+		}
+		parentData = apiData[i];
+	}
+	if (parentData && childData) {
+		return {
+			topUniqueId: parentData.uniqueId,
+			botUniqueId: childData.uniqueId
+		}
+	};
+	return null;
 }
 
 export const deletePage = async (context: any) => {
-  const {activePage, apiData, bookId, dispatch, rawData } = context;
-  if (!apiData) return Err("!apiData");
-  if (!activePage) return Err("!activePage");
-  
-  if (activePage.length === 1) return Err('Cannot delete');
-
-  const deleteIds: any[] = [];
-
-  activePage.child.forEach((section: any) => {
-    deleteIds.push(section.uniqueId);
-    section.child.forEach((subSection: any) => {
-      deleteIds.push(subSection.uniqueId);
-    });
-  });
-  deleteIds.push(activePage.uniqueId);
-
-  const totalChapters = apiData.length;
-  const activePageId = activePage.uniqueId;
-  let childData: any = null;
-  let parentData: any = null;
-
-  for (let i=0; i < totalChapters; i++) {
-    if (apiData[i].uniqueId === activePageId) {
-      if (apiData[i+1]) {
-        childData = apiData[i + 1];
-      }
-      break;
-    }
-    parentData = apiData[i];
-  }
-
-  let updateData: any = null;
-  let deleteData = deleteIds;
-
-  if (parentData && childData) {
-    updateData = {
-      topUniqueId: parentData.uniqueId,
-      botUniqueId: childData.uniqueId
-    }
-  };
-
-  await updateOrDelete({updateData, deleteData}, bookId);
-
-  let newRawData = rawData.filter((node: any) => {
-    if (deleteIds.includes(node.uniqueId)) return false;
-    return true;
-  });
-
-  if (updateData && updateData.topUniqueId && updateData.botUniqueId) {
-      newRawData = newRawData.map((node: any) => {
-        if (node.uniqueId === updateData.botUniqueId) {
-          return { ...node, parentId: updateData.topUniqueId };
-        }
-        return node;
-      })
-  }
-
-  const newApiData = sortAll(newRawData, deleteData);
-
-  let newActivePage = null;
-  newApiData.forEach((page: any) => {
-      if (page.uniqueId === bookId) {
-        newActivePage = page;
-      }
-  });
-
-  dispatch({
-    type: BOOK_SERVICE.SETTERS,
-    setters: [
-      {
-        key: 'rawData',
-        value: newRawData,
-      },
-      {
-        key: 'apiData',
-        value: newApiData,
-      },
-      {
-        key: 'activePage',
-        value: newActivePage
-      }
-    ]
-  })
-
-  return Ok("Success.");
+  	const { activePage, apiData, bookId, dispatch, rawData } = context;
+	const __activePageInfo: ActivePageInfo = activePageInfo(activePage);
+	const { activePageUId } = __activePageInfo;
+	const deleteData: any[] = [activePageUId];
+	createDeletePageIds(activePage, deleteData);
+	const updateData = createPageTopBotUId(apiData, activePageUId);
+	await updateOrDelete({updateData, deleteData}, bookId);
+	let newRawData = removeNodes(rawData, deleteData);
+	if (updateData) newRawData = updateRawDataNodes(rawData, updateData)
+	const newApiData = sortAll(newRawData, deleteData);
+	let newActivePage = getActivePage(newApiData, activePageUId);
+	dispatch({
+		type: BOOK_SERVICE.SETTERSV1,
+		setters: {
+			keys: ['rawData', 'apiData', 'activePage'],
+			values: [newRawData, newApiData, newActivePage]
+		}
+	})
 }

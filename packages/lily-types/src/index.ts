@@ -64,7 +64,7 @@ export const URLS = {
 export const ENV = {
     LOG: true,
 }
-type Common = {
+export type Common = {
     bookId: string;
     body: string;
     identity: number;
@@ -75,23 +75,22 @@ type Common = {
     createdAt: string;
     updatedAt: string;
 }
-type ParentId = {
+export type ParentId = {
     parentId: string;
 }
-type ParentNode = Common & ParentId;
-export type SubSection = ParentNode;
-type SubSections = {
+export type SubSection = Common & ParentId;
+export type SubSections = {
     child: SubSection[]
 }
-export type Section = Common & SubSections;
-type Sections = {
+export type Section = Common & ParentId & SubSections;
+export type Sections = {
     child: Section[],
 }
-export type Page = Common & Sections;
-type Pages = Page[];
-export type Documents = [Common, ...Pages];
-export type ApiData = Documents;
-export type RawData = [Common, ...Node[]];
+export type Page = Common & ParentId & Sections;
+
+// export type Documents = (Common | Page)[];
+export type ApiData = (Common | Page)[];
+export type RawData = (Common | Page)[];
 export enum Request {
     INIT = 'INIT',
     FETCH = 'FETCH',

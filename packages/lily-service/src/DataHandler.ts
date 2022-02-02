@@ -1,3 +1,5 @@
+import { ApiData, RawData } from 'lily-types';
+
 function groupSections(dd: any, s: any) {
     let pId = dd.uniqueId;
     let sections: any[] = [];
@@ -69,7 +71,7 @@ function buildSectionsReturnSections(
     });
 }
 
-function groups(book_data: Node[]) {
+function groups(book_data: RawData) {
     let gs: any = {
         101: [],
         102: [],
@@ -107,8 +109,8 @@ const groupChapters = (parentId: string, chapters: any) => {
     return orders;
 };
 
-export const sortAll = (_data: Node[], removeIds: any[] = []) => {
-    let data = _data;
+export const sortAll = (_data: RawData, removeIds: any[] = []) => {
+    let data: RawData = _data;
     if (removeIds.length > 0) {
         data = _data.filter((d: any) => {
             if (removeIds.includes(d.uniqueId)) {
@@ -124,7 +126,7 @@ export const sortAll = (_data: Node[], removeIds: any[] = []) => {
 
     let c = { 101: gs[101], 102: gs[102], 103: gs[103], 104: gs[104] };
     c[104] = groupChapters(c[101][0].uniqueId, c[104]);
-    let chapters: Node[] = [];
+    let chapters: ApiData = [];
     Object.values(c).forEach((v) => {
         let a = buildSectionsReturnSections(v, ozf, ozs);
         chapters = [...chapters, ...a];
