@@ -29,17 +29,11 @@ const SubSectionBody = (props: any) => {
     
     const _edit = (subSection: any) => {
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'formData',
-                    value: subSection,
-                },
-                {
-                    key: 'vue',
-                    value: FORM_TYPE.UPDATE
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['formData', 'vue'],
+                values: [subSection, FORM_TYPE.UPDATE]
+            }
         });
     }
 
@@ -106,17 +100,11 @@ const Body = () => {
 
     const Edit = () => {
         const edit = () => dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'viewType',
-                    value: FORM_TYPE.UPDATE
-                },
-                {
-                    key: 'formData',
-                    value: activePage
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['viewType', 'formData'],
+                values: [FORM_TYPE.UPDATE, activePage]
+            }
         })
 
         return <MdModeEdit onClick={edit}/>

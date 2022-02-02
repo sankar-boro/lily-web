@@ -19,25 +19,11 @@ const Main = () => {
         .then((res) => {
             const { rawData, apiData, activePage } = res;
             dispatch({
-                type: BOOK_SERVICE.SETTERS,
-                setters: [
-                    {
-                        key: 'rawData',
-                        value: rawData
-                    },
-                    {
-                        key: 'apiData',
-                        value: apiData
-                    },
-                    {
-                        key: 'activePage',
-                        value: activePage,
-                    },
-                    {
-                        key: 'bookId',
-                        value: bookId
-                    }
-                ]
+                type: BOOK_SERVICE.SETTERSV1,
+                settersv1: {
+                    keys: ['rawData', 'apiData', 'activePage', 'bookId'],
+                    values: [rawData, apiData, activePage, bookId]
+                }
             })
         });
     }, []);

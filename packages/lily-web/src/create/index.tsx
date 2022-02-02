@@ -1,25 +1,24 @@
 import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
-import { BookServiceProvider, setActivePageFn, sortAll, useBookContext, updatePage, updateNewBook } from 'lily-service';
+import { BookServiceProvider, useBookContext, updatePage, updateNewBook } from 'lily-service';
 import { useEffect } from "react";
 import { BOOK_SERVICE, VUE } from "lily-types";
 
 const Body = () => {
     const context = useBookContext();
-    const { dispatch, notifications, rawData, bookId, activePage, formData }: any = useBookContext();
+    const { dispatch, notifications }: any = useBookContext();
     useEffect(() => {
+        const formDataValue = {
+            url: "http://localhost:8000/book/create/new/book",
+            identity: 101,
+            type: 'NEW_BOOK'
+        }
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'formData',
-                    value: {
-                        url: "http://localhost:8000/book/create/new/book",
-                        identity: 101,
-                        type: 'NEW_BOOK'
-                    }
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['formData'],
+                values: [formDataValue]
+            }
         })
     }, []);
 

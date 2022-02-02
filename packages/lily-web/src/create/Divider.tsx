@@ -3,17 +3,11 @@ import { BOOK_SERVICE, VUE } from "lily-types";
 
 const __create = (dispatch: any, formData: any) => {
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: [
-            {
-                key: 'vue',
-                value: VUE.FORM
-            },
-            {
-                key: 'formData',
-                value: formData,
-            }
-        ]
+        type: BOOK_SERVICE.SETTERSV1,
+        settersv1: {
+            keys: ['vue', 'formData'],
+            values: [VUE.FORM, formData]
+        }
     })
 }
 

@@ -1,37 +1,23 @@
-// import { createChapter } from "lily-components";
 import { setActivePageFn, useBookContext } from "lily-service";
 import { BOOK_SERVICE, VUE } from "lily-types";
-import { useEffect } from "react";
 
 const __create = (dispatch: any, formData: any) => {
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: [
-            {
-                key: 'vue',
-                value: VUE.FORM,
-            },
-            {
-                key: 'formData',
-                value: formData
-            }
-        ]
+        type: BOOK_SERVICE.SETTERSV1,
+        settersv1: {
+            keys: ['vue', 'formData'],
+            values: [VUE.FORM, formData]
+        }
     })
 }
 
 const __set = (dispatch: any, activePage: any) => {
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: [
-            {
-                key: 'vue',
-                value: VUE.DOCUMENT
-            },
-            {
-                key: 'activePage',
-                value: activePage
-            }
-        ]
+        type: BOOK_SERVICE.SETTERSV1,
+        settersv1: {
+            keys: ['vue', 'activePage'],
+            values: [VUE.DOCUMENT, activePage]
+        }
     })
 }
 

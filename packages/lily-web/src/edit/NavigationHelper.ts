@@ -11,13 +11,11 @@ const usePageTitle = (props: any, context: any) => {
             compareId: page.uniqueId,
         });
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'activePage',
-                    value: activePage
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['activePage'],
+                values: [activePage]
+            }
         });
     };
     return [page, setActivePage];
@@ -42,13 +40,11 @@ const useSection = (props: any) => {
             compareId: section.uniqueId,
         });
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'activePage',
-                    value: activeSection
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['activePage'],
+                values: [activeSection]
+            }
         });
     }
     return [ section, setSection ];

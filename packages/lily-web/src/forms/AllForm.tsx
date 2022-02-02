@@ -18,18 +18,17 @@ export default function AllForm() {
         let res = await createNode(context, __formData);
         setTitle('');
         setBody('');
+        const notiValue = {
+            data: res,
+            __formData,
+            type: formData.type
+        };
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'notifications',
-                    value: {
-                        data: res,
-                        __formData,
-                        type: formData.type
-                    }
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['notifications'],
+                values: [notiValue]
+            }
         })
     }
 
