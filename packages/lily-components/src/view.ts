@@ -8,21 +8,17 @@ export const createSubSection = (props: any) => {
     const sectionId = viewData.uniqueId;
 
     if (subSections.length === 0) {
+        const viewType = FORM_TYPE.SUB_SECTION;
+        const formData = {
+            parentId: sectionId,
+            identity: 106,
+        }
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'viewType',
-                    value: FORM_TYPE.SUB_SECTION
-                },
-                {
-                    key: 'formData',
-                    value: {
-                        parentId: sectionId,
-                        identity: 106,
-                    }
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['viewType', 'formData'],
+                values: [viewType, formData]
+            }
         })
         return;
     }
@@ -31,22 +27,18 @@ export const createSubSection = (props: any) => {
     if (subSections.length > 0 && subSection === null) {
         let topUniqueId = sectionId;
         let botUniqueId = subSections[0].uniqueId;
+        const viewType = FORM_TYPE.CREATE_UPDATE;
+        const formData = {                        
+            topUniqueId,
+            botUniqueId,
+            identity: 106,
+        }
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'viewType',
-                    value: FORM_TYPE.CREATE_UPDATE
-                },
-                {
-                    key: 'formData',
-                    value: {                        
-                        topUniqueId,
-                        botUniqueId,
-                        identity: 106,
-                    }
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['viewType', 'formData'],
+                values: [viewType, formData]
+            }
         })
         return;
     }
@@ -56,43 +48,35 @@ export const createSubSection = (props: any) => {
     if (subSection && subSectionIndex < subSectionsLength) {
         let topUniqueId = subSections[subSectionIndex].uniqueId;
         let botUniqueId = subSections[subSectionIndex+1].uniqueId;
+        const viewType = FORM_TYPE.CREATE_UPDATE;
+        const formData = {
+            topUniqueId,
+            botUniqueId,
+            identity: 106,
+        }
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'viewType',
-                    value: FORM_TYPE.CREATE_UPDATE
-                },
-                {
-                    key: 'formData',
-                    value: {                        
-                        topUniqueId,
-                        botUniqueId,
-                        identity: 106,
-                    }
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['viewType', 'formData'],
+                values: [viewType, formData]
+            }
         })
         return;
     }
 
     if (subSection && subSectionIndex === subSectionsLength) {
         let topUniqueId = subSections[subSectionIndex].uniqueId;
+        const viewType = FORM_TYPE.SUB_SECTION;
+        const formData = {                        
+            parentId: topUniqueId,
+            identity: 106,
+        }
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: [
-                {
-                    key: 'viewType',
-                    value: FORM_TYPE.SUB_SECTION
-                },
-                {
-                    key: 'formData',
-                    value: {                        
-                        parentId: topUniqueId,
-                        identity: 106,
-                    }
-                }
-            ]
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['viewType', 'formData'],
+                values: [viewType, formData]
+            }
         })
     }
 }

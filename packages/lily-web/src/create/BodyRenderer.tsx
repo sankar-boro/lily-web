@@ -24,7 +24,7 @@ const SubSectionBody = (props: any) => {
 
     const _delete = async (e: any) => {
         e.preventDefault();
-        await deleteSubSection(context, subSection);
+        await deleteSubSection(context);
     }
     
     const _edit = (subSection: any) => {

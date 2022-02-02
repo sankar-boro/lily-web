@@ -8,7 +8,7 @@ import { BOOK_SERVICE } from "lily-types";
 
 const Body = () => {
     const context = useBookContext();
-    const { dispatch, notifications, rawData, activePage, formData }: any = context;
+    const { dispatch, notifications }: any = context;
     const history: any = useHistory();
     const { bookId } = history.location.state;
     
@@ -19,25 +19,11 @@ const Body = () => {
         .then((res) => {
             const { rawData, apiData, activePage } = res;
             dispatch({
-                type: BOOK_SERVICE.SETTERS,
-                setters: [
-                    {
-                        key: 'rawData',
-                        value: rawData
-                    },
-                    {
-                        key: 'apiData',
-                        value: apiData
-                    },
-                    {
-                        key: 'activePage',
-                        value: activePage,
-                    },
-                    {
-                        key: 'bookId',
-                        value: bookId
-                    }
-                ]
+                type: BOOK_SERVICE.SETTERSV1,
+                settersv1: {
+                    keys: ['rawData', 'apiData', 'activePage', 'bookId'],
+                    values: [rawData, apiData, activePage, bookId]
+                }
             })
         });
     }, []);
@@ -58,7 +44,7 @@ const Renderer = (props: any) => {
     </div>  
 }
 
-export default function Main(props: any){
+export default function Main(){
     return <BookServiceProvider>
         <Body />
     </BookServiceProvider>

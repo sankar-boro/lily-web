@@ -70,27 +70,6 @@ const createSectionTopAndBotId = (apiData: ApiData, activePage: ActivePageInfo) 
 	return null;
 }
 
-export const deleteSection = async (bookContext: any) => {
-    const { apiData, dispatch, activePage, bookId, rawData } = bookContext;
-	const __activePageInfo: ActivePageInfo = activePageInfo(activePage);
-	const { activePageUId } = __activePageInfo;
-    const deleteData: any[] = [activePageUId];
-    createDeleteSectionIds(activePage, deleteData);
-    let updateData = createSectionTopAndBotId(apiData, activePage);
-    await updateOrDelete({updateData, deleteData}, bookId);
-    let newRawData = removeNodes(rawData, deleteData);
-    if (updateData) newRawData = updateRawDataNodes(newRawData, updateData);
-    const newApiData = sortAll(newRawData, []);
-    let newActivePage = getActivePage(newApiData, bookId);
-    dispatch({
-      type: BOOK_SERVICE.SETTERS,
-      setters: {
-		  keys: ['rawData', 'apiData', 'activePage'],
-		  values: [newRawData, newApiData, newActivePage]
-	  }
-    })
-}
-
 type ActivePageInfo = {
 	activePageUId: string, // activePageUniqueId
 	activePageNodes: any[], // activePageChildNodes
@@ -172,29 +151,6 @@ const getActivePage = (apiData: ApiData, compareId: string) => {
 	return newActivePage;
 }
 
-export const deleteSubSection = async ({
-  context,
-  compareId
-}: any) => {
-    const { activePage, bookId, rawData, dispatch } = context;
-	const __activePageInfo: ActivePageInfo = activePageInfo(activePage);
-	const { activePageUId } = __activePageInfo;
-	let deleteData = [compareId];
-    let updateData: null | TopBotUIdType = TopBotUId(__activePageInfo, compareId);
-	await updateOrDelete({updateData, deleteData}, bookId);
-    let RawData = removeNodes(rawData, deleteData);                               // :rawData
-    if (updateData) RawData = updateRawDataNodes(RawData, updateData);
-    const ApiData = sortAll(RawData, []);                                         // :apiData
-    let ActivePage = getActivePage(ApiData, activePageUId);                       // :activePage
-    dispatch({
-      	type: BOOK_SERVICE.SETTERSV1,
-      	settersv1: {
-			keys: ['rawData', 'apiData', 'activePage'],
-			values: [RawData, ApiData, ActivePage]
-	  	}
-    })
-}
-
 const createDeletePageIds = (activePage: Page, deleteIds: any[]) => {
 	activePage.child.forEach((section: any) => {
 		deleteIds.push(section.uniqueId);
@@ -240,9 +196,54 @@ export const deletePage = async (context: any) => {
 	let newActivePage = getActivePage(newApiData, activePageUId);
 	dispatch({
 		type: BOOK_SERVICE.SETTERSV1,
-		setters: {
+		settersv1: {
 			keys: ['rawData', 'apiData', 'activePage'],
 			values: [newRawData, newApiData, newActivePage]
 		}
 	})
 }
+
+
+export const deleteSection = async (bookContext: any) => {
+    const { apiData, dispatch, activePage, bookId, rawData } = bookContext;
+	const __activePageInfo: ActivePageInfo = activePageInfo(activePage);
+	const { activePageUId } = __activePageInfo;
+    const deleteData: any[] = [activePageUId];
+    createDeleteSectionIds(activePage, deleteData);
+    let updateData = createSectionTopAndBotId(apiData, activePage);
+    await updateOrDelete({updateData, deleteData}, bookId);
+    let newRawData = removeNodes(rawData, deleteData);
+    if (updateData) newRawData = updateRawDataNodes(newRawData, updateData);
+    const newApiData = sortAll(newRawData, []);
+    let newActivePage = getActivePage(newApiData, bookId);
+    dispatch({
+      type: BOOK_SERVICE.SETTERSV1,
+      settersv1: {
+		  keys: ['rawData', 'apiData', 'activePage'],
+		  values: [newRawData, newApiData, newActivePage]
+	  }
+    })
+}
+
+export const deleteSubSection = async ({
+	context,
+	compareId
+  }: any) => {
+	  const { activePage, bookId, rawData, dispatch } = context;
+	  const __activePageInfo: ActivePageInfo = activePageInfo(activePage);
+	  const { activePageUId } = __activePageInfo;
+	  let deleteData = [compareId];
+	  let updateData: null | TopBotUIdType = TopBotUId(__activePageInfo, compareId);
+	  await updateOrDelete({updateData, deleteData}, bookId);
+	  let RawData = removeNodes(rawData, deleteData);                               // :rawData
+	  if (updateData) RawData = updateRawDataNodes(RawData, updateData);
+	  const ApiData = sortAll(RawData, []);                                         // :apiData
+	  let ActivePage = getActivePage(ApiData, activePageUId);                       // :activePage
+	  dispatch({
+			type: BOOK_SERVICE.SETTERSV1,
+			settersv1: {
+			  keys: ['rawData', 'apiData', 'activePage'],
+			  values: [RawData, ApiData, ActivePage]
+			}
+	  })
+  }

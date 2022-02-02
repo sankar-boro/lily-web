@@ -5,17 +5,13 @@ export const updateData = (data: any, props: any) => {
     const {
         title,
         body,
-        identity,
-        bookId,
         uniqueId
     } = data; 
     const {
-        history,
-        formContext,
         context
     } = props;
 
-    const { rawData, apiData, dispatch, activePage } = context;
+    const { rawData, dispatch, activePage } = context;
     const newRawData = rawData.map((page: any) => {
         if (page.uniqueId === uniqueId) {
             return { ...page, body, title }
