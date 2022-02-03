@@ -5,7 +5,6 @@ export type FormData = {
     botUniqueId: string;
     identity: number;
 };
-
 export enum FORM_TYPE {
     FRONT_COVER = "FRONT_COVER",
     BACK_COVER = "BACK_COVER",
@@ -17,7 +16,6 @@ export enum FORM_TYPE {
     NONE = "NONE",
     UPDATE = "UPDATE",
 }
-
 export enum ID_TYPES {
     BOOK = "BOOK",
     ACTIVE = "ACTIVE",
@@ -26,12 +24,10 @@ export enum ID_TYPES {
     PARENT = "PARENT",
     FORM = "FORM"
 }
-
 export type Form = {
     formType: FORM_TYPE;
     formData: Option<FormData>;
 };
-
 export enum BOOK_SERVICE {
     API_STATE = 'API_STATE',
     API_DATA = 'API_DATA',
@@ -41,7 +37,6 @@ export enum BOOK_SERVICE {
     FORM_PAGE_SETTER = 'FORM_PAGE_SETTER',
     ACTIVE_PAGE = 'ACTIVE_PAGE'
 }
-
 export const constants = {
     IDLE: 100,
     RESULT: 200,
@@ -56,11 +51,9 @@ export const constants = {
         }
     }
 }
-
 export const URLS = {
     UPDATE_OR_DELETE: "http://localhost:8000/book/update_or_delete",
 }
-
 export const ENV = {
     LOG: true,
 }
@@ -86,9 +79,8 @@ export type Section = Common & ParentId & SubSections;
 export type Sections = {
     child: Section[],
 }
+export type Chapter = Common;
 export type Page = Common & ParentId & Sections;
-
-// export type Documents = (Common | Page)[];
 export type ApiData = (Common | Page)[];
 export type RawData = (Common | Page)[];
 export enum Request {
@@ -107,7 +99,6 @@ export const VUE = {
     ERROR: 'ERROR',
     DOCUMENT: 'DOCUMENT'
 }
-
 export type BookContextType = {
     rawData: RawData,
     apiData: ApiData,
@@ -116,7 +107,7 @@ export type BookContextType = {
     formData: {},
     viewData: {},
     editData: {},
-    activePage: null,
+    activePage: null | Chapter | Page | Section,
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
@@ -124,7 +115,6 @@ export type BookContextType = {
     service: () => {},
     notifications: null,
 }
-
 export type BookActionType = {
     type: string,
     setters: any[],

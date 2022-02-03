@@ -1,0 +1,11 @@
+{
+    "name": "lily-query",
+    "version": "1.0.0",
+    "license": "MIT",
+    "dependencies": {
+      "axios": "^0.25.0",
+      "ts-results": "^3.3.0",
+      "lily-types": "1.0.0"
+    }
+  }
+  

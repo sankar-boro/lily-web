@@ -25,7 +25,9 @@
         "lily-service": [ "packages/lily-service/src"],
         "lily-service/*": [ "packages/lily-service/src/*"],
         "lily-types": [ "packages/lily-types/src"],
-        "lily-types/*": [ "packages/lily-types/src/*"]
+        "lily-types/*": [ "packages/lily-types/src/*"],
+        "lily-query": [ "packages/lily-query/src"],
+        "lily-query/*": [ "packages/lily-query/src/*"]
       },
       "baseUrl": ".",
     }

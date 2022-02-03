@@ -1,6 +1,5 @@
-import axios from "axios";
 import { Result, Ok, Err } from "ts-results";
-
+import { createNodeQuery } from "lily-query";
 const log = false;
 
 
@@ -28,14 +27,8 @@ export const createNode = async (context: any, __formData: any): Promise<Result<
 
     let url = "http://localhost:8000/book/create/update/any";
     if (!activePage) url = formData.url;
-    return await axios
-        .post(
-            url,
-            uploadData,
-            {
-                withCredentials: true,
-            }
-        )
-        .then((res) => Ok(res.data))
-        .catch((err) => Err(err));
+    return await createNodeQuery({
+        url,
+        uploadData
+    });
 }
