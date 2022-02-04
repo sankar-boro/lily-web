@@ -198,66 +198,66 @@ const __init = (context: BookContextType) => {
 	}
 }
 
-export const deletePage = async (context: BookContextType) => {
-  	const { bookId, dispatch, rawData, deletePageData, updatePageData } = __init(context);
-	const deleteData: string[] = deletePageData();
-	const updateData = updatePageData();
-	await updateOrDelete({updateData, deleteData}, bookId as string);
-
-	let _rawData: RawData = removeNodes(rawData as RawData, deleteData);
-	if (updateData) _rawData = updateRawDataNodes(_rawData, updateData)
-
-	const _apiData = sortAll(_rawData, deleteData);
-	 
-	let _activePage: Page | Section | Common | null = getActivePage(_apiData, bookId as string);
-	 
-	const keys: Keys = ['rawData', 'apiData', 'activePage'];
-	const values: Values = [_rawData, _apiData, _activePage as Page]
-	dispatch(keys, values);
+type DeleteParams = {
+	context: BookContextType,
+	type: string,
+	deleteProps?: {
+		deleteId: string,
+	}
 }
 
-export const deleteSection = async (context: BookContextType) => {
-	const { bookId, rawData, dispatch, deleteSectionData, updateSectionData } = __init(context);
-    const deleteData = deleteSectionData();
-    let updateData = updateSectionData();
-    
-	await updateOrDelete({updateData, deleteData}, bookId as string);
-
-    let _rawData = removeNodes(rawData as RawData, deleteData);
-    if (updateData) _rawData = updateRawDataNodes(_rawData, updateData);
-    
-	const _apiData = sortAll(_rawData, []);
-    
-	let _activePage = getActivePage(_apiData, bookId as string);
-    
-	const keys: Keys = ['rawData', 'apiData', 'activePage'];
-	const values: Values = [_rawData, _apiData, _activePage as Page]
-	dispatch(keys, values);
-}
-
-export const deleteSubSection = async ({
+export const Delete = async ({
 	context,
-	compareId
-}: any) => {
-	const { activePageUId, bookId, rawData, dispatch, updateSubSectionData } = __init(context);
-	/** 
-	 * @function update
-	 * 
-	*/
-	let deleteData = [compareId];
-	let updateData = updateSubSectionData(compareId);
-	/** */
-	await updateOrDelete({updateData, deleteData}, bookId as string);
-	/** */
-	let _rawData: RawData = removeNodes(rawData as RawData, deleteData);
-	if (updateData) _rawData = updateRawDataNodes(_rawData, updateData);            // final:rawData
-	/** */
-	const _apiData: ApiData = sortAll(_rawData, []);                                         // final:apiData
-	/** */
-	let _activePage: Page | Section | Common | null = getActivePage(_apiData, activePageUId);                       // final:activePage
-	/** */
-	const keys: Keys = ['rawData', 'apiData', 'activePage'];
-	const values: Values = [_rawData, _apiData, _activePage as Page]
-	dispatch(keys, values);
-}
+	type,
+	deleteProps
+}: DeleteParams) => {
+	const {
+		bookId, 
+		rawData, 
+		dispatch, 
+		updateSubSectionData, 
+		deletePageData,
+		updatePageData,
+		deleteSectionData,
+		updateSectionData
+	} = __init(context);
+	
+	const run = (deleteData: string[], updateData: TopBotUIdType | null) => {
+		let _rawData: RawData = removeNodes(rawData as RawData, deleteData);
+		if (updateData) _rawData = updateRawDataNodes(_rawData, updateData)
+		const _apiData = sortAll(_rawData, deleteData);
+		let _activePage: Page | Section | Common | null = getActivePage(_apiData, bookId as string);
+		const keys: Keys = ['rawData', 'apiData', 'activePage'];
+		const values: Values = [_rawData, _apiData, _activePage as Page]
+		dispatch(keys, values);
+	}
+	const activity = {
+		deletePage: async () => {
+			const deleteData: string[] = deletePageData();
+			const updateData = updatePageData();
+			await updateOrDelete({updateData, deleteData}, bookId as string);
+			run(deleteData, updateData);
+		},
+		deleteSection: async () => {
+			const deleteData = deleteSectionData();
+			let updateData = updateSectionData();			
+			await updateOrDelete({updateData, deleteData}, bookId as string);
+			run(deleteData, updateData);
+		},
+		deleteSubSection: async () => {
+			if (!deleteProps) return;
+			let deleteData = [deleteProps.deleteId];
+			let updateData = updateSubSectionData(deleteProps.deleteId);
+			await updateOrDelete({updateData, deleteData}, bookId as string);
+			run(deleteData, updateData);
+		}
+	}
 
+	if (type === 'PAGE') {
+		await activity.deletePage();
+	} else if (type === 'SECTION') {
+		await activity.deleteSection();
+	} else if (type === 'SUB_SECTION') {
+		await activity.deleteSubSection();
+	}
+}

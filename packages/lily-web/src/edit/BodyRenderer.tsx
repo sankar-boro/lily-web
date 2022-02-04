@@ -1,9 +1,9 @@
 import { useHistory } from "react-router-dom";
 import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
-import { deleteSection, deletePage, deleteSubSection } from "lily-components";
+import { Delete } from "lily-components";
 
 import Divider from "./Divider";
-import { BOOK_SERVICE, constants, FORM_TYPE, VUE } from "lily-types";
+import { BookContextType, BOOK_SERVICE, constants, FORM_TYPE, VUE, Page, Section, DELETE, SubSection } from "lily-types";
 import { useBookContext } from "lily-service";
 import AllForm from "lily-web/forms/AllForm";
 
@@ -17,20 +17,23 @@ const FormView = (props: any) => {
     return null;
 };
 
-const SubSectionBody = (props: any) => {
+const SubSectionBody = (props: { subSection: SubSection }) => {
     const { subSection } = props;
-    const context: any = useBookContext();
+    const context: BookContextType = useBookContext();
     const { dispatch } = context;
 
-    const _delete = async (e: any) => {
+    const __deleteSubSection = async (e: any) => {
         e.preventDefault();
-        await deleteSubSection({
+        await Delete({
             context,
-            compareId: subSection.uniqueId
+            type: DELETE.SUB_SECTION,
+            deleteProps: {
+                deleteId: subSection.uniqueId
+            }
         });
     }
     
-    const _edit = (subSection: any) => {
+    const __editSubSection = (subSection: any) => {
         dispatch({
             type: BOOK_SERVICE.SETTERSV1,
             settersv1: {
@@ -51,32 +54,54 @@ const SubSectionBody = (props: any) => {
                 </h3>
             </div>
             <div className="con-5 hover">
-                <MdModeEdit onClick={_edit}/>
-                <MdDelete onClick={_delete}/>
+                <MdModeEdit onClick={__editSubSection}/>
+                <MdDelete onClick={__deleteSubSection}/>
             </div>
         </div>
         <div className="description">{subSection.body}</div>
     </div>
 }
 
-const DeleteBody = (props: any) => {
+const DeleteBody = (props: {
+    context: BookContextType,
+    identity: number
+}) => {
     const { context, identity } = props;
     const _deletePage = (e: any) => {
         e.preventDefault();
-        deletePage(context);
+        Delete({
+            context,
+            type: DELETE.PAGE
+        });
     };
     const _deleteSection = (e: any) => {
         e.preventDefault();
-        deleteSection(context);
+        Delete({
+            context,
+            type: DELETE.SECTION
+        });
     };
     if (identity === 104) return <MdDelete onClick={_deletePage}/>
     if (identity === 105) return <MdDelete onClick={_deleteSection}/>
     return null;
 }
 
+const SectionBody = (props: { activePage: Section }) => {
+    const { activePage } = props;
+    if (activePage.identity === 104) return null;
+    return <>
+        {activePage.child.map((subSection: SubSection, subSectionIndex: number) => {
+            return <SubSectionBody subSection={subSection} key={subSectionIndex} />
+        })} 
+    </>
+}
+
 const Body = () => {
-    const context: any = useBookContext();
+    const context: BookContextType = useBookContext();
     const { vue, activePage, dispatch } = context;
+    
+    if (activePage === null) return <></>;
+
     if (vue === VUE.FORM) {
         return (
             <div className="flex">
@@ -87,16 +112,9 @@ const Body = () => {
                     </div>
                     <div className="con-10" />
                 </div>
-                <Divider {...context} />
+                <Divider />
             </div>
         );
-    }
-
-    const SectionBody = () => {
-        if (activePage.identity === 104) return null;
-        return activePage.child.map((subSection: any, subSectionIndex: number) => {
-            return <SubSectionBody subSection={subSection} key={subSectionIndex} />
-        })
     }
 
     const Edit = () => {
@@ -128,7 +146,7 @@ const Body = () => {
                     </div>
                 </div>
                 <div className="description">{activePage.body}</div>
-                <SectionBody />
+                <SectionBody activePage={activePage as Section} />
             </div>
             <div className="con-10" />
         </div>
@@ -138,7 +156,7 @@ const Body = () => {
 
 const BodyRenderer = () => {
     const history: any = useHistory();
-    const context: any = useBookContext();
+    const context: BookContextType = useBookContext();
     const { title } = history.location.state;
     const { apiData: _apiDAta } = context;
     const goHome = () => { history.replace({ pathname: "/"})};

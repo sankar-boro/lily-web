@@ -50,9 +50,7 @@ const Body = () => {
     if (vue === VUE.ERROR) return <>Api Error. {notif}</>
     if (vue === VUE.FETCHING) return <>Fetching Book.</>
     if (vue === VUE.NONE) return <>Book does not exist with id {bookId}</>;
-    if (vue === VUE.DOCUMENT) return <Renderer context={context} />;
-    return null;
-
+    return <Renderer context={context} />;
 }
 
 const Renderer = (props: any) => {

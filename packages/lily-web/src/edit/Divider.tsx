@@ -1,5 +1,5 @@
 import { useBookContext } from "lily-service";
-import { BOOK_SERVICE, VUE } from "lily-types";
+import { BookContextType, BOOK_SERVICE, Section, VUE, ActivePage, SubSection } from "lily-types";
 
 const __create = (dispatch: any, formData: any) => {
     dispatch({
@@ -11,88 +11,62 @@ const __create = (dispatch: any, formData: any) => {
     })
 }
 
-const AddSubSectionOuter = (props: {
-    activePage: any,
-}) => {
-    const { dispatch } = useBookContext();
-    const { activePage: section } = props;
-    const { uniqueId } = section;
-    const { identity, child: subSections } = section;
-    if (identity < 105) return null;
-    
-    const topUniqueId = uniqueId;
-    let botUniqueId: any = subSections && subSections[0] && subSections[0].uniqueId;
-    const formData = {
-        topUniqueId,
-        botUniqueId,
-        identity: 106,
-        type: 'NEW_NODE'
-    }
-    const click = () => __create(dispatch, formData);
-
-    return (
-        <div 
-            className="li-item hover" 
-            onClick={click}
-        >
-            + Sub-section
-        </div>
-    )
-}
-
-const AddSubSectionInner = (props: {
-    subSection: any,
-    activePage: any,
-    dispatch: any
-}) => {
-    const { activePage: section, subSection, dispatch } = props;
-    const { identity, child: subSections } = section;
-    
-    if (identity < 105) return null;
-    
-    let topUniqueId = subSection.uniqueId;
-    let botUniqueId: any = null;
-    subSections.forEach((_subSection: any, index: number) => {
-        if (_subSection.uniqueId === topUniqueId && subSections[index + 1]) {
-            botUniqueId = subSections[index + 1].uniqueId;
-        }
-    })
-
-    const formData = {
-        topUniqueId,
-        botUniqueId,
-        identity: 106,
-        type: 'NEW_NODE'
-    }
-    
-    const click = () => __create(dispatch, formData);
-    
-    return (
-        <div 
-            className="li-item hover"
-            onClick={click}
-        >
-            + Sub-section
-        </div>
-    )
-}
-
 const Divider = () => {
-    const { dispatch, activePage }: any = useBookContext();
-    const props = { activePage, dispatch, subSection: null };
-    const { identity } = activePage;
+    const context: BookContextType = useBookContext();
+    const { activePage: section, dispatch } = context;
+    const { identity, child: subSections, uniqueId } = section as Section;    
     
+    // Do not render if activePage is of type = Page | Common
+    // Render if activePage is Section;
+    if (identity === 104) return null;
+
+    const __click = {
+        outer: () => {
+            const topUniqueId = uniqueId;
+            let botUniqueId: any = subSections && subSections[0] && subSections[0].uniqueId;
+            const formData = {
+                topUniqueId,
+                botUniqueId,
+                identity: 106,
+                type: 'NEW_NODE'
+            }
+            __create(dispatch, formData)
+        },
+        inner: (subSection: SubSection) => {
+            let topUniqueId = subSection.uniqueId;
+            let botUniqueId: any = null;
+            subSections.forEach((_subSection: any, index: number) => {
+                if (_subSection.uniqueId === topUniqueId && subSections[index + 1]) {
+                    botUniqueId = subSections[index + 1].uniqueId;
+                }
+            })
+            const formData = {
+                topUniqueId,
+                botUniqueId,
+                identity: 106,
+                type: 'NEW_NODE'
+            }
+            __create(dispatch, formData)
+        }
+    };
+
     return <div className="con-20">
         <div className="li-item hover">Delete</div>
-        <AddSubSectionOuter { ...props } />
-        {identity === 105 && activePage.child.map((subSection: any, subSectionIndex: number) => {
+        <div 
+            className="li-item hover"
+            onClick={() => {__click.outer()}}
+        >
+            + Sub-section
+        </div>
+        {identity === 105 && subSections.map((subSection: SubSection) => {
             return <div key={subSection.uniqueId}>
                 {subSection.title}
-                <AddSubSectionInner 
-                    { ...props }
-                    subSection={subSection}
-                    key={subSectionIndex}
-                />
+                <div 
+                    className="li-item hover"
+                    onClick={() => {__click.inner(subSection)}}
+                >
+                    + Sub-section
+                </div>
             </div>;
         })}
     </div>

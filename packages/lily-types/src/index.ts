@@ -128,3 +128,9 @@ export type BookActionType = {
         values: [],
     }
 }
+
+export const DELETE = {
+    PAGE: 'PAGE',
+    SECTION: 'SECTION',
+    SUB_SECTION: 'SUB_SECTION'
+}
