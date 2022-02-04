@@ -161,7 +161,7 @@ const BodyRenderer = () => {
     const { apiData: _apiDAta } = context;
     const goHome = () => { history.replace({ pathname: "/"})};
 
-    return <div className="con-80" style={{ marginLeft: "20%" }}>
+    return <div className="con-80" style={{ marginLeft: "20%", backgroundColor: 'red' }}>
         <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>
             <div className="con-80 flex">
                 <div className="flex con-10" style={{ alignItems: "center" }}>
