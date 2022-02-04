@@ -83,7 +83,7 @@ const reducer = (state: BookContextType, action: BookActionType) => {
 export const BookServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, bookState);
     const { location } = useHistory();
-    const { state: historyState, pathname } = location;
+    const { state: historyState, pathname }: any = location;
     useEffect(() => {
         if (!historyState && pathname) {
             const splitPathName = pathname.split('/').filter((t: string) => t);            
@@ -97,6 +97,16 @@ export const BookServiceProvider = (props: { children: object }) => {
                     setters: []
                 });
             }
+        }
+        if (historyState && historyState.bookId) {
+            dispatch({
+                type: BOOK_SERVICE.SETTERSV1,
+                settersv1: {
+                    keys: ['bookId'],
+                    values: [historyState.bookId]
+                },
+                setters: []
+            });
         }
     }, []);
     return (
