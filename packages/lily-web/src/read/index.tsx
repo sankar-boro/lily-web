@@ -1,29 +1,16 @@
-import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Body from "./Body";
 import NavigationRenderer from "./NavigationRenderer";
-import { BookHandler } from "lily-service";
+import { BookHandler, updatePage } from "lily-service";
 import { useBookContext, BookServiceProvider, FormServiceProvider } from "lily-service";
 import { BOOK_SERVICE, VUE } from "lily-types";
 
 const Main = () => {
     const context = useBookContext();
-    const { dispatch, vue } = context;
-    const history: any = useHistory();
-    const { state, pathname } = history.location;
-    const [bookId, setBookId] = useState(null);
+    const { activePage } = context;
+    const [notif, setNotif] = useState(null);
 
-    useEffect(() => {
-        if (!state && pathname) {
-            const splitPathName = pathname.split('/');
-            if (splitPathName.length === 3) {
-                setBookId(splitPathName[2]);
-            }
-        }
-        if (state && state.bookId) {
-            setBookId(state.bookId);
-        }
-    }, [pathname]);
+    const { dispatch, vue, bookId, notifications } = context;
 
     useEffect(() => {
         if (bookId) {
@@ -35,18 +22,26 @@ const Main = () => {
                 dispatch({
                     type: BOOK_SERVICE.SETTERSV1,
                     settersv1: {
-                        keys: ['rawData', 'apiData', 'activePage', 'bookId'],
-                        values: [rawData, apiData, activePage, bookId]
+                        keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
+                        values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
                     }
                 })
+            })
+            .catch((err) => {
+                setNotif(err);
             });
         }
     }, [bookId]);
 
-    if (!bookId) return null;
-    if (vue === VUE.NONE) return null;
-    if (vue === VUE.ERROR) return <>Something went wrong.</>
-    if(!context.activePage) return <div>Fetching...</div>;
+    useEffect(() => {
+        updatePage(context);
+    }, [notifications]);
+
+    if (vue === VUE.INIT) return <>Initializing.</>
+    if (vue === VUE.ERROR) return <>Api Error. {notif}</>
+    if (vue === VUE.FETCHING) return <>Fetching Book.</>
+    if (vue === VUE.NONE) return <>Book does not exist with id {bookId}</>;
+    if (!bookId || !activePage) return null;
     return <Renderer />;
 }
 

@@ -3,7 +3,7 @@ import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 import { Delete } from "lily-components";
 
 import Divider from "./Divider";
-import { BookContextType, BOOK_SERVICE, constants, FORM_TYPE, VUE, Page, Section, DELETE, SubSection } from "lily-types";
+import { BookContextType, BOOK_SERVICE, constants, FORM_TYPE, VUE, Page, Section, DELETE, SubSection, ActivePage } from "lily-types";
 import { useBookContext } from "lily-service";
 import AllForm from "lily-web/forms/AllForm";
 
@@ -157,11 +157,11 @@ const Body = () => {
 const BodyRenderer = () => {
     const history: any = useHistory();
     const context: BookContextType = useBookContext();
-    const { title } = history.location.state;
-    const { apiData: _apiDAta } = context;
+    const { apiData: _apiDAta, activePage } = context;
     const goHome = () => { history.replace({ pathname: "/"})};
-
-    return <div className="con-80" style={{ marginLeft: "20%", backgroundColor: 'red' }}>
+    const { title } = activePage as ActivePage;
+    
+    return <div className="con-80" style={{ marginLeft: "20%" }}>
         <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>
             <div className="con-80 flex">
                 <div className="flex con-10" style={{ alignItems: "center" }}>

@@ -122,10 +122,10 @@ export type BookContextType = {
 }
 export type BookActionType = {
     type: string,
-    setters: any[],
-    settersv1: {
-        keys: [],
-        values: [],
+    setters?: any[],
+    settersv1?: {
+        keys: any[],
+        values: any[],
     }
 }
 

@@ -1,4 +1,3 @@
-import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
@@ -9,43 +8,44 @@ import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
 const Body = () => {
     const context: BookContextType = useBookContext();
     const [notif, setNotif] = useState(null);
-    const { dispatch, notifications, vue }: BookContextType = context;
-    const history: any = useHistory();
-    const { bookId } = history.location.state;
-    
+    const { dispatch, notifications, vue, bookId }: BookContextType = context;
+
     useEffect(() => {
-        const service = new BookHandler();
-        service.fetch(bookId)
-        .then((res) => res.map_res())
-        .then((res) => {
-            const { rawData, apiData, activePage } = res;
-            if (rawData && apiData && activePage) {
-                dispatch({
-                    type: BOOK_SERVICE.SETTERSV1,
-                    settersv1: {
-                        keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
-                        values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
-                    }
-                })
-            } else {
-                dispatch({
-                    type: BOOK_SERVICE.SETTERSV1,
-                    settersv1: {
-                        keys: ['vue'],
-                        values: [VUE.NONE]
-                    }
-                })
-            }
-        })
-        .catch((err) => {
-            setNotif(err);
-        });
-    }, []);
+        if (bookId) {
+            const service = new BookHandler();
+            service.fetch(bookId)
+            .then((res) => res.map_res())
+            .then((res) => {
+                const { rawData, apiData, activePage } = res;
+                if (rawData && apiData && activePage) {
+                    dispatch({
+                        type: BOOK_SERVICE.SETTERSV1,
+                        settersv1: {
+                            keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
+                            values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
+                        }
+                    })
+                } else {
+                    dispatch({
+                        type: BOOK_SERVICE.SETTERSV1,
+                        settersv1: {
+                            keys: ['vue'],
+                            values: [VUE.NONE]
+                        }
+                    })
+                }
+            })
+            .catch((err) => {
+                setNotif(err);
+            });
+        }
+    }, [bookId]);
 
     useEffect(() => {
         updatePage(context);
     }, [notifications]);
 
+    if (!bookId) return null;
     if (vue === VUE.INIT) return <>Initializing.</>
     if (vue === VUE.ERROR) return <>Api Error. {notif}</>
     if (vue === VUE.FETCHING) return <>Fetching Book.</>

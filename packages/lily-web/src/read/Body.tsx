@@ -71,7 +71,8 @@ const ReadBodyContainer = (props: any) => {
 }
 
 const Main = (props: any) => {
-    const { title, activePage, history } = props;
+    const { activePage, history } = props;
+    const { title } = activePage;
     return (
         <div className="con-80" style={{ marginLeft: "20%" }}>
             <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>
@@ -95,10 +96,9 @@ const Main = (props: any) => {
 
 const BodyRenderer = () => {
     const history: any = useHistory();
-    const { title } = history.location.state;
     const context: any = useBookContext();
     const { activePage, sectionId } = context;
-    const temp = {title, activePage, sectionId, context, history };
+    const temp = {activePage, sectionId, context, history };
 
     if (activePage === null) return null;
     return <Main {...temp} />
