@@ -102,7 +102,7 @@ const TopBotId = () => {
 		subSection: (section: Section, deleteSubSectionId: string) => {
 			topData = section;
 			const subSections = section.child;
-			for (let i = 1; i < subSections.length; i++) {
+			for (let i = 0; i < subSections.length; i++) {
 				if (subSections[i].uniqueId === deleteSubSectionId) {
 					if (subSections[i + 1]) {
 						botData = subSections[i + 1];
@@ -219,14 +219,15 @@ export const Delete = async ({
 		deletePageData,
 		updatePageData,
 		deleteSectionData,
-		updateSectionData
+		updateSectionData,
+		activePageUId
 	} = __init(context);
 	
 	const run = (deleteData: string[], updateData: TopBotUIdType | null) => {
 		let _rawData: RawData = removeNodes(rawData as RawData, deleteData);
 		if (updateData) _rawData = updateRawDataNodes(_rawData, updateData)
 		const _apiData = sortAll(_rawData, deleteData);
-		let _activePage: Page | Section | Common | null = getActivePage(_apiData, bookId as string);
+		let _activePage: ActivePage | null = getActivePage(_apiData, deleteData.includes(activePageUId) ? bookId as string : activePageUId as string);
 		const keys: Keys = ['rawData', 'apiData', 'activePage'];
 		const values: Values = [_rawData, _apiData, _activePage as Page]
 		dispatch(keys, values);
