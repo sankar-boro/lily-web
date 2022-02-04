@@ -154,22 +154,3 @@ export const setActivePageFn = (props: {
     
     return activePage;
 }
-
-export const deleteSubSection = (props: any, state: any) => {
-    const { subSectionId, setActivePage } = props;
-    const { activePage, rawData } = state;
-    const newRawData = rawData.filter((data: any) => {
-        if (subSectionId === data.uniqueId) return false;
-        return true;
-    })
-    const newApiData = sortAll(rawData, [subSectionId]);
-    let newActivePage = null;
-    newApiData.forEach((page: any) => {
-        page.child.forEach((section: any) => {
-            if (section.uniqueId === activePage.uniqueId) {
-                newActivePage = section;
-            }
-        })
-    });
-    return { ...state, activePage: newActivePage, rawData: newRawData, apiData: newApiData };
-}

@@ -1,3 +1,4 @@
+import { BookHandler } from "lily-service";
 import { Option } from "ts-results";
 
 export type FormData = {
@@ -71,7 +72,9 @@ export type Common = {
 export type ParentId = {
     parentId: string;
 }
-export type SubSection = Common & ParentId;
+export type ParentNode = Common;
+export type ChildNode = Common & ParentId;
+export type SubSection = ChildNode;
 export type SubSections = {
     child: SubSection[]
 }
@@ -82,7 +85,8 @@ export type Sections = {
 export type Chapter = Common;
 export type Page = Common & ParentId & Sections;
 export type ApiData = (Common | Page)[];
-export type RawData = (Common | Page)[];
+export type RawData = (ParentNode | ChildNode)[];
+export type ActivePage = Common | Page | Section;
 export enum Request {
     INIT = 'INIT',
     FETCH = 'FETCH',
@@ -95,24 +99,25 @@ export const VUE = {
     FORM: 'FORM',
     NONE: 'NONE',
     UPDATING: 'UPDATING',
+    FETCHING: 'FETCHING',
     INIT: 'INIT',
     ERROR: 'ERROR',
     DOCUMENT: 'DOCUMENT'
 }
 export type BookContextType = {
-    rawData: RawData,
-    apiData: ApiData,
-    bookId: '',
-    parentId: '',
-    formData: {},
-    viewData: {},
-    editData: {},
+    rawData: null | RawData,
+    apiData: null | ApiData,
+    bookId: null | string,
+    parentId: null | string,
+    formData: null | any,
+    viewData: null | any,
+    editData: null | any,
     activePage: null | Chapter | Page | Section,
     apiState: null,
-    error: '',
-    dispatch: (data: any) => {},
+    error: null | string,
+    dispatch: (data: any) => void,
     vue: string,
-    service: () => {},
+    service: BookHandler,
     notifications: null,
 }
 export type BookActionType = {

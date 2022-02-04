@@ -17,9 +17,8 @@ const bookState = {
     editData: {},
     activePage: null,
     apiState: null,
-    error: '',
-    dispatch: (data: any) => {},
-    vue: VUE.DOCUMENT,
+    dispatch: (data: any): void => {},
+    vue: VUE.INIT,
     service: new BookHandler(),
     notifications: null,
 }
@@ -33,11 +32,11 @@ export const BookContext = React.createContext({
     formData: {},
     viewData: {},
     editData: {},
-    activePage: [],
+    activePage: null,
     apiState: null,
     error: '',
-    dispatch: (data: any) => {},
-    vue: VUE.DOCUMENT,
+    dispatch: (data: any): void => {},
+    vue: VUE.INIT,
     notifications: null,
 });
 

@@ -1,5 +1,5 @@
 import { sortAll } from "lily-service";
-import { BOOK_SERVICE, Page, Common, ApiData, Section, RawData, SubSection, BookContextType, ParentId } from "lily-types";
+import { BOOK_SERVICE, Page, Common, ApiData, Section, RawData, SubSection, BookContextType, ActivePage } from "lily-types";
 import { updateOrDelete } from "lily-query";
 
 type ActivePageInfo = {
@@ -9,7 +9,6 @@ type ActivePageInfo = {
 	activePageNodesLen: number, // activePageChildNodesLen
 	parentData: any, // parentData
 };
-type ActivePage = Common | Page | Section | null;
 type Keys = string[];
 type Values = [RawData, ApiData, ActivePage];
 
@@ -63,7 +62,7 @@ const TopBotId = () => {
 		return null;
 	}
 	return {
-		page: (apiData: ApiData, activePage: ActivePage) => {
+		page: (apiData: ApiData, activePage: Page) => {
 			if (!activePage) return null;
 			const { uniqueId: deletePageId } = activePage;
 			topData = apiData[0];
@@ -78,7 +77,7 @@ const TopBotId = () => {
 			}
 			return final();
 		},
-		section: (apiData: ApiData, activePage: ActivePage) => {
+		section: (apiData: ApiData, activePage: Page) => {
 			if (!activePage) return null;
 			const { uniqueId: deleteSectionId } = activePage;
 			let break_ = false;
@@ -193,8 +192,8 @@ const __init = (context: BookContextType) => {
 		activePageInfo,
 		deletePageData: () => [activePageUId, ...__pageChildIds(activePage as Page)],
 		deleteSectionData: () => [activePageUId, ...__sectionChildIds(activePage as Section)],
-		updatePageData: () => TopBotId().page(apiData, activePage),
-		updateSectionData: () => TopBotId().section(apiData, activePage),
+		updatePageData: () => TopBotId().page(apiData as ApiData, activePage as Page),
+		updateSectionData: () => TopBotId().section(apiData as ApiData, activePage as Page),
 		updateSubSectionData: (id: string) => TopBotId().subSection(activePage as Section, id)
 	}
 }
@@ -203,17 +202,17 @@ export const deletePage = async (context: BookContextType) => {
   	const { bookId, dispatch, rawData, deletePageData, updatePageData } = __init(context);
 	const deleteData: string[] = deletePageData();
 	const updateData = updatePageData();
-	await updateOrDelete({updateData, deleteData}, bookId);
+	await updateOrDelete({updateData, deleteData}, bookId as string);
 
-	let _rawData: RawData = removeNodes(rawData, deleteData);
+	let _rawData: RawData = removeNodes(rawData as RawData, deleteData);
 	if (updateData) _rawData = updateRawDataNodes(_rawData, updateData)
 
 	const _apiData = sortAll(_rawData, deleteData);
 	 
-	let _activePage: Page | Section | Common | null = getActivePage(_apiData, bookId);
+	let _activePage: Page | Section | Common | null = getActivePage(_apiData, bookId as string);
 	 
 	const keys: Keys = ['rawData', 'apiData', 'activePage'];
-	const values: Values = [_rawData, _apiData, _activePage]
+	const values: Values = [_rawData, _apiData, _activePage as Page]
 	dispatch(keys, values);
 }
 
@@ -222,17 +221,17 @@ export const deleteSection = async (context: BookContextType) => {
     const deleteData = deleteSectionData();
     let updateData = updateSectionData();
     
-	await updateOrDelete({updateData, deleteData}, bookId);
+	await updateOrDelete({updateData, deleteData}, bookId as string);
 
-    let _rawData = removeNodes(rawData, deleteData);
+    let _rawData = removeNodes(rawData as RawData, deleteData);
     if (updateData) _rawData = updateRawDataNodes(_rawData, updateData);
     
 	const _apiData = sortAll(_rawData, []);
     
-	let _activePage = getActivePage(_apiData, bookId);
+	let _activePage = getActivePage(_apiData, bookId as string);
     
 	const keys: Keys = ['rawData', 'apiData', 'activePage'];
-	const values: Values = [_rawData, _apiData, _activePage]
+	const values: Values = [_rawData, _apiData, _activePage as Page]
 	dispatch(keys, values);
 }
 
@@ -248,9 +247,9 @@ export const deleteSubSection = async ({
 	let deleteData = [compareId];
 	let updateData = updateSubSectionData(compareId);
 	/** */
-	await updateOrDelete({updateData, deleteData}, bookId);
+	await updateOrDelete({updateData, deleteData}, bookId as string);
 	/** */
-	let _rawData: RawData = removeNodes(rawData, deleteData);
+	let _rawData: RawData = removeNodes(rawData as RawData, deleteData);
 	if (updateData) _rawData = updateRawDataNodes(_rawData, updateData);            // final:rawData
 	/** */
 	const _apiData: ApiData = sortAll(_rawData, []);                                         // final:apiData
@@ -258,6 +257,7 @@ export const deleteSubSection = async ({
 	let _activePage: Page | Section | Common | null = getActivePage(_apiData, activePageUId);                       // final:activePage
 	/** */
 	const keys: Keys = ['rawData', 'apiData', 'activePage'];
-	const values: Values = [_rawData, _apiData, _activePage]
+	const values: Values = [_rawData, _apiData, _activePage as Page]
 	dispatch(keys, values);
 }
+

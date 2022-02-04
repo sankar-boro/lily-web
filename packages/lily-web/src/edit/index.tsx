@@ -1,14 +1,15 @@
 import { useHistory } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
 import { BookHandler, updatePage } from "lily-service";
 import { useBookContext, BookServiceProvider } from 'lily-service';
-import { BOOK_SERVICE } from "lily-types";
+import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
 
 const Body = () => {
-    const context = useBookContext();
-    const { dispatch, notifications }: any = context;
+    const context: BookContextType = useBookContext();
+    const [notif, setNotif] = useState(null);
+    const { dispatch, notifications, vue }: BookContextType = context;
     const history: any = useHistory();
     const { bookId } = history.location.state;
     
@@ -18,13 +19,26 @@ const Body = () => {
         .then((res) => res.map_res())
         .then((res) => {
             const { rawData, apiData, activePage } = res;
-            dispatch({
-                type: BOOK_SERVICE.SETTERSV1,
-                settersv1: {
-                    keys: ['rawData', 'apiData', 'activePage', 'bookId'],
-                    values: [rawData, apiData, activePage, bookId]
-                }
-            })
+            if (rawData && apiData && activePage) {
+                dispatch({
+                    type: BOOK_SERVICE.SETTERSV1,
+                    settersv1: {
+                        keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
+                        values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
+                    }
+                })
+            } else {
+                dispatch({
+                    type: BOOK_SERVICE.SETTERSV1,
+                    settersv1: {
+                        keys: ['vue'],
+                        values: [VUE.NONE]
+                    }
+                })
+            }
+        })
+        .catch((err) => {
+            setNotif(err);
         });
     }, []);
 
@@ -32,9 +46,13 @@ const Body = () => {
         updatePage(context);
     }, [notifications]);
 
-    if(!context.activePage) return <div>Fetching...</div>;
+    if (vue === VUE.INIT) return <>Initializing.</>
+    if (vue === VUE.ERROR) return <>Api Error. {notif}</>
+    if (vue === VUE.FETCHING) return <>Fetching Book.</>
+    if (vue === VUE.NONE) return <>Book does not exist with id {bookId}</>;
+    if (vue === VUE.DOCUMENT) return <Renderer context={context} />;
+    return null;
 
-    return <Renderer context={context} />;
 }
 
 const Renderer = (props: any) => {
