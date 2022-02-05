@@ -35,8 +35,8 @@ const SubSectionBody = (props: { subSection: SubSection }) => {
     
     const __editSubSection = (subSection: any) => {
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['formData', 'vue'],
                 values: [subSection, FORM_TYPE.UPDATE]
             }
@@ -118,8 +118,8 @@ const Body = () => {
 
     const Edit = () => {
         const edit = () => dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['viewType', 'formData'],
                 values: [FORM_TYPE.UPDATE, activePage]
             }

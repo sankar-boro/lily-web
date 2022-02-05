@@ -3,8 +3,8 @@ import { BOOK_SERVICE, VUE } from "lily-types";
 
 const __create = (dispatch: any, formData: any) => {
     dispatch({
-        type: BOOK_SERVICE.SETTERSV1,
-        settersv1: {
+        type: BOOK_SERVICE.SETTERS,
+        setters: {
             keys: ['vue', 'formData'],
             values: [VUE.FORM, formData]
         }
@@ -13,8 +13,8 @@ const __create = (dispatch: any, formData: any) => {
 
 const __set = (dispatch: any, activePage: any) => {
     dispatch({
-        type: BOOK_SERVICE.SETTERSV1,
-        settersv1: {
+        type: BOOK_SERVICE.SETTERS,
+        setters: {
             keys: ['vue', 'activePage'],
             values: [VUE.DOCUMENT, activePage]
         }

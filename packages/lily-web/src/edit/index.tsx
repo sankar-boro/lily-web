@@ -20,16 +20,16 @@ const Body = () => {
                 const { rawData, apiData, activePage } = res;
                 if (rawData && apiData && activePage) {
                     dispatch({
-                        type: BOOK_SERVICE.SETTERSV1,
-                        settersv1: {
+                        type: BOOK_SERVICE.SETTERS,
+                        setters: {
                             keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
                             values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
                         }
                     })
                 } else {
                     dispatch({
-                        type: BOOK_SERVICE.SETTERSV1,
-                        settersv1: {
+                        type: BOOK_SERVICE.SETTERS,
+                        setters: {
                             keys: ['vue'],
                             values: [VUE.NONE]
                         }

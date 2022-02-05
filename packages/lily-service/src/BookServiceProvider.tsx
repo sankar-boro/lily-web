@@ -45,17 +45,8 @@ export const useBookContext = () => useContext(BookContext);
 
 const setters = (state: BookContextType, action: BookActionType) => {
     const { setters } = action;
-    const updateData: any = {};
-    setters?.forEach((setter: any) => {
-        updateData[setter.key] = setter.value;
-    })
-    return { ...state, ...updateData };
-}
-
-const settersv1 = (state: BookContextType, action: BookActionType) => {
-    const { settersv1 } = action;
-    if (settersv1) {
-        const { keys, values } = settersv1;
+    if (setters) {
+        const { keys, values } = setters;
         const updateData: any = {};
         if (keys.length === values.length) {
             keys.forEach((keyName: any, keyIndex: any) => {
@@ -73,8 +64,6 @@ const reducer = (state: BookContextType, action: BookActionType) => {
     switch (type) {
         case BOOK_SERVICE.SETTERS:
             return setters(state, action);
-        case BOOK_SERVICE.SETTERSV1:
-            return settersv1(state, action);
         default:
             throw new Error(`Unknown type: ${action.type}`);
     }
@@ -89,23 +78,21 @@ export const BookServiceProvider = (props: { children: object }) => {
             const splitPathName = pathname.split('/').filter((t: string) => t);            
             if (splitPathName.length === 3) {
                 dispatch({
-                    type: BOOK_SERVICE.SETTERSV1,
-                    settersv1: {
+                    type: BOOK_SERVICE.SETTERS,
+                    setters: {
                         keys: ['bookId'],
                         values: [splitPathName[2]]
                     },
-                    setters: []
                 });
             }
         }
         if (historyState && historyState.bookId) {
             dispatch({
-                type: BOOK_SERVICE.SETTERSV1,
-                settersv1: {
+                type: BOOK_SERVICE.SETTERS,
+                setters: {
                     keys: ['bookId'],
                     values: [historyState.bookId]
                 },
-                setters: []
             });
         }
     }, []);

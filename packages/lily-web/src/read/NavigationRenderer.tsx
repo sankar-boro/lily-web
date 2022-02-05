@@ -18,8 +18,8 @@ const ReadBookNavigation = () => {
             });
 
             dispatch({
-                type: BOOK_SERVICE.SETTERSV1,
-                settersv1: {
+                type: BOOK_SERVICE.SETTERS,
+                setters: {
                     keys: ['activePage'],
                     values: [page]
                 }
@@ -33,8 +33,8 @@ const ReadBookNavigation = () => {
             });
 
             dispatch({
-                type: BOOK_SERVICE.SETTERSV1,
-                settersv1: {
+                type: BOOK_SERVICE.SETTERS,
+                setters: {
                     keys: ['activePage'],
                     values: [page]
                 }

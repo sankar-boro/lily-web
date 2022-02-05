@@ -32,9 +32,7 @@ export type Form = {
 export enum BOOK_SERVICE {
     API_STATE = 'API_STATE',
     API_DATA = 'API_DATA',
-    SETTER = 'SETTER',
     SETTERS = 'SETTERS',
-    SETTERSV1 = 'SETTERSV1',
     FORM_PAGE_SETTER = 'FORM_PAGE_SETTER',
     ACTIVE_PAGE = 'ACTIVE_PAGE'
 }
@@ -125,8 +123,7 @@ export type BookContextType = {
 }
 export type DefaultActionType = {
     type: string,
-    setters?: any[],
-    settersv1?: {
+    setters?: {
         keys: any[],
         values: any[],
     }
@@ -146,19 +143,13 @@ export type HomeContextType = {
 }
 export type HomeActionType = DefaultActionType;
 export enum DefaultSetter {
-    SETTER = 'SETTER',
     SETTERS = 'SETTERS',
-    SETTERSV1 = 'SETTERSV1',
 }
 export enum HOME_SERVICE {
-    SETTER = 'SETTER',
     SETTERS = 'SETTERS',
-    SETTERSV1 = 'SETTERSV1',
 }
 export enum AUTH_SERVICE {
-    SETTER = 'SETTER',
     SETTERS = 'SETTERS',
-    SETTERSV1 = 'SETTERSV1',
 }
 export type AuthActionType = DefaultActionType;
 export type UserInfo = {

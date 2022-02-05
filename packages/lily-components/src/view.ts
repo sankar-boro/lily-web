@@ -14,8 +14,8 @@ export const createSubSection = (props: any) => {
             identity: 106,
         }
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['viewType', 'formData'],
                 values: [viewType, formData]
             }
@@ -34,8 +34,8 @@ export const createSubSection = (props: any) => {
             identity: 106,
         }
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['viewType', 'formData'],
                 values: [viewType, formData]
             }
@@ -55,8 +55,8 @@ export const createSubSection = (props: any) => {
             identity: 106,
         }
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['viewType', 'formData'],
                 values: [viewType, formData]
             }
@@ -72,8 +72,8 @@ export const createSubSection = (props: any) => {
             identity: 106,
         }
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['viewType', 'formData'],
                 values: [viewType, formData]
             }

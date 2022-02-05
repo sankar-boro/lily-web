@@ -24,8 +24,8 @@ export default function AllForm() {
             type: formData.type
         };
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['notifications'],
                 values: [notiValue]
             }

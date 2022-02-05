@@ -21,15 +21,15 @@ const Main = () => {
             .then((res) => {
                 const { rawData, apiData, activePage } = res;
                 dispatch({
-                    type: BOOK_SERVICE.SETTERSV1,
-                    settersv1: {
+                    type: BOOK_SERVICE.SETTERS,
+                    setters: {
                         keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
                         values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
                     }
                 })
                 homeDispatch({
-                    type: HOME_SERVICE.SETTERSV1,
-                    settersv1: {
+                    type: HOME_SERVICE.SETTERS,
+                    setters: {
                         keys: ['title'],
                         values: [activePage?.title]
                     }

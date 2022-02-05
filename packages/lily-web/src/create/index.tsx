@@ -14,8 +14,8 @@ const Body = () => {
             type: 'NEW_BOOK'
         }
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['formData'],
                 values: [formDataValue]
             }

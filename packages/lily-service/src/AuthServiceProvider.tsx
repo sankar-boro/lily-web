@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { None } from "ts-results";
 import axios, { AxiosResponse } from "axios";
 import { AuthActionType, AuthContextType, AUTH_SERVICE } from "lily-types";
 
@@ -27,17 +26,8 @@ const authState: AuthContextType = {
 
 const setters = (state: AuthContextType, action: AuthActionType) => {
     const { setters } = action;
-    const updateData: any = {};
-    setters?.forEach((setter: any) => {
-        updateData[setter.key] = setter.value;
-    })
-    return { ...state, ...updateData };
-}
-
-const settersv1 = (state: AuthContextType, action: AuthActionType) => {
-    const { settersv1 } = action;
-    if (settersv1) {
-        const { keys, values } = settersv1;
+    if (setters) {
+        const { keys, values } = setters;
         const updateData: any = {};
         if (keys.length === values.length) {
             keys.forEach((keyName: any, keyIndex: any) => {
@@ -55,8 +45,6 @@ const reducer = (state: AuthContextType, action: AuthActionType) => {
     switch (type) {
         case AUTH_SERVICE.SETTERS:
             return setters(state, action);
-        case AUTH_SERVICE.SETTERSV1:
-            return settersv1(state, action);
         default:
             throw new Error(`Unknown type: ${action.type}`);
     }
@@ -73,8 +61,8 @@ export const AuthServiceProvider = (props: { children: object }) => {
             .then((res: AxiosResponse<UserInfo>) => {
                 if (res && res.data) {
                     dispatch({
-                        type: AUTH_SERVICE.SETTERSV1,
-                        settersv1: {
+                        type: AUTH_SERVICE.SETTERS,
+                        setters: {
                             keys: ['auth', 'authUserData'],
                             values: [true, res.data]
                         }
@@ -83,8 +71,8 @@ export const AuthServiceProvider = (props: { children: object }) => {
             })
             .catch((err: any) => {
                 dispatch({
-                    type: AUTH_SERVICE.SETTERSV1,
-                    settersv1: {
+                    type: AUTH_SERVICE.SETTERS,
+                    setters: {
                         keys: ['auth'],
                         values: [false]
                     }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useReducer } from "react";
 import { BOOK_SERVICE } from "lily-types";
 
 const bookState = {
@@ -13,26 +13,25 @@ export const FormContext = React.createContext({
 
 export const useFormContext = () => useContext(FormContext);
 
-const setter = (state: any, action: any) => {
-    const { payload, _setter } = action;
-    return { ...state, [_setter]: payload };
-}
-
 const setters = (state: any, action: any) => {
-    const { _setters, _payloads } = action;
-    let _state = state;
-    _setters.forEach((s: string, index: number) => {
-        _state[s] = _payloads[index];
-    });
-    return _state;
+    const { setters } = action;
+    if (setters) {
+        const { keys, values } = setters;
+        const updateData: any = {};
+        if (keys.length === values.length) {
+            keys.forEach((keyName: any, keyIndex: any) => {
+                updateData[keyName] = values[keyIndex];
+            })
+        }
+        return { ...state, ...updateData };
+    }
+    return state;
 }
 
 const reducer = (state: any, action: any) => {
-    const { type, payload, viewType } = action;
+    const { type } = action;
     
     switch (type) { 
-        case BOOK_SERVICE.SETTER:
-            return setter(state, action);
         case BOOK_SERVICE.SETTERS:
             return setters(state, action);
         default:

@@ -19,8 +19,8 @@ export const DeleteComponent = () => {
             ...act.data
         })
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['modal', 'activity'],
                 values: [null, null]
             }
@@ -28,8 +28,8 @@ export const DeleteComponent = () => {
     }
     const __cancel = () => {
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['modal', 'activity'],
                 values: [null, null]
             }

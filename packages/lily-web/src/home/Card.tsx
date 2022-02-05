@@ -12,8 +12,8 @@ const Card = (props: { data: any }) => {
             key={data.bookId}
             onClick={() => {
                 dispatch({
-                    type: HOME_SERVICE.SETTERSV1,
-                    settersv1: {
+                    type: HOME_SERVICE.SETTERS,
+                    setters: {
                         keys: ['title'],
                         values: [data.title]
                     }

@@ -23,19 +23,11 @@ const homeState: HomeState = {
 
 export const useHomeContext = () => useContext(HomeContext);
 
+
 const setters = (state: HomeContextType, action: HomeActionType) => {
     const { setters } = action;
-    const updateData: any = {};
-    setters?.forEach((setter: any) => {
-        updateData[setter.key] = setter.value;
-    })
-    return { ...state, ...updateData };
-}
-
-const settersv1 = (state: HomeContextType, action: HomeActionType) => {
-    const { settersv1 } = action;
-    if (settersv1) {
-        const { keys, values } = settersv1;
+    if (setters) {
+        const { keys, values } = setters;
         const updateData: any = {};
         if (keys.length === values.length) {
             keys.forEach((keyName: any, keyIndex: any) => {
@@ -53,8 +45,6 @@ const reducer = (state: HomeContextType, action: HomeActionType) => {
     switch (type) {
         case HOME_SERVICE.SETTERS:
             return setters(state, action);
-        case HOME_SERVICE.SETTERSV1:
-            return settersv1(state, action);
         default:
             throw new Error(`Unknown type: ${action.type}`);
     }
@@ -75,8 +65,8 @@ export const HomeServiceProvider = (props: { children: object }) => {
                 res.status === 200
             ) {
                 dispatch({
-                    type: HOME_SERVICE.SETTERSV1,
-                    settersv1: {
+                    type: HOME_SERVICE.SETTERS,
+                    setters: {
                         keys: ['books'],
                         values: [res.data]
                     }
@@ -85,8 +75,8 @@ export const HomeServiceProvider = (props: { children: object }) => {
         })
         .catch((err) => {
             authDispatch({
-                type: AUTH_SERVICE.SETTERSV1,
-                settersv1: {
+                type: AUTH_SERVICE.SETTERS,
+                setters: {
                     keys: ['auth', 'authUserData'],
                     values: [false, null]
                 }

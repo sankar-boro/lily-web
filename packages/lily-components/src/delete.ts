@@ -16,8 +16,8 @@ const __dispatch = (fn: any, keys: Keys, values: Values) => {
 	console.log('keys', keys);
 	console.log('values', values);
 	fn({
-		type: BOOK_SERVICE.SETTERSV1,
-		settersv1: { keys, values }
+		type: BOOK_SERVICE.SETTERS,
+		setters: { keys, values }
 	})
 }
 

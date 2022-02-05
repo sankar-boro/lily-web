@@ -11,8 +11,8 @@ const usePageTitle = (props: any, context: any) => {
             compareId: page.uniqueId,
         });
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['activePage'],
                 values: [activePage]
             }
@@ -40,8 +40,8 @@ const useSection = (props: any) => {
             compareId: section.uniqueId,
         });
         dispatch({
-            type: BOOK_SERVICE.SETTERSV1,
-            settersv1: {
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
                 keys: ['activePage'],
                 values: [activeSection]   
             }

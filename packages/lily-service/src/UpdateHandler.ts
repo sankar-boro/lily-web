@@ -42,24 +42,10 @@ export const updateData = (data: any, props: any) => {
 
     dispatch({
         type: BOOK_SERVICE.SETTERS,
-        setters: [
-            {
-                key: 'rawData',
-                value: newRawData,
-            },
-            {
-                key: 'apiData',
-                value: newApiData,
-            },
-            {
-                key: 'activePage',
-                value: newActivePage
-            },
-            {
-                key: 'vue',
-                value: 'NONE'
-            }
-        ]       
+        setters: {
+            keys: ['rawData', 'apiData', 'activePage', 'vue'],
+            values: [newRawData, newApiData, newActivePage, 'NONE']
+        }    
     })
 }
 
@@ -114,32 +100,10 @@ export const updatePage = (context: any) => {
                 });
                 dispatch({
                     type: BOOK_SERVICE.SETTERS,
-                    setters: [
-                        {
-                            key: 'rawData',
-                            value: newRawData
-                        },
-                        {
-                            key: 'apiData',
-                            value: newApiData
-                        },
-                        {
-                            key: 'activePage',
-                            value: newActivePage,
-                        },
-                        {
-                            key: 'notifications',
-                            value: null,
-                        }, 
-                        {
-                            key: 'formData',
-                            value: null,
-                        },
-                        {
-                            key: 'vue',
-                            value: VUE.DOCUMENT
-                        }
-                    ]
+                    setters: {
+                        keys: ['rawData', 'apiData', 'activePage', 'notifications', 'formData', 'vue'],
+                        values: [newRawData, newApiData, newActivePage, null, null, VUE.DOCUMENT]
+                    }
                 })
             }
         }
@@ -170,36 +134,10 @@ export const updateNewBook = (context: any) => {
                 });
                 dispatch({
                     type: BOOK_SERVICE.SETTERS,
-                    setters: [
-                        {
-                            key: 'rawData',
-                            value: newRawData
-                        },
-                        {
-                            key: 'apiData',
-                            value: newApiData
-                        },
-                        {
-                            key: 'activePage',
-                            value: newActivePage,
-                        },
-                        {
-                            key: 'bookId',
-                            value: bookId,
-                        },
-                        {
-                            key: 'notifications',
-                            value: null,
-                        },
-                        {
-                            key: 'formData',
-                            value: null,
-                        },
-                        {
-                            key: 'vue',
-                            value: VUE.DOCUMENT
-                        }
-                    ]
+                    setters: {
+                        keys: ['rawData', 'apiData', 'activePage', 'bookId', 'notifications', 'formData', 'vue'],
+                        values: [newRawData, newApiData, newActivePage, bookId, notifications, null, VUE.DOCUMENT],
+                    }
                 })
             }
         }
