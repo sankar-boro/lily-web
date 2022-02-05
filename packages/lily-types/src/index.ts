@@ -108,17 +108,20 @@ export type BookContextType = {
     rawData: null | RawData,
     apiData: null | ApiData,
     bookId: null | string,
-    parentId: null | string,
     formData: null | any,
     viewData: null | any,
     editData: null | any,
     activePage: null | Chapter | Page | Section,
-    apiState: null,
     error: null | string,
     vue: string,
     service: BookHandler,
     notifications: null,
     dispatch: (data: any) => void,
+    modal: any,
+    activity: null | {
+        type: string,
+        data: any,
+    }
 }
 export type BookActionType = {
     type: string,

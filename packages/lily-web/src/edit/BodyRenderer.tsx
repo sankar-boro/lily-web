@@ -24,13 +24,29 @@ const SubSectionBody = (props: { subSection: SubSection }) => {
 
     const __deleteSubSection = async (e: any) => {
         e.preventDefault();
-        await Delete({
-            context,
-            type: DELETE.SUB_SECTION,
-            deleteProps: {
-                deleteId: subSection.uniqueId
+        const act = {
+            type: 'DELETE',
+            data: {
+                type: DELETE.SUB_SECTION,
+                deleteProps: {
+                    deleteId: subSection.uniqueId
+                }
             }
-        });
+        }
+        dispatch({
+            type: BOOK_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['modal', 'activity'],
+                values: [{ type: 'DELETE' }, act]
+            }
+        })
+        // await Delete({
+        //     context,
+        //     type: DELETE.SUB_SECTION,
+        //     deleteProps: {
+        //         deleteId: subSection.uniqueId
+        //     }
+        // });
     }
     
     const __editSubSection = (subSection: any) => {

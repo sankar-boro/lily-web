@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useReducer } from "react";
 import { VUE, BOOK_SERVICE, BookContextType, BookActionType } from "lily-types";
 import { BookHandler } from "./BookService";
 import { useHistory } from "react-router";
-import { useHomeContext } from "./HomeServiceProvider";
 
 type ApiResponse = any;
 type InitFormData = any;
@@ -13,16 +12,16 @@ const bookState = {
     rawData: null,
     apiData: null,
     bookId: '',
-    parentId: '',
     formData: {},
     viewData: {},
     editData: {},
     activePage: null,
-    apiState: null,
     dispatch: (data: any): void => {},
     vue: VUE.INIT,
     service: new BookHandler(),
     notifications: null,
+    modal: null,
+    activity: null,
 }
 
 export const BookContext = React.createContext({
@@ -30,16 +29,16 @@ export const BookContext = React.createContext({
     apiData: null,
     service: new BookHandler(),
     bookId: '',
-    parentId: '',
     formData: {},
     viewData: {},
     editData: {},
     activePage: null,
-    apiState: null,
     error: '',
     dispatch: (data: any): void => {},
     vue: VUE.INIT,
     notifications: null,
+    modal: null,
+    activity: null,
 });
 
 export const useBookContext = () => useContext(BookContext);
@@ -83,7 +82,6 @@ const reducer = (state: BookContextType, action: BookActionType) => {
 
 export const BookServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, bookState);
-    const { dispatch: homeDispatch } = useHomeContext();
     const { location } = useHistory();
     const { state: historyState, pathname }: any = location;
     useEffect(() => {

@@ -4,6 +4,7 @@ import NavigationRenderer from "./NavigationRenderer";
 import { BookHandler, updatePage } from "lily-service";
 import { useBookContext, BookServiceProvider } from 'lily-service';
 import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
+import { DeleteComponent } from "./ModalComponents";
 
 const Body = () => {
     const context: BookContextType = useBookContext();
@@ -53,8 +54,33 @@ const Body = () => {
     return <Renderer context={context} />;
 }
 
+const RenderDeleteComponent = ({
+    modal
+}: any) => {
+    if (modal && modal.type === 'DELETE') return <DeleteComponent />
+    return null;
+}
+
+const RenderModal = () => {
+    const { modal }: BookContextType = useBookContext();
+    if (modal) {
+        return <div className="modal">
+            <div className="modal-container">
+                <div className="modal-body">
+                    <RenderDeleteComponent 
+                        modal={modal}
+                    />
+                </div>
+            </div>
+        </div>
+    }
+    return null;
+}
+
 const Renderer = (props: any) => {
+
     return <div className="flex edit-component-container">
+        <RenderModal />
         <NavigationRenderer context={props.context} />
         <BodyRenderer />
     </div>  
