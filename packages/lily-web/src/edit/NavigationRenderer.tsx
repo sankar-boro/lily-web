@@ -1,4 +1,3 @@
-// import { createChapter } from "lily-components";
 import { setActivePageFn, useBookContext } from "lily-service";
 import { BOOK_SERVICE, VUE } from "lily-types";
 
@@ -211,7 +210,6 @@ const Main = (props: any) => {
     const { apiData: pages } = context;
     return (
         <div className="con-19 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>
-            <div style={{ height: 35 }}/>
             {pages.map((page: any, pageIndex: number) => <NavigationPages page={page} pageIndex={pageIndex} key={pageIndex} pages={pages}/>)}
         </div>
     );

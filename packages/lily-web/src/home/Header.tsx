@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import { logout } from "./util";
-import { useAuthContext } from "lily-service";
+import { useAuthContext, useHomeContext } from "lily-service";
 
 const Header = () => {
-    const context = useAuthContext();
-    const read = context.read;
-    const userData = context.authUserData;
+    const { title } = useHomeContext();
+    const { read, authUserData, auth, logoutUser } = useAuthContext();
+
     let userInfo = null;
-    if (context.auth) {
-        userInfo = userData.unwrap();
+    if (auth) {
+        userInfo = authUserData.unwrap();
     }
 
     if (read) return null;
@@ -24,7 +24,9 @@ const Header = () => {
                     </div>
                     <div className="nav-section hover">Search</div>
                 </div>
-                <div className="navbar-top-center"></div>
+                <div className="navbar-top-center" style={{ fontSize: "1.5em"}}>
+                    {title}
+                </div>
                 <div className="navbar-top-right">
                     <div className="nav-section dropdown">
                         <div className="link hover">
@@ -44,7 +46,7 @@ const Header = () => {
                     <div className="nav-section">
                         <div
                             className="link hover"
-                            onClick={(e: any) => logout(e, context)}
+                            onClick={(e: any) => logout(e, logoutUser)}
                         >
                             Logout
                         </div>

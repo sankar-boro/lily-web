@@ -54,7 +54,7 @@ const Body = () => {
 }
 
 const Renderer = (props: any) => {
-    return <div className="flex">
+    return <div className="flex edit-component-container">
         <NavigationRenderer context={props.context} />
         <BodyRenderer />
     </div>  

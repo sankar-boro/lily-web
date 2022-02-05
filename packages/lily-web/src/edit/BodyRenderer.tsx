@@ -129,55 +129,32 @@ const Body = () => {
         return <MdModeEdit onClick={edit}/>
     }
     
-    return <div className="flex">
-        <div className="con-80 flex">
-            <div className="con-10" />
-            <div className="con-80" style={{ paddingTop: 50 }}>
-                <div className="flex center">
-                    <div className="con-95">
-                        <h3 className="h3">{activePage.title}</h3>
-                    </div>
-                    <div className="con-5 hover">
-                        <Edit />
-                        <DeleteBody 
-                            context={context}
-                            identity={activePage.identity}
-                        />
-                    </div>
-                </div>
-                <div className="description">{activePage.body}</div>
-                <SectionBody activePage={activePage as Section} />
-            </div>
-            <div className="con-10" />
-        </div>
-        <Divider />
-    </div>
-}
-
-const BodyRenderer = () => {
-    const history: any = useHistory();
-    const context: BookContextType = useBookContext();
-    const { apiData: _apiDAta, activePage } = context;
-    const goHome = () => { history.replace({ pathname: "/"})};
-    const { title } = activePage as ActivePage;
-    
     return <div className="con-80" style={{ marginLeft: "20%" }}>
-        <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>
+        <div className="flex">
             <div className="con-80 flex">
-                <div className="flex con-10" style={{ alignItems: "center" }}>
-                    <MdSearch className="hover" style={{ padding: 15 }}/>
-                </div>
-                <div className="con-80 flex center">
-                    <h2 className="h2 book-title">{title}</h2>
+                <div className="con-10" />
+                <div className="con-80">
+                    <div className="flex center">
+                        <div className="con-95">
+                            <h3 className="h3">{activePage.title}</h3>
+                        </div>
+                        <div className="con-5 hover">
+                            <Edit />
+                            <DeleteBody 
+                                context={context}
+                                identity={activePage.identity}
+                            />
+                        </div>
+                    </div>
+                    <div className="description">{activePage.body}</div>
+                    <SectionBody activePage={activePage as Section} />
                 </div>
                 <div className="con-10" />
             </div>
-            <div className="con-20 flex">
-                <MdHome className="hover" onClick={goHome}/>
-            </div>
+            <Divider />
         </div>
-        <Body />
     </div>
-};
+}
 
-export default BodyRenderer;
+
+export default Body;

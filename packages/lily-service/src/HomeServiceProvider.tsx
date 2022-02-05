@@ -1,22 +1,66 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
+import { HomeContextType, HomeActionType, HOME_SERVICE } from "lily-types";
 
 export type HomeState = {
-    books: Node[]
+    books: Node[],
+    title: null | string,
+    dispatch: (data: any) => void,
 };
-
-const homeState = {
-    books: [],
-}
 
 export const HomeContext = React.createContext<HomeState>({
     books: [],
+    title: null,
+    dispatch: (data: any): void => {}
 });
+
+const homeState: HomeState = {
+    books: [],
+    title: null,
+    dispatch: (data: any) => {}
+}
 
 export const useHomeContext = () => useContext(HomeContext);
 
+const setters = (state: HomeContextType, action: HomeActionType) => {
+    const { setters } = action;
+    const updateData: any = {};
+    setters?.forEach((setter: any) => {
+        updateData[setter.key] = setter.value;
+    })
+    return { ...state, ...updateData };
+}
+
+const settersv1 = (state: HomeContextType, action: HomeActionType) => {
+    const { settersv1 } = action;
+    if (settersv1) {
+        const { keys, values } = settersv1;
+        const updateData: any = {};
+        if (keys.length === values.length) {
+            keys.forEach((keyName: any, keyIndex: any) => {
+                updateData[keyName] = values[keyIndex];
+            })
+        }
+        return { ...state, ...updateData };
+    }
+    return state;
+}
+
+const reducer = (state: HomeContextType, action: HomeActionType) => {
+    const { type } = action;
+    
+    switch (type) {
+        case HOME_SERVICE.SETTERS:
+            return setters(state, action);
+        case HOME_SERVICE.SETTERSV1:
+            return settersv1(state, action);
+        default:
+            throw new Error(`Unknown type: ${action.type}`);
+    }
+}
+
 export const HomeServiceProvider = (props: { children: object }) => {
-    const [books, setBooks] = useState<any>(null);
+    const [state, dispatch] = useReducer(reducer, homeState);
     
     useEffect(() => {
         axios
@@ -29,17 +73,22 @@ export const HomeServiceProvider = (props: { children: object }) => {
                 typeof res.status === "number" &&
                 res.status === 200
             ) {
-                setBooks(res.data)
+                dispatch({
+                    type: HOME_SERVICE.SETTERSV1,
+                    settersv1: {
+                        keys: ['books'],
+                        values: [res.data]
+                    }
+                })
             }
         });
     },[]);
 
-    if (!books) return null;
-
     return (
         <HomeContext.Provider
             value={{
-                books,
+                ...state,
+                dispatch,
             }}
         >
             {props.children}

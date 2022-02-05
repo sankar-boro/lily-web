@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import Body from "./Body";
 import NavigationRenderer from "./NavigationRenderer";
-import { BookHandler, updatePage } from "lily-service";
+import { BookHandler, updatePage, useHomeContext } from "lily-service";
 import { useBookContext, BookServiceProvider, FormServiceProvider } from "lily-service";
-import { BOOK_SERVICE, VUE } from "lily-types";
+import { BOOK_SERVICE, HOME_SERVICE, VUE } from "lily-types";
 
 const Main = () => {
     const context = useBookContext();
+    const { dispatch: homeDispatch } = useHomeContext();
     const { activePage } = context;
     const [notif, setNotif] = useState(null);
 
@@ -24,6 +25,13 @@ const Main = () => {
                     settersv1: {
                         keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
                         values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
+                    }
+                })
+                homeDispatch({
+                    type: HOME_SERVICE.SETTERSV1,
+                    settersv1: {
+                        keys: ['title'],
+                        values: [activePage?.title]
                     }
                 })
             })
@@ -46,7 +54,7 @@ const Main = () => {
 }
 
 const Renderer = () => {
-    return <div className="flex">
+    return <div className="flex read-component-container">
         <NavigationRenderer />
         <Body />
     </div>  

@@ -256,10 +256,19 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* Navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
 .navbar-top {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    height: 32px;
+    align-items: center;
+    font-size: 0.9em;
 }
 .navbar-top-right, .navbar-top-left {
     display: flex;
@@ -270,10 +279,19 @@ input:focus, textarea:focus, select:focus {
     width: 20%;
 }
 .nav-section {
-    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    height: 32px;
+    min-width: 45px;
+    padding: 0px 10px;
+    border-right: 0.1em solid #ccc;
 }
 
 /* Body */
+.body {
+    top: 50px;
+    margin-top: 32px;
+}
 .card {
     width: 23%;
 }
@@ -311,6 +329,7 @@ input:focus, textarea:focus, select:focus {
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
+    top: 32px;
 }
 
 .dropdown-content a {
@@ -394,4 +413,9 @@ input:focus, textarea:focus, select:focus {
   /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
     visibility: visible;
+}
+
+/* Read components */
+.read-component-container, .edit-component-container {
+    margin-top: 50px;
 }

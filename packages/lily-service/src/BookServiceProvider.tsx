@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useReducer } from "react";
 import { VUE, BOOK_SERVICE, BookContextType, BookActionType } from "lily-types";
 import { BookHandler } from "./BookService";
 import { useHistory } from "react-router";
+import { useHomeContext } from "./HomeServiceProvider";
 
 type ApiResponse = any;
 type InitFormData = any;
@@ -82,6 +83,7 @@ const reducer = (state: BookContextType, action: BookActionType) => {
 
 export const BookServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, bookState);
+    const { dispatch: homeDispatch } = useHomeContext();
     const { location } = useHistory();
     const { state: historyState, pathname }: any = location;
     useEffect(() => {

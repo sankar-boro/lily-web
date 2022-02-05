@@ -115,10 +115,10 @@ export type BookContextType = {
     activePage: null | Chapter | Page | Section,
     apiState: null,
     error: null | string,
-    dispatch: (data: any) => void,
     vue: string,
     service: BookHandler,
     notifications: null,
+    dispatch: (data: any) => void,
 }
 export type BookActionType = {
     type: string,
@@ -133,4 +133,16 @@ export const DELETE = {
     PAGE: 'PAGE',
     SECTION: 'SECTION',
     SUB_SECTION: 'SUB_SECTION'
+}
+
+export type HomeContextType = {
+    books: any[],
+    book?: null | RawData,
+    dispatch: (data: any) => void,
+}
+export type HomeActionType = BookActionType;
+export enum HOME_SERVICE {
+    SETTER = 'SETTER',
+    SETTERS = 'SETTERS',
+    SETTERSV1 = 'SETTERSV1',
 }

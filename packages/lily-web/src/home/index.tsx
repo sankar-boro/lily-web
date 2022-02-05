@@ -5,34 +5,37 @@ import Profile from "../profile";
 import NewBook from "../create";
 import EditBook from "../edit/index";
 import Home from "./Home";
+import { HomeServiceProvider } from "lily-service";
 
 const Main = () => {
     return (
-        <div className="home">
-            <Header />
-            <div className="body">
-                <Switch>
-                    <Route path="/book/view/:bookId">
-                        <ViewBook />
-                    </Route>
-                    <Route path="/profile">
-                        <Profile />
-                    </Route>
-                    <Route path="/new/book">
-                        <NewBook />
-                    </Route>
-                    <Route path="/new/blog">
-                        <></>
-                    </Route>
-                    <Route path="/book/edit/:bookId">
-                        <EditBook />
-                    </Route>
-                    <Route path="/">
-                        <Home />
-                    </Route>
-                </Switch>
+        <HomeServiceProvider>
+            <div className="home">
+                <Header />
+                <div className="body">
+                    <Switch>
+                        <Route path="/book/view/:bookId">
+                            <ViewBook />
+                        </Route>
+                        <Route path="/profile">
+                            <Profile />
+                        </Route>
+                        <Route path="/new/book">
+                            <NewBook />
+                        </Route>
+                        <Route path="/new/blog">
+                            <></>
+                        </Route>
+                        <Route path="/book/edit/:bookId">
+                            <EditBook />
+                        </Route>
+                        <Route path="/">
+                            <Home />
+                        </Route>
+                    </Switch>
+                </div>
             </div>
-        </div>
+        </HomeServiceProvider>
     );
 };
 

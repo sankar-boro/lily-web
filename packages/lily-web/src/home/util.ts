@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useAuthContext, AuthService } from "../../service/AuthServiceProvider";
+import React from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-const logout = (e: OnClickEvent, context: AuthService) => {
+const logout = (e: OnClickEvent, logoutUser: any) => {
     e.preventDefault();
     axios
         .post(
@@ -20,7 +19,7 @@ const logout = (e: OnClickEvent, context: AuthService) => {
                 typeof res.status === "number" &&
                 res.status === 200
             ) {
-                context.logoutUser();
+                logoutUser();
             }
         })
         .catch((err: AxiosError<any>) => {

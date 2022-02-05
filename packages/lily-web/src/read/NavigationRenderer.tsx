@@ -1,7 +1,5 @@
 import { useBookContext, setActivePageFn } from "lily-service";
-import { BOOK_SERVICE, constants } from "lily-types";
-
-const { leftBar } = constants.heights.fromTopNav;
+import { BOOK_SERVICE } from "lily-types";
 
 const ReadBookNavigation = () => {
     const context: any = useBookContext();
@@ -68,7 +66,6 @@ const ReadBookNavigation = () => {
 
     return (
         <div className="con-19 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>
-            <div style={{height: leftBar }}/>
             {apiData.map((value: any, index: number) => {
                 return <Page page={value} key={index} />;
             })}

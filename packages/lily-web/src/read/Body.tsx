@@ -1,9 +1,5 @@
 import { useHistory } from "react-router-dom";
-import { MdHome, MdSearch } from 'react-icons/md';
-import { constants } from "lily-types";
 import { useBookContext } from "lily-service";
-
-const { topBar } = constants.heights.fromTopNav;
 
 const SubSections = (props: any) => {
     const { activePage } = props;
@@ -57,7 +53,7 @@ const Divider = (props: any) => {
 const ReadBodyContainer = (props: any) => {
     const {activePage} = props;
     return  <div className="con-100 flex">
-        <div className="con-80 flex" style={{ paddingTop: 50 }}>
+        <div className="con-80 flex">
             <Padding_H_10 />
             <div className="con-80">
                 <h3 className="h2" id={activePage.uniqueId}>{activePage.title}</h3>
@@ -71,24 +67,9 @@ const ReadBodyContainer = (props: any) => {
 }
 
 const Main = (props: any) => {
-    const { activePage, history } = props;
-    const { title } = activePage;
+    const { activePage} = props;
     return (
         <div className="con-80" style={{ marginLeft: "20%" }}>
-            <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>
-                <div className="con-80 flex">
-                    <div className="flex con-10" style={{ alignItems: "center" }}>
-                        <MdSearch className="hover" style={{ padding: 15 }}/>
-                    </div>
-                    <div className="con-80 flex center">
-                        <h2 className="h2 book-title">{title}</h2>
-                    </div>
-                    <div className="con-10" />
-                </div>
-                <div className="con-20 flex">
-                    <MdHome className="hover" onClick={() => { history.replace({ pathname: "/"})}}/>
-                </div>
-            </div>
             <ReadBodyContainer activePage={activePage} {...props} />
         </div>
     );

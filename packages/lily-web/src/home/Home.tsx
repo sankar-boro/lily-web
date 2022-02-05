@@ -1,13 +1,21 @@
 import { useEffect } from "react";
 import Card from "./Card";
 import { useHomeContext, useAuthContext, HomeServiceProvider } from "lily-service";
+import { HOME_SERVICE } from "lily-types";
 
-const Main = () => {
+const Home = () => {
     const authContext = useAuthContext();
-    const { books } = useHomeContext();
+    const { books, dispatch } = useHomeContext();
 
     useEffect(() => {
         authContext.setRead(false);
+        dispatch({
+            type: HOME_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['title'],
+                values: [null]
+            }
+        })
     }, []);
 
     return (
@@ -19,13 +27,6 @@ const Main = () => {
                 })}
         </div>
     );
-
-}
-
-const Home = () => {
-    return <HomeServiceProvider>
-        <Main />
-    </HomeServiceProvider>
 };
 
 export default Home;
