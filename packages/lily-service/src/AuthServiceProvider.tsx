@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Option, None, Some } from "ts-results";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import React, { useContext, useEffect, useReducer } from "react";
+import { None } from "ts-results";
+import axios, { AxiosResponse } from "axios";
+import { AuthActionType, AuthContextType, AUTH_SERVICE } from "lily-types";
 
 export type UserInfo = {
     userId: string;
@@ -8,51 +9,61 @@ export type UserInfo = {
     lname: string;
     email: string;
 };
-export type AuthService = {
-    initializing: boolean;
-    auth: boolean;
-    authUserData: Option<UserInfo>;
-    authToken: Option<string>;
-    authenticateUser: (token: UserInfo) => void;
-    logoutUser: () => void;
-    read: boolean;
-    setRead: (value: boolean) => void;
-    error: any;
-    setError: (e: any) => void;
-};
-export const AuthContext = React.createContext<AuthService>({
-    initializing: true,
-    auth: false,
-    authUserData: None,
-    authToken: None,
-    authenticateUser: (token: UserInfo) => {},
-    logoutUser: () => {},
-    read: false,
-    setRead: (value: boolean) => {},
-    error: {},
-    setError: (e: any) => {},
+export const AuthContext = React.createContext<AuthContextType>({
+    auth: null,
+    authUserData: null,
+    authToken: null,
+    dispatch: (e: any) => {},
 });
 
 export const useAuthContext = () => useContext(AuthContext);
 
-function clearAllStorage() {
-    localStorage.removeItem("auth");
+const authState: AuthContextType = {
+    auth: null,
+    authUserData: null,
+    authToken: null,
+    dispatch: () => {},
+}
+
+const setters = (state: AuthContextType, action: AuthActionType) => {
+    const { setters } = action;
+    const updateData: any = {};
+    setters?.forEach((setter: any) => {
+        updateData[setter.key] = setter.value;
+    })
+    return { ...state, ...updateData };
+}
+
+const settersv1 = (state: AuthContextType, action: AuthActionType) => {
+    const { settersv1 } = action;
+    if (settersv1) {
+        const { keys, values } = settersv1;
+        const updateData: any = {};
+        if (keys.length === values.length) {
+            keys.forEach((keyName: any, keyIndex: any) => {
+                updateData[keyName] = values[keyIndex];
+            })
+        }
+        return { ...state, ...updateData };
+    }
+    return state;
+}
+
+const reducer = (state: AuthContextType, action: AuthActionType) => {
+    const { type } = action;
+    
+    switch (type) {
+        case AUTH_SERVICE.SETTERS:
+            return setters(state, action);
+        case AUTH_SERVICE.SETTERSV1:
+            return settersv1(state, action);
+        default:
+            throw new Error(`Unknown type: ${action.type}`);
+    }
 }
 
 export const AuthServiceProvider = (props: { children: object }) => {
-    const [initializing, setInitializing] = useState(true);
-    const [read, setRead_] = useState(false);
-    const [authUserData, setAuthUserData] = useState<Option<UserInfo>>(
-        Some({
-            userId: "1",
-            fname: "Sankar",
-            lname: "boro",
-            email: "sankar.boro@yahoo.com",
-        })
-    );
-    const [auth, setAuth] = useState<boolean>(false);
-    const [authToken, setAuthToken] = useState<Option<string>>(None);
-    const [error, setError] = useState<any>({});
+    const [state, dispatch] = useReducer(reducer, authState);
 
     useEffect(() => {
         axios
@@ -61,41 +72,30 @@ export const AuthServiceProvider = (props: { children: object }) => {
             })
             .then((res: AxiosResponse<UserInfo>) => {
                 if (res && res.data) {
-                    authenticateUser(res.data);
-                    setInitializing(false);
-                    setInitializing(false);
+                    dispatch({
+                        type: AUTH_SERVICE.SETTERSV1,
+                        settersv1: {
+                            keys: ['auth', 'authUserData'],
+                            values: [true, res.data]
+                        }
+                    })
                 }
             })
-            .catch((err: AxiosError<any>) => {
-                setInitializing(false);
+            .catch((err: any) => {
+                dispatch({
+                    type: AUTH_SERVICE.SETTERSV1,
+                    settersv1: {
+                        keys: ['auth'],
+                        values: [false]
+                    }
+                })
             });
     }, []);
-    const authenticateUser = async (userInfo: UserInfo) => {
-        setAuthUserData(Some(userInfo));
-        setAuth(true);
-    };
-    const logoutUser = () => {
-        setAuth(false);
-        clearAllStorage();
-        setAuthUserData(None);
-        setAuthToken(None);
-    };
-    const toggleRead = (value: boolean) => {
-        setRead_(value);
-    };
     return (
         <AuthContext.Provider
             value={{
-                auth,
-                authUserData,
-                authToken,
-                initializing,
-                authenticateUser,
-                logoutUser,
-                read,
-                setRead: toggleRead,
-                error,
-                setError: setError,
+                ...state,
+                dispatch,
             }}
         >
             {props.children}

@@ -19,7 +19,6 @@ export const createNode = async (context: any, __formData: any): Promise<Result<
     if (botUniqueId) uploadData = { ...uploadData, botUniqueId };
 
     if (log) {
-        console.log('uploadData', uploadData)
         return new Promise((resolve) => {
             resolve(Ok(null))
         });

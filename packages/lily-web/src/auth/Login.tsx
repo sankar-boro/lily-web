@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useAuthContext } from "lily-service";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { login } from "./util";
-import { constants } from "lily-types";
+import axios from "axios";
+import { useAuthContext } from "lily-service";
+import { AUTH_SERVICE } from "lily-types";
 
 const inputs = {
     email: {
@@ -17,26 +17,62 @@ const inputs = {
     },
 };
 
+function login(userInfo: any, dispatch: any) {
+    axios
+        .post(
+            "http://localhost:8000/login",
+            userInfo,
+            {
+                withCredentials: true,
+            }
+        )
+        .then((res: any) => {
+            if (res && res.data) {
+                dispatch({
+                    type: 'SUCCESS',
+                    data: res.data,
+                });
+            }
+        })
+        .catch((err: any) => {
+            // if (err.response && err.response.data && err.response.data.message) {
+            //     console.log(setError({credentials: err.response.data.message}));
+            // }
+            dispatch({
+                type: 'ERR',
+                data: err.response.data.message,
+            })
+        });
+};
+
 //
 const Login = () => {
+    const { dispatch } = useAuthContext();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const context = useAuthContext();
-    const {error} = context;
-    const [state, setState] = useState<number>(constants.IDLE);
+    const [error, setError] = useState(null);
 
-    const handles = {
-        setState,
-        email,
-        password,
-        context,
+    const loginUser = (loginData: any) => {
+        console.log(loginData);
+        if (loginData.type === 'ERROR') {
+            setError(loginData.data);
+        }
+        if (loginData.type === 'SUCCESS') {
+            localStorage.setItem('auth', loginData.data);
+            dispatch({
+                type: AUTH_SERVICE.SETTERSV1,
+                settersv1: {
+                    keys: ['auth', 'authUserData'],
+                    values: [true, loginData.data]
+                }
+            })
+        }
     }
-    //
     return (
         <div className="container container-center">
             <div className="container-login">
                 <div className="h1">Login</div>
-                <div className="form-res-error">{error && error.credentials}</div>
+                <div className="form-res-error">{error}</div>
                 <div className="container-form">    
                     <form action="#" method="post">
                         <div className="group-form-input">
@@ -73,13 +109,9 @@ const Login = () => {
                                     type="submit"
                                     name="Submit"
                                     className="button"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        
-                                        if (state === constants.IDLE) {
-                                            setState(constants.WAITING);
-                                            login(handles);
-                                        }
+                                    onClick={(e: any) => {
+                                        e.preventDefault()
+                                        login({email, password}, loginUser);
                                     }}
                                     >
                                     Submit

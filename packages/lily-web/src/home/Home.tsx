@@ -1,14 +1,21 @@
 import { useEffect } from "react";
 import Card from "./Card";
-import { useHomeContext, useAuthContext, HomeServiceProvider } from "lily-service";
-import { HOME_SERVICE } from "lily-types";
+import { useHomeContext, useAuthContext } from "lily-service";
+import { AUTH_SERVICE, HOME_SERVICE } from "lily-types";
 
 const Home = () => {
-    const authContext = useAuthContext();
     const { books, dispatch } = useHomeContext();
-
-    useEffect(() => {
-        authContext.setRead(false);
+    const { dispatch: authDispatch } = useAuthContext();
+    useEffect(() => { 
+        if (!localStorage.getItem('auth')) {
+            authDispatch({
+                type: AUTH_SERVICE.SETTERSV1,
+                settersv1: {
+                    keys: ['auth', 'authUserData'],
+                    values: [false, null]
+                }
+            })
+        }   
         dispatch({
             type: HOME_SERVICE.SETTERSV1,
             settersv1: {

@@ -36,10 +36,10 @@ const NotAuthRoute = () => {
 //
 const CurrentComponents = () => {
     const context = useAuthContext();
-    const { auth, initializing } = context;
-    if (initializing) return <div>Loding...</div>;
-    if (auth) return <AuthRoute />;
-    return <NotAuthRoute />;
+    const { auth } = context;
+    if (auth === null) return <div>Loding...</div>;
+    if (auth === false) return <NotAuthRoute />;
+    return <AuthRoute />;
 };
 
 //

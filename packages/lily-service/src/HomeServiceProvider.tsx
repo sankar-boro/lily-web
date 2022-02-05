@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import axios from "axios";
-import { HomeContextType, HomeActionType, HOME_SERVICE } from "lily-types";
+import { HomeContextType, HomeActionType, HOME_SERVICE, AUTH_SERVICE } from "lily-types";
+import { useAuthContext } from "./AuthServiceProvider";
 
 export type HomeState = {
     books: Node[],
@@ -61,7 +62,7 @@ const reducer = (state: HomeContextType, action: HomeActionType) => {
 
 export const HomeServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, homeState);
-    
+    const { dispatch: authDispatch } = useAuthContext();
     useEffect(() => {
         axios
         .get("http://localhost:8000/book/all", {
@@ -81,6 +82,15 @@ export const HomeServiceProvider = (props: { children: object }) => {
                     }
                 })
             }
+        })
+        .catch((err) => {
+            authDispatch({
+                type: AUTH_SERVICE.SETTERSV1,
+                settersv1: {
+                    keys: ['auth', 'authUserData'],
+                    values: [false, null]
+                }
+            })
         });
     },[]);
 

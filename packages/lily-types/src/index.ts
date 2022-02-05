@@ -123,7 +123,7 @@ export type BookContextType = {
         data: any,
     }
 }
-export type BookActionType = {
+export type DefaultActionType = {
     type: string,
     setters?: any[],
     settersv1?: {
@@ -131,6 +131,7 @@ export type BookActionType = {
         values: any[],
     }
 }
+export type BookActionType = DefaultActionType;
 
 export const DELETE = {
     PAGE: 'PAGE',
@@ -143,9 +144,32 @@ export type HomeContextType = {
     book?: null | RawData,
     dispatch: (data: any) => void,
 }
-export type HomeActionType = BookActionType;
+export type HomeActionType = DefaultActionType;
+export enum DefaultSetter {
+    SETTER = 'SETTER',
+    SETTERS = 'SETTERS',
+    SETTERSV1 = 'SETTERSV1',
+}
 export enum HOME_SERVICE {
     SETTER = 'SETTER',
     SETTERS = 'SETTERS',
     SETTERSV1 = 'SETTERSV1',
+}
+export enum AUTH_SERVICE {
+    SETTER = 'SETTER',
+    SETTERS = 'SETTERS',
+    SETTERSV1 = 'SETTERSV1',
+}
+export type AuthActionType = DefaultActionType;
+export type UserInfo = {
+    userId: string;
+    fname: string;
+    lname: string;
+    email: string;
+};
+export type AuthContextType = {
+    auth: null | boolean;
+    authUserData: null | UserInfo;
+    authToken: null | string;
+    dispatch: (e: any) => void,
 }

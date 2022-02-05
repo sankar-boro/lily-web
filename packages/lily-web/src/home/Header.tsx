@@ -1,18 +1,48 @@
 import { Link } from "react-router-dom";
-import { logout } from "./util";
 import { useAuthContext, useHomeContext } from "lily-service";
+import { AUTH_SERVICE } from "lily-types";
+import axios, { AxiosError, AxiosResponse } from "axios";
+
+type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
+
+const logout = (cleanUpLocalStorage: any) => {
+    axios
+        .post(
+            "http://localhost:8000/logout",
+            {},
+            {
+                withCredentials: true,
+            }
+        )
+        .then((res: AxiosResponse<{ status: number }>) => {
+            if (
+                res.status &&
+                typeof res.status === "number" &&
+                res.status === 200
+            ) {
+                cleanUpLocalStorage();
+            }
+        })
+        .catch((err: AxiosError<any>) => {
+            // console.log("Logout Error", err.response);
+        });
+};
 
 const Header = () => {
     const { title } = useHomeContext();
-    const { read, authUserData, auth, logoutUser } = useAuthContext();
+    const { authUserData, dispatch } = useAuthContext();
 
-    let userInfo = null;
-    if (auth) {
-        userInfo = authUserData.unwrap();
+    const cleanUpUi = () => {
+        localStorage.removeItem('auth');
+        localStorage.clear();
+        dispatch({
+            type: AUTH_SERVICE.SETTERSV1,
+            settersv1: {
+                keys: ['auth', 'authUserData'],
+                values: [false, null]
+            }
+        })
     }
-
-    if (read) return null;
-    
     return (
         <div>
             <div className="navbar navbar-top">
@@ -40,13 +70,13 @@ const Header = () => {
                     </div>
                     <div className="nav-section">
                         <Link to="/profile" className="link">
-                            {userInfo?.fname} {userInfo?.lname}
+                            {authUserData?.fname} {authUserData?.lname}
                         </Link>
                     </div>
                     <div className="nav-section">
                         <div
                             className="link hover"
-                            onClick={(e: any) => logout(e, logoutUser)}
+                            onClick={() => {logout(cleanUpUi)}}
                         >
                             Logout
                         </div>
