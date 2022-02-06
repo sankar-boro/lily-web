@@ -1,9 +1,23 @@
 import { useEffect, useState } from "react";
-import Body from "./Body";
-import NavigationRenderer from "./NavigationRenderer";
+import BodyComponent from "./BodyComponent";
+import NavigationRenderer from "./NavigationComponent";
 import { BookHandler } from "lily-service/BookService";
 import { useBookContext, BookServiceProvider, FormServiceProvider, useHomeContext, updatePage } from "lily-service";
 import { BOOK_SERVICE, HOME_SERVICE, VUE } from "lily-types";
+import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
+import Divider from "./Divider";
+
+const RenderComponent = () => {
+    return <MainContainer>
+        <NavigationContainer>
+            <NavigationRenderer />
+        </NavigationContainer>
+        <BodyContainer>
+            <BodyComponent />  
+        </BodyContainer>
+        <Divider />
+    </MainContainer>
+}
 
 const Main = () => {
     const context = useBookContext();
@@ -50,17 +64,10 @@ const Main = () => {
     if (vue === VUE.FETCHING) return <>Fetching Book.</>
     if (vue === VUE.NONE) return <>Book does not exist with id {bookId}</>;
     if (!bookId || !activePage) return null;
-    return <Renderer />;
+    return <RenderComponent />;
 }
 
-const Renderer = () => {
-    return <div className="flex read-component-container">
-        <NavigationRenderer />
-        <Body />
-    </div>  
-}
-
-export default function MainContext(){
+export default function ReadComponent(){
     return <BookServiceProvider>
         <FormServiceProvider>
             <Main />

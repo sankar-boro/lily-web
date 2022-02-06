@@ -1,12 +1,10 @@
 import { Delete } from "lily-components";
 import { useBookContext } from "lily-service";
 import { MdModeEdit, MdDelete } from 'react-icons/md';
-import { BOOK_SERVICE, constants, FORM_TYPE, VUE, Page, Section, DELETE, SubSection, BookContextType } from "lily-types";
-
-import Divider from "./Divider";
+import { BOOK_SERVICE, FORM_TYPE, VUE, Section, DELETE, SubSection, BookContextType } from "lily-types";
 import AllForm from "lily-web/forms/AllForm";
+import { BodyViewContainer, DocumentViewContainer, EditTitle, EditTitleContainer, EditTitleIcons, SubSectionsViewContainer, SubSectionViewContainer } from "lily-web/components";
 
-const { topBar } = constants.heights.fromTopNav;
 
 const FormView = (props: any) => {
     const { state } = props;
@@ -16,7 +14,7 @@ const FormView = (props: any) => {
     return null;
 };
 
-const SubSectionBody = (props: { subSection: SubSection }) => {
+const SubSectionComponent = (props: { subSection: SubSection }) => {
     const { subSection } = props;
     const context: BookContextType = useBookContext();
     const { dispatch } = context;
@@ -39,13 +37,6 @@ const SubSectionBody = (props: { subSection: SubSection }) => {
                 values: [{ type: 'DELETE' }, act]
             }
         })
-        // await Delete({
-        //     context,
-        //     type: DELETE.SUB_SECTION,
-        //     deleteProps: {
-        //         deleteId: subSection.uniqueId
-        //     }
-        // });
     }
     
     const __editSubSection = (subSection: any) => {
@@ -58,23 +49,18 @@ const SubSectionBody = (props: { subSection: SubSection }) => {
         });
     }
 
-    return <div key={subSection.uniqueId}>
-        <div className="flex center">
-            <div className="con-95">
-                <h3 className="h3 tooltip">
-                    {subSection.title}
-                    <span className="tooltiptext">
-                        {subSection.uniqueId}
-                    </span>
-                </h3>
-            </div>
-            <div className="con-5 hover">
+    return <SubSectionViewContainer>
+        <EditTitleContainer>
+            <EditTitle>
+                {subSection.title}
+            </EditTitle>
+            <EditTitleIcons>
                 <MdModeEdit onClick={__editSubSection}/>
                 <MdDelete onClick={__deleteSubSection}/>
-            </div>
-        </div>
+            </EditTitleIcons>
+        </EditTitleContainer>
         <div className="description">{subSection.body}</div>
-    </div>
+    </SubSectionViewContainer>
 }
 
 const DeleteBody = (props: {
@@ -101,17 +87,28 @@ const DeleteBody = (props: {
     return null;
 }
 
-const SectionBody = (props: { activePage: Section }) => {
-    const { activePage } = props;
-    if (activePage.identity === 104) return null;
-    return <>
-        {activePage.child.map((subSection: SubSection, subSectionIndex: number) => {
-            return <SubSectionBody subSection={subSection} key={subSectionIndex} />
+const ActivePageChildComponents = () => {
+    const { activePage }: BookContextType = useBookContext();
+    if (!activePage) return null;
+    const _activePage = activePage as Section;
+    const { child, identity } = _activePage;
+    if (identity === 104) return null;
+    const subSections = child;
+
+    return <SubSectionsViewContainer>
+        {subSections.map((subSection: SubSection, subSectionIndex: number) => {
+            return <SubSectionComponent subSection={subSection} key={subSectionIndex} />
         })} 
-    </>
+    </SubSectionsViewContainer>
 }
 
-const Body = () => {
+const SearchInputComponent = () => {
+    return <div className="search-input-container">
+        <input className="search-input" name="searchDocument" placeholder="Search"/>
+    </div>
+}
+
+const BodyComponent = () => {
     const context: BookContextType = useBookContext();
     const { vue, activePage, dispatch } = context;
     
@@ -127,7 +124,6 @@ const Body = () => {
                     </div>
                     <div className="con-10" />
                 </div>
-                <Divider />
             </div>
         );
     }
@@ -144,32 +140,25 @@ const Body = () => {
         return <MdModeEdit onClick={edit}/>
     }
     
-    return <div className="con-80" style={{ marginLeft: "20%" }}>
-        <div className="flex">
-            <div className="con-80 flex">
-                <div className="con-10" />
-                <div className="con-80">
-                    <div className="flex center">
-                        <div className="con-95">
-                            <h3 className="h3">{activePage.title}</h3>
-                        </div>
-                        <div className="con-5 hover">
-                            <Edit />
-                            <DeleteBody 
-                                context={context}
-                                identity={activePage.identity}
-                            />
-                        </div>
-                    </div>
-                    <div className="description">{activePage.body}</div>
-                    <SectionBody activePage={activePage as Section} />
-                </div>
-                <div className="con-10" />
-            </div>
-            <Divider />
-        </div>
-    </div>
+    return <BodyViewContainer>
+        <SearchInputComponent />
+        <DocumentViewContainer>
+            <EditTitleContainer>
+                <EditTitleContainer>
+                    <h3 className="h3">{activePage.title}</h3>
+                </EditTitleContainer>
+                <EditTitleIcons>
+                    <Edit />
+                    <DeleteBody 
+                        context={context}
+                        identity={activePage.identity}
+                    />
+                </EditTitleIcons>
+            </EditTitleContainer>
+            <div className="description">{activePage.body}</div>
+            <ActivePageChildComponents />
+        </DocumentViewContainer>
+    </BodyViewContainer>
 }
 
-
-export default Body;
+export default BodyComponent;

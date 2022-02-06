@@ -67,6 +67,28 @@ table {
     url("./fonts/OpenSans-Light.ttf") format("truetype");
 }
 
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: grey white;
+  }
+  
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+  
+*::-webkit-scrollbar-track {
+    background: white;
+}
+  
+*::-webkit-scrollbar-thumb {
+    background-color: grey;
+    border-radius: 20px;
+    border: 3px solid white;
+}
+  
+
 html, body, .home, .body {
     font-family: 'SSP-R', sans-serif;
     height: 100%;
@@ -154,6 +176,9 @@ html, body, .home, .body {
 }
 .con-5 {
     width: 5%;
+}
+.pad-10 {
+    padding: 10px;
 }
 .container-sm {
     width: 75%;
@@ -298,7 +323,6 @@ input:focus, textarea:focus, select:focus {
 
 /* Body */
 .body {
-    top: 50px;
     margin-top: 32px;
 }
 .card {
@@ -380,6 +404,12 @@ input:focus, textarea:focus, select:focus {
     padding-top: 5px;
     padding-bottom: 5px;
 }
+.section-nav-top {
+    margin-left: 20px;   
+}
+.add-section-title {
+    padding: 5px 0px;
+}
 .section-nav {
     margin-left: 20px;   
 }
@@ -388,14 +418,17 @@ input:focus, textarea:focus, select:focus {
     padding-right: 5%;
 }
 .scroll-view {
-    overflow-y:hidden;
     height: 100%;
-}
-.scroll-view:hover {
     overflow-y:scroll;
 }
 .flex {
     display: flex;
+}
+.flex-row {
+    flex-direction: row;
+}
+.flex-col {
+    flex-direction: column;
 }
 
 /* Tooltip container */
@@ -425,10 +458,36 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* Read components */
-.read-component-container, .edit-component-container {
-    margin-top: 50px;
+.body-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
 }
-
+.navigation-container {
+    height: 100%;
+    width: 19%;
+    position: fixed;
+    padding: 15px 5px 0px 10px;
+    background-color: rgb(238, 255, 236);
+}
+.document-container {
+    height: 100%;
+    width: 60%;
+    margin-left: 20%;
+    padding: 20px 10% 0px 10%;
+    background-color: rgb(228, 252, 225);
+}
+.divider-container {
+    width: 20%;
+    height: 100%;
+    padding: 15px 10px 0px 10px;
+    background-color: rgb(209, 252, 204);
+}
+.document-view-container {
+    margin-top: 20px;
+    width: 100%;
+}
 /* Modal */
 .modal {
     position: fixed;
@@ -442,7 +501,16 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
-
+.edit-title-container {
+    width: 100%;
+    display: flex;
+}
+.edit-title {
+    width: 95%;
+}
+.edit-title-icons {
+    width: 5%;
+}
 .modal-container {
     padding: 5%;
     position: absolute;
@@ -462,4 +530,15 @@ input:focus, textarea:focus, select:focus {
 }
 .margin-right-10 {
     margin-right: 10px;
+}
+
+.search-input-container {
+    width: 100%;
+}
+.search-input {
+    width: 75%;
+    padding: 5px;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+    background: transparent;
 }

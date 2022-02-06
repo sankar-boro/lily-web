@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import BodyRenderer from "./BodyRenderer";
-import NavigationRenderer from "./NavigationRenderer";
+import BodyComponent from "./BodyComponent";
+import NavigationRenderer from "./NavigationComponent";
 import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
 import { useBookContext, BookServiceProvider, updatePage } from 'lily-service';
 import { BookHandler } from "lily-service/BookService";
 import { DeleteComponent } from "./ModalComponents";
+import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
+import Divider from "./Divider";
 
-const Body = () => {
+const Main = () => {
     const context: BookContextType = useBookContext();
     const [notif, setNotif] = useState(null);
     const { dispatch, notifications, vue, bookId }: BookContextType = context;
@@ -51,7 +53,7 @@ const Body = () => {
     if (vue === VUE.ERROR) return <>Api Error. {notif}</>
     if (vue === VUE.FETCHING) return <>Fetching Book.</>
     if (vue === VUE.NONE) return <>Book does not exist with id {bookId}</>;
-    return <Renderer context={context} />;
+    return <RenderComponent />;
 }
 
 const RenderDeleteComponent = ({
@@ -77,17 +79,21 @@ const RenderModal = () => {
     return null;
 }
 
-const Renderer = (props: any) => {
-
-    return <div className="flex edit-component-container">
-        <RenderModal />
-        <NavigationRenderer context={props.context} />
-        <BodyRenderer />
-    </div>  
+const RenderComponent = () => {
+    return <MainContainer>
+        <NavigationContainer>
+            <NavigationRenderer />
+        </NavigationContainer>
+        <BodyContainer>
+            <RenderModal />
+            <BodyComponent />  
+        </BodyContainer>
+        <Divider />
+    </MainContainer>  
 }
 
-export default function Main(){
+export default function EditComponent(){
     return <BookServiceProvider>
-        <Body />
+        <Main />
     </BookServiceProvider>
 }
