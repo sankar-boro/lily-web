@@ -1,10 +1,9 @@
-import { useHistory } from "react-router-dom";
-import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 import { Delete } from "lily-components";
+import { useBookContext } from "lily-service";
+import { MdModeEdit, MdDelete } from 'react-icons/md';
+import { BOOK_SERVICE, constants, FORM_TYPE, VUE, Page, Section, DELETE, SubSection, BookContextType } from "lily-types";
 
 import Divider from "./Divider";
-import { BookContextType, BOOK_SERVICE, constants, FORM_TYPE, VUE, Page, Section, DELETE, SubSection, ActivePage } from "lily-types";
-import { useBookContext } from "lily-service";
 import AllForm from "lily-web/forms/AllForm";
 
 const { topBar } = constants.heights.fromTopNav;

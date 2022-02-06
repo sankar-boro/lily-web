@@ -1,6 +1,8 @@
-import React, { useContext, useEffect, useReducer } from "react";
 import axios from "axios";
+import React, { useContext, useEffect, useReducer } from "react";
 import { HomeContextType, HomeActionType, HOME_SERVICE, AUTH_SERVICE } from "lily-types";
+
+import { setters } from './ProvidersCommon';
 import { useAuthContext } from "./AuthServiceProvider";
 
 export type HomeState = {
@@ -23,21 +25,6 @@ const homeState: HomeState = {
 
 export const useHomeContext = () => useContext(HomeContext);
 
-
-const setters = (state: HomeContextType, action: HomeActionType) => {
-    const { setters } = action;
-    if (setters) {
-        const { keys, values } = setters;
-        const updateData: any = {};
-        if (keys.length === values.length) {
-            keys.forEach((keyName: any, keyIndex: any) => {
-                updateData[keyName] = values[keyIndex];
-            })
-        }
-        return { ...state, ...updateData };
-    }
-    return state;
-}
 
 const reducer = (state: HomeContextType, action: HomeActionType) => {
     const { type } = action;

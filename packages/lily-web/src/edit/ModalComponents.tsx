@@ -1,5 +1,5 @@
 import { useBookContext } from "lily-service"
-import { BookContextType, BOOK_SERVICE } from "lily-types";
+import { BOOK_SERVICE, BookContextType } from "lily-types";
 import { Delete } from "lily-components";
 
 type Activity = {

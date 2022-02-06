@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { VUE, BOOK_SERVICE, BookContextType, BookActionType } from "lily-types";
-import { BookHandler } from "./BookService";
+import { VUE } from "lily-types";
+import { BookHandler } from "../BookService";
+import { BookActionType, BookContextType, BOOK_SERVICE } from 'lily-types';
 import { useHistory } from "react-router";
+import { setters } from './ProvidersCommon';
 
 type ApiResponse = any;
 type InitFormData = any;
 
 export type FormData = ApiResponse | InitFormData;
 
-const bookState = {
+const initBookState = {
     rawData: null,
     apiData: null,
     bookId: '',
@@ -24,7 +26,7 @@ const bookState = {
     activity: null,
 }
 
-export const BookContext = React.createContext({
+export const BookContext = React.createContext<BookContextType>({
     rawData: null,
     apiData: null,
     service: new BookHandler(),
@@ -43,21 +45,6 @@ export const BookContext = React.createContext({
 
 export const useBookContext = () => useContext(BookContext);
 
-const setters = (state: BookContextType, action: BookActionType) => {
-    const { setters } = action;
-    if (setters) {
-        const { keys, values } = setters;
-        const updateData: any = {};
-        if (keys.length === values.length) {
-            keys.forEach((keyName: any, keyIndex: any) => {
-                updateData[keyName] = values[keyIndex];
-            })
-        }
-        return { ...state, ...updateData };
-    }
-    return state;
-}
-
 const reducer = (state: BookContextType, action: BookActionType) => {
     const { type } = action;
     
@@ -70,7 +57,7 @@ const reducer = (state: BookContextType, action: BookActionType) => {
 }
 
 export const BookServiceProvider = (props: { children: object }) => {
-    const [state, dispatch] = useReducer(reducer, bookState);
+    const [state, dispatch] = useReducer(reducer, initBookState);
     const { location } = useHistory();
     const { state: historyState, pathname }: any = location;
     useEffect(() => {

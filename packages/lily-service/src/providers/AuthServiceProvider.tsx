@@ -1,47 +1,25 @@
-import React, { useContext, useEffect, useReducer } from "react";
 import axios, { AxiosResponse } from "axios";
-import { AuthActionType, AuthContextType, AUTH_SERVICE } from "lily-types";
+import React, { useContext, useEffect, useReducer } from "react";
+import { UserInfo, AuthContextType, AuthActionType, AUTH_SERVICE } from "lily-types";
 
-export type UserInfo = {
-    userId: string;
-    fname: string;
-    lname: string;
-    email: string;
-};
-export const AuthContext = React.createContext<AuthContextType>({
+import { setters } from './ProvidersCommon';
+
+const initAuthState: AuthContextType = {
     auth: null,
     authUserData: null,
-    authToken: null,
+    dispatch: () => {},
+}
+
+const AuthContext = React.createContext<AuthContextType>({
+    auth: null,
+    authUserData: null,
     dispatch: (e: any) => {},
 });
 
 export const useAuthContext = () => useContext(AuthContext);
 
-const authState: AuthContextType = {
-    auth: null,
-    authUserData: null,
-    authToken: null,
-    dispatch: () => {},
-}
-
-const setters = (state: AuthContextType, action: AuthActionType) => {
-    const { setters } = action;
-    if (setters) {
-        const { keys, values } = setters;
-        const updateData: any = {};
-        if (keys.length === values.length) {
-            keys.forEach((keyName: any, keyIndex: any) => {
-                updateData[keyName] = values[keyIndex];
-            })
-        }
-        return { ...state, ...updateData };
-    }
-    return state;
-}
-
 const reducer = (state: AuthContextType, action: AuthActionType) => {
     const { type } = action;
-    
     switch (type) {
         case AUTH_SERVICE.SETTERS:
             return setters(state, action);
@@ -51,7 +29,7 @@ const reducer = (state: AuthContextType, action: AuthActionType) => {
 }
 
 export const AuthServiceProvider = (props: { children: object }) => {
-    const [state, dispatch] = useReducer(reducer, authState);
+    const [state, dispatch] = useReducer(reducer, initAuthState);
 
     useEffect(() => {
         axios

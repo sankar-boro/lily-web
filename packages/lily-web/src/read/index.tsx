@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Body from "./Body";
 import NavigationRenderer from "./NavigationRenderer";
-import { BookHandler, updatePage, useHomeContext } from "lily-service";
-import { useBookContext, BookServiceProvider, FormServiceProvider } from "lily-service";
+import { BookHandler } from "lily-service/BookService";
+import { useBookContext, BookServiceProvider, FormServiceProvider, useHomeContext, updatePage } from "lily-service";
 import { BOOK_SERVICE, HOME_SERVICE, VUE } from "lily-types";
 
 const Main = () => {

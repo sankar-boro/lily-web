@@ -53,7 +53,6 @@ const Login = () => {
     const [error, setError] = useState(null);
 
     const loginUser = (loginData: any) => {
-        console.log(loginData);
         if (loginData.type === 'ERROR') {
             setError(loginData.data);
         }

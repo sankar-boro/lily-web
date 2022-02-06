@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Card from "./Card";
 import { useHomeContext, useAuthContext } from "lily-service";
-import { AUTH_SERVICE, HOME_SERVICE } from "lily-types";
+import { HOME_SERVICE, AUTH_SERVICE } from "lily-types";
 
 const Home = () => {
     const { books, dispatch } = useHomeContext();

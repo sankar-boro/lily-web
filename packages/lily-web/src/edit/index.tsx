@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
-import { BookHandler, updatePage } from "lily-service";
-import { useBookContext, BookServiceProvider } from 'lily-service';
 import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
+import { useBookContext, BookServiceProvider, updatePage } from 'lily-service';
+import { BookHandler } from "lily-service/BookService";
 import { DeleteComponent } from "./ModalComponents";
 
 const Body = () => {

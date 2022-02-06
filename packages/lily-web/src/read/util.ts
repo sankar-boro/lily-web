@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Node } from "lily-types";
 
 type Book = {
     bookId: string;
@@ -25,7 +24,7 @@ const getPages = (setAllPages: Function, bookId: string) => {
             typeof res.status === "number" &&
             res.status === 200
         ) {
-            let dataRes: Node[] = res.data;
+            let dataRes: any[] = res.data;
             let x = sortAll(dataRes);
             setAllPages(x);
         }
@@ -106,7 +105,7 @@ function buildSectionsReturnSections(
     });
 }
 
-function groups(book_data: Node[]) {
+function groups(book_data: any[]) {
     let gs: any = {
         101: [],
         102: [],
@@ -116,7 +115,7 @@ function groups(book_data: Node[]) {
         106: [],
     };
 
-    book_data.forEach((d: Node) => {
+    book_data.forEach((d: any) => {
         if (gs[d.identity]) {
             gs[d.identity].push(d);
         }
@@ -124,13 +123,13 @@ function groups(book_data: Node[]) {
     return gs;
 }
 
-const sortAll = (data: Node[]) => {
+const sortAll = (data: any[]) => {
     let gs = groups(data);
     let ozf = gs[105];
     let ozs = gs[106];
 
     let c = { 101: gs[101], 102: gs[102], 103: gs[103], 104: gs[104] };
-    let chapters: Node[] = [];
+    let chapters: any[] = [];
     Object.values(c).forEach((v) => {
         let a = buildSectionsReturnSections(v, ozf, ozs);
         chapters = [...chapters, ...a];
