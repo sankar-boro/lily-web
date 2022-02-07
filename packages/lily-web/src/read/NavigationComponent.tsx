@@ -1,11 +1,12 @@
 import { useBookContext, setActivePageFn } from "lily-service";
 import { BOOK_SERVICE } from "lily-types";
-import { 
-    ChapterNavContainer, 
+import {
     PageNavContainer, 
     SectionNavContainer, 
     SectionsNavContainer, 
-    PagesNavContainer 
+    PagesNavContainer, 
+    PageTitleContainer,
+    SectionTitleContainer
 } from "lily-web/components";
 
 const ReadBookNavigation = () => {
@@ -49,17 +50,19 @@ const ReadBookNavigation = () => {
         }
 
         return <PageNavContainer>            
-            <ChapterNavContainer>
+            <PageTitleContainer>
                 <div onClick={setActivePage}>
                     {page.title}
                 </div>
-            </ChapterNavContainer>
+            </PageTitleContainer>
             <SectionsNavContainer>
                 {sections.map((section: any) => {
                     return <SectionNavContainer key={section.uniqueId}>
-                        <div onClick={() => setActiveSection(section)}>
-                            {section.title}
-                        </div>
+                        <SectionTitleContainer>
+                            <div onClick={() => setActiveSection(section)}>
+                                {section.title}
+                            </div>
+                        </SectionTitleContainer>
                     </SectionNavContainer>
                 })}
             </SectionsNavContainer>

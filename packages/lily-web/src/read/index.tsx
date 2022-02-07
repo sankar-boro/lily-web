@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import BodyComponent from "./BodyComponent";
-import NavigationRenderer from "./NavigationComponent";
+import NavigationComponent from "./NavigationComponent";
 import { BookHandler } from "lily-service/BookService";
 import { useBookContext, BookServiceProvider, FormServiceProvider, useHomeContext, updatePage } from "lily-service";
 import { BOOK_SERVICE, HOME_SERVICE, VUE } from "lily-types";
@@ -10,7 +10,7 @@ import Divider from "./Divider";
 const RenderComponent = () => {
     return <MainContainer>
         <NavigationContainer>
-            <NavigationRenderer />
+            <NavigationComponent />
         </NavigationContainer>
         <BodyContainer>
             <BodyComponent />  

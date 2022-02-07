@@ -1,6 +1,17 @@
 import { setActivePageFn, useBookContext } from "lily-service";
 import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
-import { AddSectionUpperContainer, AddSectionInnerContainer, ChapterNavContainer, PageNavContainer, PagesNavContainer, SectionNavContainer, SectionsNavContainer } from "lily-web/components";
+import { 
+    AddSectionUpperContainer, 
+    AddSectionInnerContainer,
+    AddChapterUpperContainer,
+    ChapterNavContainer, 
+    PageNavContainer, 
+    PagesNavContainer, 
+    SectionNavContainer, 
+    SectionsNavContainer, 
+    PageTitleContainer,
+    SectionTitleContainer
+} from "lily-web/components";
 
 const __create = (dispatch: any, formData: any) => {
     dispatch({
@@ -48,7 +59,7 @@ const AddNewSectionComponent = (props: {
     const createSection = () => __create(dispatch, formData);
 
     return <AddSectionInnerContainer>
-        <div onClick={createSection} className="add-section-title">
+        <div onClick={createSection}>
             + Add section
         </div>
     </AddSectionInnerContainer>
@@ -95,13 +106,11 @@ const AddChapter = (props: {
     const createNewChapter = () => {
         __create(dispatch, formData);
     }
-    return (
-        <div
-            onClick={createNewChapter}
-        >
-            <span>+ Add chapter</span>
+    return <AddChapterUpperContainer>
+        <div onClick={createNewChapter}>
+            + Add chapter
         </div>
-    );
+    </AddChapterUpperContainer>
 }
 
 const AddNewSectionUpper = (props: {
@@ -130,7 +139,7 @@ const AddNewSectionUpper = (props: {
     }
 
     return <AddSectionUpperContainer>        
-        <div onClick={createNewSection} className="add-section-title">
+        <div onClick={createNewSection}>
             + Add section
         </div>
     </AddSectionUpperContainer>
@@ -150,12 +159,11 @@ const SectionComponent = (props: any) => {
     };
 
     return <SectionNavContainer>
-        <div
-            onClick={setActiveSection}
-            key={section.uniqueId}
-        >
-            {section.title}
-        </div>
+        <SectionTitleContainer>
+            <div onClick={setActiveSection}>
+                {section.title}
+            </div>
+        </SectionTitleContainer>
         <AddNewSectionComponent {...props} sections={sections} section={section} />
     </SectionNavContainer>
 }
@@ -172,27 +180,25 @@ const SectionsComponent = (props: {
     if (!sections) return null;
     if (sections && sections.length === 0) return null;
 
-    return <div>
+    return <SectionsNavContainer>
         {sections.map((section: any, sectionIndex: number) => {
             return <SectionComponent section={section} sections={sections} key={sectionIndex} />;
         })} 
-    </div>
+    </SectionsNavContainer>
 }
 
-const NavigationPages = (props: {
+const PageNavComponent = (props: {
     page: any,
     pageIndex: number,
     pages: any
 }) => {
     return (
         <PageNavContainer>
-            <ChapterNavContainer>
+            <PageTitleContainer>
                 <PageTitle {...props} />
-            </ChapterNavContainer>
-            <SectionsNavContainer>
-                <AddNewSectionUpper {...props } />
-                <SectionsComponent {...props} />
-            </SectionsNavContainer>
+            </PageTitleContainer>
+            <AddNewSectionUpper {...props } />
+            <SectionsComponent {...props} />
             <AddChapter {...props} />
         </PageNavContainer>
     )
@@ -205,7 +211,7 @@ const Main = () => {
     return (
         <PagesNavContainer>
             {pages.map((page: any, pageIndex: number) => {
-                return <NavigationPages page={page} pageIndex={pageIndex} key={pageIndex} pages={pages}/>
+                return <PageNavComponent page={page} pageIndex={pageIndex} key={pageIndex} pages={pages}/>
             })}
         </PagesNavContainer>
     );

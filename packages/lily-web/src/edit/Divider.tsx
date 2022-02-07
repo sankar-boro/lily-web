@@ -1,5 +1,6 @@
 import { useBookContext } from "lily-service";
 import { BookContextType, BOOK_SERVICE, Section, VUE, ActivePage, SubSection } from "lily-types";
+import { DividerContainer } from "lily-web/components";
 
 const __create = (dispatch: any, formData: any) => {
     dispatch({
@@ -50,7 +51,7 @@ const Divider = () => {
         }
     };
 
-    return <div className="con-20">
+    return <DividerContainer>
         <div className="li-item hover">Delete</div>
         <div 
             className="li-item hover"
@@ -69,7 +70,7 @@ const Divider = () => {
                 </div>
             </div>;
         })}
-    </div>
+    </DividerContainer>
 }
 
 export default Divider;

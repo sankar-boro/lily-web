@@ -4,6 +4,7 @@ import { BookContextType, Section, SubSection } from "lily-types";
 import { DividerContainer } from "../components"
 
 const Divider = () => {
+    console.log("sdk");
     const history = useHistory();
     const { bookId, activePage }: BookContextType = useBookContext();
     if (!activePage) return <DividerContainer />;

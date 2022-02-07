@@ -397,12 +397,34 @@ input:focus, textarea:focus, select:focus {
     text-decoration: none;
     color: black;
 }
-.li-item:hover, .section-nav:hover, .chapter-nav:hover {
-    color:#0080f0;
+.li-item:hover, .section-nav:hover, .chapter-nav:hover, .page-nav:hover {
+    cursor: pointer;
+}
+.page-title {
+    /* background-color: red; */
+    padding: 5px 0px 5px 5px;
+}
+.section-title {
+    /* background-color: rgb(255, 0, 221); */
+    padding: 5px 0px 5px 5px;
 }
 .chapter-nav, .section-nav {
-    padding-top: 5px;
-    padding-bottom: 5px;
+}
+.add-chapter-upper-container {
+    padding: 5px 0px 5px 5px;
+    font-size: 0.8em;
+    /* background-color: springgreen; */
+}
+.add-section-upper-container {
+    margin-left: 20px;
+    font-size: 0.8em;
+    padding: 5px 0px 5px 0px;
+    /* background-color: rgb(10, 110, 110); */
+}
+.add-section-inner-container {
+    padding: 5px 0px 5px 0px;
+    /* background-color: burlywood; */
+    font-size: 0.8em;
 }
 .section-nav-top {
     margin-left: 20px;   
@@ -469,20 +491,20 @@ input:focus, textarea:focus, select:focus {
     width: 19%;
     position: fixed;
     padding: 15px 5px 0px 10px;
-    background-color: rgb(238, 255, 236);
+    /* background-color: rgb(238, 255, 236); */
 }
 .document-container {
     height: 100%;
     width: 60%;
     margin-left: 20%;
     padding: 20px 10% 0px 10%;
-    background-color: rgb(228, 252, 225);
+    /* background-color: rgb(228, 252, 225); */
 }
 .divider-container {
     width: 20%;
     height: 100%;
     padding: 15px 10px 0px 10px;
-    background-color: rgb(209, 252, 204);
+    /* background-color: rgb(209, 252, 204); */
 }
 .document-view-container {
     margin-top: 20px;

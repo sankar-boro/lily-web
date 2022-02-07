@@ -1,5 +1,5 @@
 import BodyRenderer from "./BodyRenderer";
-import NavigationRenderer from "./NavigationRenderer";
+import NavigationRenderer from "./NavigationComponent";
 import { BookServiceProvider, useBookContext, updatePage, updateNewBook } from 'lily-service';
 import { useEffect } from "react";
 import { BOOK_SERVICE, VUE } from "lily-types";

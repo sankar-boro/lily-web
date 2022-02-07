@@ -94,14 +94,38 @@ export const EditTitleIcons = (props: any) => {
     </div>
 }
 
+export const AddChapterUpperContainer = (props: any) => {
+    return <div className="add-chapter-upper-container">
+        {props.children}
+    </div>
+}
+
 export const AddSectionUpperContainer = (props: any) => {
-    return <div className="section-nav-top">
+    return <div className="add-section-upper-container">
         {props.children}
     </div>
 }
 
 export const AddSectionInnerContainer = (props: any) => {
-    return <div className="add-section-container">
+    return <div className="add-section-inner-container">
+        {props.children}
+    </div>
+}
+
+export const Container = (props: any) => {
+    return <>
+        {props.children}
+    </>
+}
+
+export const PageTitleContainer = (props: any) => {
+    return <div className="page-title">
+        {props.children}
+    </div>
+}
+
+export const SectionTitleContainer = (props: any) => {
+    return <div className="section-title">
         {props.children}
     </div>
 }

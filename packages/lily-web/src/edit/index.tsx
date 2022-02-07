@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import BodyComponent from "./BodyComponent";
-import NavigationRenderer from "./NavigationComponent";
+import NavigationComponent from "./NavigationComponent";
 import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
 import { useBookContext, BookServiceProvider, updatePage } from 'lily-service';
 import { BookHandler } from "lily-service/BookService";
@@ -82,7 +82,7 @@ const RenderModal = () => {
 const RenderComponent = () => {
     return <MainContainer>
         <NavigationContainer>
-            <NavigationRenderer />
+            <NavigationComponent />
         </NavigationContainer>
         <BodyContainer>
             <RenderModal />
