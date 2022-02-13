@@ -7,7 +7,7 @@ export const createNode = async (context: any, __formData: any): Promise<Result<
     const { formData, bookId, activePage } = context;
     const { identity, topUniqueId, botUniqueId } = formData;
     const { title, body } = __formData;
-
+    if(!title || !body) return Err('Title or body not set.');
     let uploadData: any = {
         title,
         body,

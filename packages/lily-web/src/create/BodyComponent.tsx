@@ -130,27 +130,13 @@ const bodyComponentHandler = (context: BookContextType) => {
     }
 }
 
-const FormComponent = ({vue}:{vue: string}) => {
-    return (
-        <div className="flex">
-            <div className="con-80 flex">
-                <div className="con-10" />
-                <div className="con-80">
-                    <FormView state={vue} />
-                </div>
-                <div className="con-10" />
-            </div>
-        </div>
-    );
-}
-
 const BodyComponent = () => {
     const context: BookContextType = useBookContext();
     const { activePage, vue } = context;
     const { __editPage, __deletePage, __deleteSection } = bodyComponentHandler(context);
 
+    if (vue === VUE.FORM) return <MarkDownForm />
     if (!activePage) return null;
-    if (vue === VUE.FORM) return <FormComponent vue={vue} />
 
     return <BodyViewContainer>
         <SearchInputComponent />

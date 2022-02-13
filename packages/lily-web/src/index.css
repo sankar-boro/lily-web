@@ -383,6 +383,9 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* Read book */
+.page-nav {
+    line-height: 1.8em;
+}
 .description {
     white-space: pre-wrap;
     font-size: 17px;
@@ -401,29 +404,22 @@ input:focus, textarea:focus, select:focus {
     cursor: pointer;
 }
 .page-title {
-    /* background-color: red; */
-    padding: 5px 0px 5px 5px;
+    font-size: 1em;
 }
 .section-title {
-    /* background-color: rgb(255, 0, 221); */
-    padding: 5px 0px 5px 5px;
+    font-size: 1em;
 }
 .chapter-nav, .section-nav {
 }
 .add-chapter-upper-container {
-    padding: 5px 0px 5px 5px;
     font-size: 0.8em;
     /* background-color: springgreen; */
 }
 .add-section-upper-container {
     margin-left: 20px;
     font-size: 0.8em;
-    padding: 5px 0px 5px 0px;
-    /* background-color: rgb(10, 110, 110); */
 }
 .add-section-inner-container {
-    padding: 5px 0px 5px 0px;
-    /* background-color: burlywood; */
     font-size: 0.8em;
 }
 .section-nav-top {
@@ -488,17 +484,16 @@ input:focus, textarea:focus, select:focus {
 }
 .navigation-container {
     height: 100%;
-    width: 19%;
+    width: 15%;
     position: fixed;
     padding: 15px 5px 0px 10px;
-    /* background-color: rgb(238, 255, 236); */
+    background-color: #fafafa;
 }
 .document-container {
     height: 100%;
-    width: 60%;
-    margin-left: 20%;
+    width: 64%;
+    margin-left: 15%;
     padding: 20px 10% 0px 10%;
-    /* background-color: rgb(228, 252, 225); */
 }
 .divider-container {
     width: 20%;

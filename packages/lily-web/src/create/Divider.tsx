@@ -1,5 +1,6 @@
 import { useBookContext } from "lily-service";
-import { BOOK_SERVICE, VUE } from "lily-types";
+import { BookContextType, BOOK_SERVICE, VUE, Section } from "lily-types";
+import { DividerContainer } from "lily-web/components";
 
 const __create = (dispatch: any, formData: any) => {
     dispatch({
@@ -78,24 +79,27 @@ const AddSubSectionInner = (props: {
 }
 
 const Divider = () => {
-    const { dispatch, activePage }: any = useBookContext();
+    const { dispatch, activePage, formData }: BookContextType = useBookContext();
     const props = { activePage, dispatch, subSection: null };
-    const { identity } = activePage;
-    
-    return <div className="con-20">
-        <div className="li-item hover">Delete</div>
-        <AddSubSectionOuter { ...props } />
-        {identity === 105 && activePage.child.map((subSection: any, subSectionIndex: number) => {
-            return <div key={subSection.uniqueId}>
-                {subSection.title}
-                <AddSubSectionInner 
-                    { ...props }
-                    subSection={subSection}
-                    key={subSectionIndex}
-                />
-            </div>;
+    if (!formData) return <DividerContainer />;
+    if (!activePage) return <DividerContainer />;
+    const section = activePage as Section;
+    const { identity, child: subSections } = section;
+
+    return <DividerContainer>
+         <div className="li-item hover">Delete</div>
+         <AddSubSectionOuter { ...props } />
+         {identity === 105 && subSections.map((subSection: any, subSectionIndex: number) => {
+             return <div key={subSection.uniqueId}>
+                 {subSection.title}
+                 <AddSubSectionInner 
+                     { ...props }
+                     subSection={subSection}
+                     key={subSectionIndex}
+                 />
+             </div>;
         })}
-    </div>
+    </DividerContainer>
 }
 
 export default Divider;

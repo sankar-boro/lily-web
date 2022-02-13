@@ -5,16 +5,19 @@
   "author": "Sankar boro <sankar.boro@yahoo.com>",
   "license": "MIT",
   "dependencies": {
+    "@uiw/react-markdown-editor": "^3.2.7",
+    "@uiw/react-markdown-preview": "^3.4.7",
+    "@uiw/react-md-editor": "^3.9.4",
     "axios": "^0.25.0",
+    "lily-components": "1.0.0",
+    "lily-service": "1.0.0",
+    "lily-types": "1.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "ts-results": "^3.3.0",
-    "lily-components": "1.0.0",
-    "lily-service": "1.0.0",
-    "lily-types": "1.0.0"
+    "ts-results": "^3.3.0"
   },
   "scripts": {
     "start": "webpack serve --config ./config/webpack.config.js --env env=dev",

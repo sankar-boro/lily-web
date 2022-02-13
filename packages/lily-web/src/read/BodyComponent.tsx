@@ -1,5 +1,6 @@
 import { useBookContext } from "lily-service";
-import { BookContextType, Section } from "lily-types";
+import { BookContextType, Section, SubSection } from "lily-types";
+import MarkdownPreview from '@uiw/react-markdown-preview';
 import { BodyViewContainer, DocumentViewContainer, SubSectionsViewContainer, SubSectionViewContainer } from "lily-web/components";
 
 const ActivePageChildComponents = () => {
@@ -11,11 +12,13 @@ const ActivePageChildComponents = () => {
     const subSections = child;
 
     return <SubSectionsViewContainer>
-        {subSections.map((x: any) => {
+        {subSections.map((subSection: SubSection) => {
             return (
-                <SubSectionViewContainer key={x.uniqueId}>
-                    <h4 className="h4" id={x.uniqueId}>{x.title}</h4>
-                    <div className="description">{x.body}</div>
+                <SubSectionViewContainer key={subSection.uniqueId}>
+                    <h4 className="h4" id={subSection.uniqueId}>{subSection.title}</h4>
+                    <div className="description">
+                        <MarkdownPreview source={subSection.body} />
+                    </div>
                 </SubSectionViewContainer>
             );
         })}
@@ -38,7 +41,9 @@ const BodyComponent = () => {
         <DocumentViewContainer>
             <div>
                 <h3 className="h2" id={activePage.uniqueId}>{activePage.title}</h3>
-                <div className="description">{activePage.body}</div>
+                <div className="description">
+                    <MarkdownPreview source={activePage.body} />
+                </div>
                 <ActivePageChildComponents />
             </div>
         </DocumentViewContainer>
