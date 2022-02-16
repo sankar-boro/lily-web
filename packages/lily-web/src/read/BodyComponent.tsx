@@ -43,7 +43,6 @@ const BodyComponent = () => {
             <div>
                 <h1 className="h2" id={activePage.uniqueId}>{activePage.title}</h1>
                 <div className="description">
-                    {/* <MarkdownPreview source={activePage.body} /> */}
                     <MarkdownPreview.Markdown source={activePage.body} />
                 </div>
                 <ActivePageChildComponents />

@@ -21,15 +21,7 @@ import {
     SubSectionsViewContainer,
     SubSectionViewContainer 
 } from "lily-web/components";
-
-
-const FormView = (props: any) => {
-    const { state } = props;
-    if (state === VUE.FORM) {
-        return <MarkDownForm />;
-    }
-    return null;
-};
+import MarkdownPreview from '@uiw/react-md-editor';
 
 const subSectionHandlers = (context: BookContextType, subSection: SubSection) => {
     const { dispatch } = context;
@@ -79,7 +71,9 @@ const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
                 <MdDelete onClick={__delete}/>
             </EditTitleIcons>
         </EditTitleContainer>
-        <div className="description">{subSection.body}</div>
+        <div className="description">
+            <MarkdownPreview.Markdown source={subSection.body} />
+        </div>
     </SubSectionViewContainer>
 }
 
@@ -153,7 +147,9 @@ const BodyComponent = () => {
                     />
                 </EditTitleIcons>
             </EditTitleContainer>
-            <div className="description">{activePage.body}</div>
+            <div className="description">
+                <MarkdownPreview.Markdown source={activePage.body} />
+            </div>
             <ActivePageChildComponents activePage={activePage as Page | Section} />
         </DocumentViewContainer>
     </BodyViewContainer>
