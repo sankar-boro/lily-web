@@ -3,7 +3,7 @@
 */
 
 html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
@@ -204,31 +204,6 @@ html, body, .home, .body {
     width: 95%;
 }
 
-/* Headers */
-.h1 {
-    font-family: 'SSP-SB', sans-serif;
-    font-size: 32px;
-    padding: 8px 0px;
-    color: #4a4a4a;
-}
-.h2 {
-    font-family: 'SSP-SB', sans-serif;
-    font-size: 28px;
-    padding: 8px 0px;
-    color: #4a4a4a;
-}
-.h3 {
-    font-family: 'SSP-SB', sans-serif;
-    font-size: 24px;
-    padding: 8px 0px;
-    color: #4a4a4a;
-}
-.h4 {
-    font-family: 'SSP-SB', sans-serif;
-    font-size: 20px;
-    padding: 8px 0px;
-    color: #4a4a4a;
-}
 .book-title {
     font-family: 'OS-L';
 }
@@ -387,7 +362,7 @@ input:focus, textarea:focus, select:focus {
     line-height: 1.8em;
 }
 .description {
-    white-space: pre-wrap;
+    /* white-space: pre-wrap; */
     font-size: 17px;
     line-height: 1.45em;
 }
@@ -558,4 +533,9 @@ input:focus, textarea:focus, select:focus {
     border: 1px solid #cccccc;
     border-radius: 2px;
     background: transparent;
+}
+.content-editable {
+    height: 500px;
+    border: 1px solid #ccc;
+    padding: 10px;
 }

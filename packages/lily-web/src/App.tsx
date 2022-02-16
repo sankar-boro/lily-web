@@ -1,5 +1,4 @@
 import AppRoute from "./route";
-
 const App = () => {
     return <AppRoute />;
 };
