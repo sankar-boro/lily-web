@@ -137,7 +137,7 @@ const BodyComponent = () => {
         <DocumentViewContainer>
             <EditTitleContainer>
                 <EditTitleContainer>
-                    <h3 className="h3">{activePage.title}</h3>
+                    <h1 className="h1">{activePage.title}</h1>
                 </EditTitleContainer>
                 <EditTitleIcons>
                     <MdModeEdit onClick={__editPage}/>

@@ -46,6 +46,14 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+.required {
+    color: rgb(0, 130, 252);
+    font-size: 12px;
+}
+.form-label {
+    padding: 5px 0px 5px 0px;
+    font-size: 16px !important;
+}
 /* Reset css */
 
 /* Import fonts */
