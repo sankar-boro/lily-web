@@ -17,7 +17,6 @@ const ActivePageChildComponents = () => {
                 <SubSectionViewContainer key={subSection.uniqueId}>
                     <h4 className="h4" id={subSection.uniqueId}>{subSection.title}</h4>
                     <div className="description">
-                        {/* <MarkdownPreview source={subSection.body} /> */}
                         <MarkdownPreview.Markdown source={subSection.body} />
                     </div>
                 </SubSectionViewContainer>

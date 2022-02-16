@@ -135,15 +135,12 @@ const bodyComponentHandler = (context: BookContextType) => {
 
 const FormComponent = ({vue}:{vue: string}) => {
     return (
-        <div className="flex">
-            <div className="con-80 flex">
-                <div className="con-10" />
-                <div className="con-80">
-                    <FormView state={vue} />
-                </div>
-                <div className="con-10" />
-            </div>
-        </div>
+        <BodyViewContainer>
+            <SearchInputComponent />
+            <DocumentViewContainer>
+                <FormView state={vue} />
+            </DocumentViewContainer>
+        </BodyViewContainer>
     );
 }
 
