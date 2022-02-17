@@ -1,7 +1,6 @@
-import axios from "axios";
 import React, { useContext, useEffect, useReducer } from "react";
 import { HomeContextType, HomeActionType, HOME_SERVICE, AUTH_SERVICE } from "lily-types";
-import { GET_BOOK_ALL } from "lily-query";
+import { GET_BOOK_ALL, getQueryAuth } from "lily-query";
 
 import { setters } from './ProvidersCommon';
 import { useAuthContext } from "./AuthServiceProvider";
@@ -42,10 +41,7 @@ export const HomeServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, homeState);
     const { dispatch: authDispatch } = useAuthContext();
     useEffect(() => {
-        axios
-        .get(GET_BOOK_ALL, {
-            withCredentials: true,
-        })
+        getQueryAuth({ url: GET_BOOK_ALL})
         .then((res: any) => {
             if (
                 res.status &&

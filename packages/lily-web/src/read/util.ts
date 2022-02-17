@@ -1,6 +1,3 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { GET_BOOK_FROM_ID } from "lily-query";
-
 type Book = {
     bookId: string;
     authorId: string;
@@ -13,27 +10,6 @@ type Book = {
     updatedAt: string;
     identity: number;
 };
-
-const getPages = (setAllPages: Function, bookId: string) => {
-    axios
-    .get(GET_BOOK_FROM_ID(bookId), {
-        withCredentials: true,
-    })
-    .then((res: AxiosResponse<any>) => {
-        if (
-            res.status &&
-            typeof res.status === "number" &&
-            res.status === 200
-        ) {
-            let dataRes: any[] = res.data;
-            let x = sortAll(dataRes);
-            setAllPages(x);
-        }
-    })
-    .catch((err: AxiosError<any>) => {
-        // console.log("deleteerror", err.response);
-    });
-}
 
 function groupSections(dd: any, s: any) {
     let pId = dd.uniqueId;
@@ -160,5 +136,10 @@ const displayNone = (c: any, a: string) => {
     };
 };
 
-export { sortAll, activeChBg, activeScBg, displayNone, getPages };
+export { 
+    sortAll, 
+    activeChBg, 
+    activeScBg, 
+    displayNone 
+};
 export type { Book };

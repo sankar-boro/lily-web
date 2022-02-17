@@ -1,30 +1,24 @@
 import { Link } from "react-router-dom";
 import { useAuthContext, useHomeContext } from "lily-service";
 import { AUTH_SERVICE } from "lily-types";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { LOGOUT } from "lily-query";
+import { LOGOUT, postQuery } from "lily-query";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 const logout = (cleanUpLocalStorage: any) => {
-    axios
-        .post(LOGOUT, {},
-            {
-                withCredentials: true,
-            }
-        )
-        .then((res: AxiosResponse<{ status: number }>) => {
-            if (
-                res.status &&
-                typeof res.status === "number" &&
-                res.status === 200
-            ) {
-                cleanUpLocalStorage();
-            }
-        })
-        .catch((err: AxiosError<any>) => {
-            // console.log("Logout Error", err.response);
-        });
+    postQuery({ url: LOGOUT, data: {} })
+    .then((res: any) => {
+        if (
+            res.status &&
+            typeof res.status === "number" &&
+            res.status === 200
+        ) {
+            cleanUpLocalStorage();
+        }
+    })
+    .catch((err: any) => {
+        // console.log("Logout Error", err.response);
+    });
 };
 
 const Header = () => {

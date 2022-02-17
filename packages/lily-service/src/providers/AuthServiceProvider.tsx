@@ -1,9 +1,8 @@
-import axios, { AxiosResponse } from "axios";
 import React, { useContext, useEffect, useReducer } from "react";
-import { UserInfo, AuthContextType, AuthActionType, AUTH_SERVICE } from "lily-types";
+import { AuthContextType, AuthActionType, AUTH_SERVICE } from "lily-types";
+import { USER_SESSION, getQueryAuth } from "lily-query";
 
 import { setters } from './ProvidersCommon';
-import { USER_SESSION } from "lily-query";
 
 const initAuthState: AuthContextType = {
     auth: null,
@@ -33,11 +32,8 @@ export const AuthServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, initAuthState);
 
     useEffect(() => {
-        axios
-            .get(USER_SESSION, {
-                withCredentials: true,
-            })
-            .then((res: AxiosResponse<UserInfo>) => {
+        getQueryAuth({ url: USER_SESSION})
+            .then((res: any) => {
                 if (res && res.data) {
                     dispatch({
                         type: AUTH_SERVICE.SETTERS,
