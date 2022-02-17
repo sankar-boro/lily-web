@@ -1,33 +1,6 @@
 import { SIGNUP, LOGIN } from "lily-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-function login(props: any) {
-    const {email, password, context} = props;
-    const { authenticateUser, setError } = context;
-
-    axios
-        .post(
-            LOGIN,
-            {
-                email,
-                password,
-            },
-            {
-                withCredentials: true,
-            }
-        )
-        .then((res: any) => {
-            if (res && res.data) {
-                authenticateUser(res.data);
-            }
-        })
-        .catch((err: AxiosError<any>) => {
-            if (err.response && err.response.data && err.response.data.message) {
-                console.log(setError({credentials: err.response.data.message}));
-            }
-        });
-};
-
 //
 const signup = (props: {
     email: string;
@@ -58,4 +31,4 @@ const signup = (props: {
         });
 };
 
-export { login, signup };
+export { signup };

@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useAuthContext } from "lily-service";
 import { AUTH_SERVICE } from "lily-types";
-import { LOGIN } from 'lily-query';
+import { LOGIN, postQuery } from 'lily-query';
 
 const inputs = {
     email: {
@@ -19,31 +18,21 @@ const inputs = {
 };
 
 function login(userInfo: any, dispatch: any) {
-    axios
-        .post(
-            LOGIN,
-            userInfo,
-            {
-                withCredentials: true,
-            }
-        )
-        .then((res: any) => {
-            if (res && res.data) {
-                dispatch({
-                    type: 'SUCCESS',
-                    data: res.data,
-                });
-            }
-        })
-        .catch((err: any) => {
-            // if (err.response && err.response.data && err.response.data.message) {
-            //     console.log(setError({credentials: err.response.data.message}));
-            // }
+    postQuery({ url: LOGIN, data: userInfo})
+    .then((res: any) => {
+        if (res && res.data) {
             dispatch({
-                type: 'ERR',
-                data: err.response.data.message,
-            })
-        });
+                type: 'SUCCESS',
+                data: res.data,
+            });
+        }
+    })
+    .catch((err: any) => {
+        dispatch({
+            type: 'ERROR',
+            data: err.response.data.message,
+        })
+    })
 };
 
 //
@@ -53,7 +42,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
 
-    const loginUser = (loginData: any) => {
+    const loginDispatch = (loginData: any) => {
         if (loginData.type === 'ERROR') {
             setError(loginData.data);
         }
@@ -111,7 +100,7 @@ const Login = () => {
                                     className="button"
                                     onClick={(e: any) => {
                                         e.preventDefault()
-                                        login({email, password}, loginUser);
+                                        login({email, password}, loginDispatch);
                                     }}
                                     >
                                     Submit

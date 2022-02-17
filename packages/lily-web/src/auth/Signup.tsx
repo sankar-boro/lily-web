@@ -1,19 +1,56 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { signup } from "./util";
+import {SIGNUP, postQuery } from 'lily-query';
+import { useAuthContext } from "lily-service";
+import { AUTH_SERVICE } from "lily-types";
+
+function signup(userInfo: any, dispatch: any | undefined) {
+    postQuery({ url: SIGNUP, data: userInfo})
+    .then((res: any) => {
+        if (res && res.data) {
+            dispatch({
+                type: 'SUCCESS',
+                data: res.data,
+            });
+        }
+    })
+    .catch((err: any) => {
+        dispatch({
+            type: 'ERROR',
+            data: err.response.data.message,
+        })
+    })
+};
 
 const Login = () => {
-    const [email, setEmail] = useState("sankar.boro@yahoo.com");
-    const [password, setPassword] = useState("sankar");
-    const [fname, setFname] = useState("Sankar");
-    const [lname, setLname] = useState("boro");
+    const { dispatch } = useAuthContext();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [fname, setFname] = useState('');
+    const [lname, setLname] = useState('');
+    const [error, setError] = useState(null);
     const history = useHistory();
 
-    //
+    const signDispatch = (loginData: any) => {
+        if (loginData.type === 'ERROR') {
+            setError(loginData.data);
+        }
+        if (loginData.type === 'SUCCESS') {
+            localStorage.setItem('auth', loginData.data);
+            dispatch({
+                type: AUTH_SERVICE.SETTERS,
+                setters: {
+                    keys: ['auth', 'authUserData'],
+                    values: [true, loginData.data]
+                }
+            })
+        }
+    }
     return (
         <div className="container container-center">
             <div className="container-login">
                 <div className="h1">Sign up</div>
+                <div className="form-res-error">{error}</div>
                 <div className="container-form">
                     <form action="#" method="post">
                         <div className="group-form-input">
@@ -84,7 +121,7 @@ const Login = () => {
                                             fname,
                                             lname,
                                             history,
-                                        });
+                                        }, signDispatch);
                                     }}
                                     >
                                     Submit

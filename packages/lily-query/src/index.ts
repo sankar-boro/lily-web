@@ -53,42 +53,34 @@ export const createNodeQuery = async (props: {
 type PostQueryData = {
   url: string,
   data: any,
-  successCallBack: any,
-  errorCallBack: any,
 }
 
 type GetQueryData = {
   url: string,
-  successCallBack: any,
-  errorCallBack: any,
 }
 
-export const postQuery = async (postQueryData: PostQueryData) => {
-  const { url, data, successCallBack, errorCallBack} = postQueryData;
-  await axios.post(url,data,authCreds)
-  .then((res: AxiosResponse<any>) => {
-      if (res && res.data) {
-        successCallBack(res.data);
-      }
-  })
-  .catch((err: AxiosError<any>) => {
-      if (err.response && err.response.data && err.response.data.message) {
-        errorCallBack({credentials: err.response.data.message});
-      }
+export const postQuery = (postQueryData: PostQueryData) => {
+  const { url, data} = postQueryData;
+  return new Promise((resolve, reject) => {
+    axios.post(url,data,authCreds)
+    .then((res: AxiosResponse<any>) => {
+        resolve(res);
+    })
+    .catch((err: AxiosError<any>) => {
+      reject(err);
+    })
   });
 }
 
 export const getQueryAuth = async (getQueryData: GetQueryData) => {
-  const { url, successCallBack, errorCallBack} = getQueryData;
-  await axios.get(url,authCreds)
-  .then((res: AxiosResponse<any>) => {
-      if (res && res.data) {
-        successCallBack(res.data);
-      }
-  })
-  .catch((err: AxiosError<any>) => {
-      if (err.response && err.response.data && err.response.data.message) {
-        errorCallBack({credentials: err.response.data.message});
-      }
+  const { url } = getQueryData;
+  return new Promise((resolve, reject) => {
+    axios.get(url,authCreds)
+    .then((res: AxiosResponse<any>) => {
+        resolve(res)
+    })
+    .catch((err: AxiosError<any>) => {
+        reject(err)
+    })
   });
 }

@@ -1,4 +1,4 @@
-import { GET_BOOK_ALL, getQueryAuth } from "lily-query";
+import { GET_BOOK_FROM_ID, getQueryAuth } from "lily-query";
 import { RawData, ApiData, ActivePage } from "lily-types";
 import { sortAll } from './DataHandler';
 
@@ -25,18 +25,16 @@ class BookHandler implements BookService {
 
     fetch(bookId: string): Promise<BookHandler> {
         this.bookId = bookId;
-        const prefix = GET_BOOK_ALL;
-        const url = `${prefix}${bookId}`;
         return new Promise(async (resolve, reject) => {
-            const successCallBack = (successData: any) => {
-                this.payload = successData;
+            await getQueryAuth({ url: GET_BOOK_FROM_ID(bookId) })
+            .then((res) => {
+                this.payload = res;
                 resolve(this);
-            }
-            const errorCallBack = (errorData: any) => {
-                this.err = errorData;
+            })
+            .catch((err) => {
+                this.err = err;
                 reject(this);
-            }
-            await getQueryAuth({url, successCallBack, errorCallBack});
+            });
         });
     }
     
