@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { GET_BOOK_FROM_ID } from "lily-query";
 
 type Book = {
     bookId: string;
@@ -15,7 +16,7 @@ type Book = {
 
 const getPages = (setAllPages: Function, bookId: string) => {
     axios
-    .get(`http://localhost:8000/book/getall/${bookId}`, {
+    .get(GET_BOOK_FROM_ID(bookId), {
         withCredentials: true,
     })
     .then((res: AxiosResponse<any>) => {

@@ -1,13 +1,13 @@
 import React from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { LOGOUT } from 'lily-query';
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 const logout = (e: OnClickEvent, logoutUser: any) => {
     e.preventDefault();
     axios
-        .post(
-            "http://localhost:8000/logout",
+        .post(LOGOUT,
             {},
             {
                 withCredentials: true,

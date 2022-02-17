@@ -1,5 +1,5 @@
 import { Result, Ok, Err } from "ts-results";
-import { createNodeQuery } from "lily-query";
+import { createNodeQuery, CREATE_UPDATE_ANY } from "lily-query";
 const log = false;
 
 
@@ -24,7 +24,7 @@ export const createNode = async (context: any, __formData: any): Promise<Result<
         });
     }
 
-    let url = "http://localhost:8000/book/create/update/any";
+    let url = CREATE_UPDATE_ANY;
     if (!activePage) url = formData.url;
     return await createNodeQuery({
         url,

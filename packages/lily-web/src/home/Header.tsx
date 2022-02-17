@@ -2,14 +2,13 @@ import { Link } from "react-router-dom";
 import { useAuthContext, useHomeContext } from "lily-service";
 import { AUTH_SERVICE } from "lily-types";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { LOGOUT } from "lily-query";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
 const logout = (cleanUpLocalStorage: any) => {
     axios
-        .post(
-            "http://localhost:8000/logout",
-            {},
+        .post(LOGOUT, {},
             {
                 withCredentials: true,
             }

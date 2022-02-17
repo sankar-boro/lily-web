@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useReducer } from "react";
 import { UserInfo, AuthContextType, AuthActionType, AUTH_SERVICE } from "lily-types";
 
 import { setters } from './ProvidersCommon';
+import { USER_SESSION } from "lily-query";
 
 const initAuthState: AuthContextType = {
     auth: null,
@@ -33,7 +34,7 @@ export const AuthServiceProvider = (props: { children: object }) => {
 
     useEffect(() => {
         axios
-            .get("http://localhost:8000/user/session", {
+            .get(USER_SESSION, {
                 withCredentials: true,
             })
             .then((res: AxiosResponse<UserInfo>) => {

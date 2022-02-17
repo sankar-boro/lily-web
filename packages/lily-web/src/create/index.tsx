@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BOOK_SERVICE, VUE, BookContextType } from "lily-types";
 import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
 import { BookServiceProvider, useBookContext, updatePage, updateNewBook } from 'lily-service';
+import { CREATE_NEW_BOOK } from "lily-query";
 
 import Divider from "./Divider";
 import BodyComponent from "./BodyComponent";
@@ -16,7 +17,7 @@ const Main = () => {
     
     useEffect(() => {
         const formDataValue = {
-            url: "http://localhost:8000/book/create/new/book",
+            url: CREATE_NEW_BOOK,
             identity: 101,
             type: 'NEW_BOOK'
         }

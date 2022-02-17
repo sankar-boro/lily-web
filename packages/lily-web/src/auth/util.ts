@@ -1,5 +1,5 @@
+import { SIGNUP, LOGIN } from "lily-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { UserInfo } from "lily-service";
 
 function login(props: any) {
     const {email, password, context} = props;
@@ -7,7 +7,7 @@ function login(props: any) {
 
     axios
         .post(
-            "http://localhost:8000/login",
+            LOGIN,
             {
                 email,
                 password,
@@ -16,7 +16,7 @@ function login(props: any) {
                 withCredentials: true,
             }
         )
-        .then((res: AxiosResponse<UserInfo>) => {
+        .then((res: any) => {
             if (res && res.data) {
                 authenticateUser(res.data);
             }
@@ -38,7 +38,7 @@ const signup = (props: {
 }) => {
     const { email, password, fname, lname, history } = props;
     axios
-        .post("http://localhost:8000/signup", {
+        .post(SIGNUP, {
             email,
             password,
             fname,

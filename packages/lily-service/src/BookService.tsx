@@ -1,4 +1,4 @@
-import axios from "axios";
+import { GET_BOOK_ALL, getQueryAuth } from "lily-query";
 import { RawData, ApiData, ActivePage } from "lily-types";
 import { sortAll } from './DataHandler';
 
@@ -15,12 +15,6 @@ interface BookService {
     map_err(): any;
 }
 
-const getAllBookData = async (url: string) => {
-    return await axios.get(url, {
-        withCredentials: true,
-    });
-}
-
 class BookHandler implements BookService {
     rawData: null | RawData = null;
     apiData: null | ApiData = null;
@@ -31,18 +25,18 @@ class BookHandler implements BookService {
 
     fetch(bookId: string): Promise<BookHandler> {
         this.bookId = bookId;
-        const prefix = "http://localhost:8000/book/getall/";
+        const prefix = GET_BOOK_ALL;
         const url = `${prefix}${bookId}`;
         return new Promise(async (resolve, reject) => {
-            getAllBookData(url)
-            .then((res) => {
-                this.payload = res;
+            const successCallBack = (successData: any) => {
+                this.payload = successData;
                 resolve(this);
-            })
-            .catch((err) => {
-                this.err = err;
+            }
+            const errorCallBack = (errorData: any) => {
+                this.err = errorData;
                 reject(this);
-            });
+            }
+            await getQueryAuth({url, successCallBack, errorCallBack});
         });
     }
     

@@ -1,0 +1,10 @@
+export const UPDATE_OR_DELETE = "http://localhost:8000/book/update_or_delete";
+export const CREATE_UPDATE_ANY = "http://localhost:8000/book/create/update/any";
+export const GET_BOOK_FROM_ID = (bookId: string) => `http://localhost:8000/book/getall/${bookId}`;
+export const GET_BOOK_ALL = `http://localhost:8000/book/all`;
+export const CREATE_NEW_BOOK = "http://localhost:8000/book/create/new/book";
+export const LOGOUT = "http://localhost:8000/logout";
+export const LOGIN = "http://localhost:8000/login";
+export const SIGNUP = "http://localhost:8000/signup";
+export const USER_SESSION = "http://localhost:8000/user/session";
+export default null;

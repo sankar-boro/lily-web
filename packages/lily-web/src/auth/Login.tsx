@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAuthContext } from "lily-service";
 import { AUTH_SERVICE } from "lily-types";
+import { LOGIN } from 'lily-query';
 
 const inputs = {
     email: {
@@ -20,7 +21,7 @@ const inputs = {
 function login(userInfo: any, dispatch: any) {
     axios
         .post(
-            "http://localhost:8000/login",
+            LOGIN,
             userInfo,
             {
                 withCredentials: true,

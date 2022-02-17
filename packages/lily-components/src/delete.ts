@@ -157,28 +157,6 @@ const getActivePage = (apiData: ApiData, compareId: string) => {
 	return newActivePage;
 }
 
-const createPageTopBotUId = (apiData: ApiData, activePageUId: string): null | TopBotUIdType => {
-	const totalChapters = apiData.length;
-	let childData: any = null;
-	let parentData: any = null;
-	for (let i=0; i < totalChapters; i++) {
-		if (apiData[i].uniqueId === activePageUId) {
-			if (apiData[i+1]) {
-				childData = apiData[i + 1];
-			}
-			break;
-		}
-		parentData = apiData[i];
-	}
-	if (parentData && childData) {
-		return {
-			topUniqueId: parentData.uniqueId,
-			botUniqueId: childData.uniqueId
-		}
-	};
-	return null;
-}
-
 const __init = (context: BookContextType) => {
 	const { activePage, bookId, rawData, dispatch, apiData } = context;
 	const activePageInfo: ActivePageInfo = __activePageInfo(activePage as Page | Section);

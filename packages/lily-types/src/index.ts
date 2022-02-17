@@ -17,9 +17,6 @@ export const constants = {
         }
     }
 }
-export const URLS = {
-    UPDATE_OR_DELETE: "http://localhost:8000/book/update_or_delete",
-}
 export const ENV = {
     LOG: true,
 }
