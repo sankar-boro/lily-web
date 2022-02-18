@@ -1,3 +1,5 @@
+import { BookContextType, BOOK_SERVICE } from "./book";
+
 export * from "./book";
 export * from "./form";
 export * from "./auth";
@@ -49,23 +51,8 @@ export type Page = Common & ParentId & Sections;
 export type ApiData = (Common | Page)[];
 export type RawData = (ParentNode | ChildNode)[];
 export type ActivePage = Common | Page | Section;
-export enum Request {
-    INIT = 'INIT',
-    FETCH = 'FETCH',
-    SUCCESS = 'SUCCESS',
-    ERROR = 'ERROR'
-}
 export const textareaRows = 10;
 export const textareaCols = 50;
-export const VUE = {
-    FORM: 'FORM',
-    NONE: 'NONE',
-    UPDATING: 'UPDATING',
-    FETCHING: 'FETCHING',
-    INIT: 'INIT',
-    ERROR: 'ERROR',
-    DOCUMENT: 'DOCUMENT'
-}
 export type DefaultActionType = {
     type: string,
     setters?: {
@@ -73,8 +60,60 @@ export type DefaultActionType = {
         values: any[],
     }
 }
-export const DELETE = {
-    PAGE: 'PAGE',
-    SECTION: 'SECTION',
-    SUB_SECTION: 'SUB_SECTION'
+export enum NODE_TYPE {
+    FRONT_COVER = "FRONT_COVER",
+    BACK_COVER = "BACK_COVER",
+    PAGE = "PAGE",
+    CHAPTER = "CHAPTER",
+    SECTION = "SECTION",
+    SUB_SECTION = "SUB_SECTION",
+}
+export enum HTTP_METHODS {
+    CREATE = 'CREATE',
+    DELETE = 'DELETE',
+    UPDATE = 'UPDATE',
+    PUT    = 'PUT'
+}
+export enum VUE {
+    FORM = 'FORM',
+    DOCUMENT = 'DOCUMENT',
+    NONE = 'NONE',
+    MODAL = 'MODAL'
+}
+
+export const vueSetter = (context: BookContextType) => {
+    const { dispatch } = context;
+    let vue: any = {
+        type: null,
+        document: {
+            type: null,
+        },
+        form: {
+            method: null,
+            data: null,
+        },
+    }
+
+    const __dispatch = (keys: any, values: any) => {
+        dispatch({
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
+                keys,
+                values
+            }
+        })
+    }
+    return {
+        document: (documentType: NODE_TYPE) => {
+            vue.type = VUE.DOCUMENT;
+            vue.document.type = documentType;
+            __dispatch(['vue'], [vue]);
+        }, 
+        form: (formMethod: HTTP_METHODS, formData: any) => {
+            vue.type = VUE.FORM;
+            vue.form.method = formMethod;
+            vue.form.data = formData;
+            __dispatch(['vue'], [vue]);
+        }
+    }
 }

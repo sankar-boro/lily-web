@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BOOK_SERVICE } from "lily-types";
+import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
 import { useBookContext} from "lily-service";
 import { createNode } from "lily-components";
 import MDEditor, { commands, ICommand, TextState, TextAreaTextApi } from '@uiw/react-md-editor';
@@ -24,10 +24,13 @@ const title3: ICommand = {
 
 export default function MarkDownForm() {
     const context = useBookContext();
-    const { formData, rawData, dispatch }: any = context;
+    const { formData, rawData, dispatch, vue }: BookContextType = context;
+    if (!formData) return null;
     const { identity }: any = formData;
-    const [title, setTitle] = useState("");
-    const [body, setBody] = useState('');
+    let defTitle = vue.type === VUE.FORM ? formData.title : '';
+    let defBody = vue.type === VUE.FORM ? formData.body : '';
+    const [title, setTitle] = useState(formData.title);
+    const [body, setBody] = useState(formData.body);
     const _submit = async (e: any) => {
         e.preventDefault();
         const __formData = {
@@ -51,7 +54,6 @@ export default function MarkDownForm() {
         })
     }
 
-    if (!formData) return null;
     const _identity = identity && identity.toString();
     const createName: any = {
         "104": "Chapter",
@@ -60,7 +62,7 @@ export default function MarkDownForm() {
     }
 
     let name = createName[_identity] ? createName[_identity] : 'Book';
-
+    console.log(formData);
     return <div>
         <div><h1>Create {name}</h1></div>
         <div className="form-section">

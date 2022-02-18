@@ -3,13 +3,14 @@ import { useBookContext } from "lily-service";
 import { MdModeEdit, MdDelete } from 'react-icons/md';
 import { 
     BOOK_SERVICE,
-    FORM_TYPE,
     VUE,
     Section,
-    DELETE,
     SubSection,
     BookContextType,
-    Page
+    Page,
+    NODE_TYPE,
+    vueSetter,
+    HTTP_METHODS
 } from "lily-types";
 import MarkDownForm from "lily-web/forms/MarkDownForm";
 import { 
@@ -31,7 +32,7 @@ const subSectionHandlers = (context: BookContextType, subSection: SubSection) =>
             const act = {
                 type: 'DELETE',
                 data: {
-                    type: DELETE.SUB_SECTION,
+                    type: NODE_TYPE.SUB_SECTION,
                     deleteProps: {
                         deleteId: subSection.uniqueId
                     }
@@ -46,13 +47,8 @@ const subSectionHandlers = (context: BookContextType, subSection: SubSection) =>
             })        
         },
         __edit: () => {
-            dispatch({
-                type: BOOK_SERVICE.SETTERS,
-                setters: {
-                    keys: ['formData', 'vue'],
-                    values: [subSection, FORM_TYPE.UPDATE]
-                }
-            });
+            vueSetter(context)
+            .form(HTTP_METHODS.UPDATE, subSection);
         }
     }
 }
@@ -102,23 +98,20 @@ const SearchInputComponent = () => {
 const bodyComponentHandler = (context: BookContextType) => {
     const { activePage, dispatch } = context;
     return {
-        __editPage: () => dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: {
-                keys: ['viewType', 'formData'],
-                values: [FORM_TYPE.UPDATE, activePage]
-            }
-        }),
+        __editPage: () => {
+            vueSetter(context)
+            .form(HTTP_METHODS.UPDATE, activePage);
+        },
         __deletePage: () => {
             Delete({
                 context,
-                type: DELETE.PAGE
+                type: NODE_TYPE.PAGE
             });
         },
         __deleteSection: () => {
             Delete({
                 context,
-                type: DELETE.SECTION
+                type: NODE_TYPE.SECTION
             });
         },
     }
@@ -129,7 +122,7 @@ const BodyComponent = () => {
     const { activePage, vue } = context;
     const { __editPage, __deletePage, __deleteSection } = bodyComponentHandler(context);
 
-    if (vue === VUE.FORM) return <MarkDownForm />
+    if (vue.type === VUE.FORM) return <MarkDownForm />
     if (!activePage) return null;
 
     return <BodyViewContainer>

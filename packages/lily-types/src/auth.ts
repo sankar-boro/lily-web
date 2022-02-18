@@ -1,5 +1,8 @@
 import { DefaultActionType } from 'lily-types';
 
+export enum AUTH_SERVICE {
+    SETTERS = 'SETTERS'
+}
 export type UserInfo = {
     userId: string;
     fname: string;
@@ -11,9 +14,4 @@ export type AuthContextType = {
     authUserData: null | UserInfo;
     dispatch: (e: any) => void,
 }
-
-export enum AUTH_SERVICE {
-    SETTERS = 'SETTERS',
-}
-
 export type AuthActionType = DefaultActionType;

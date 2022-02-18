@@ -23,7 +23,7 @@ class BookHandler implements BookService {
     err: any;
     payload: any;
 
-    fetch(bookId: string): Promise<BookHandler> {
+    fetch = (bookId: string): Promise<BookHandler> => {
         this.bookId = bookId;
         return new Promise(async (resolve, reject) => {
             await getQueryAuth({ url: GET_BOOK_FROM_ID(bookId) })

@@ -13,8 +13,6 @@ type Keys = string[];
 type Values = [RawData, ApiData, ActivePage];
 
 const __dispatch = (fn: any, keys: Keys, values: Values) => {
-	console.log('keys', keys);
-	console.log('values', values);
 	fn({
 		type: BOOK_SERVICE.SETTERS,
 		setters: { keys, values }

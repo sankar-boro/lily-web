@@ -1,13 +1,12 @@
-import { Result, Ok, Err } from "ts-results";
-import { createNodeQuery, CREATE_UPDATE_ANY } from "lily-query";
+import { CREATE_UPDATE_ANY, postQuery } from "lily-query";
+
 const log = false;
 
-
-export const createNode = async (context: any, __formData: any): Promise<Result<any, string>> => {
+export const createNode = async (context: any, __formData: any) => {
     const { formData, bookId, activePage } = context;
     const { identity, topUniqueId, botUniqueId } = formData;
     const { title, body } = __formData;
-    if(!title || !body) return Err('Title or body not set.');
+    if(!title || !body) return null;
     let uploadData: any = {
         title,
         body,
@@ -19,15 +18,13 @@ export const createNode = async (context: any, __formData: any): Promise<Result<
     if (botUniqueId) uploadData = { ...uploadData, botUniqueId };
 
     if (log) {
-        return new Promise((resolve) => {
-            resolve(Ok(null))
-        });
+        return null;
     }
 
     let url = CREATE_UPDATE_ANY;
     if (!activePage) url = formData.url;
-    return await createNodeQuery({
+    return await postQuery({
         url,
-        uploadData
+        data: uploadData
     });
 }

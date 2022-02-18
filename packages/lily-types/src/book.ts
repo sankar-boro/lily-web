@@ -3,7 +3,16 @@ import { DefaultActionType } from './index';
 import { BookHandler } from "lily-service/BookService";
 
 export type BookActionType = DefaultActionType;
-
+type vue = {
+    type: string,
+    document: {
+        type: string,
+    },
+    form: {
+        method: string,
+        data: any | null,
+    },
+}
 export type BookContextType = {
     rawData: null | RawData,
     apiData: null | ApiData,
@@ -13,7 +22,7 @@ export type BookContextType = {
     editData: null | any,
     activePage: null | Chapter | Page | Section,
     error: null | string,
-    vue: string,
+    vue: vue,
     service: BookHandler,
     notifications: null,
     dispatch: (data: any) => void,
@@ -25,19 +34,9 @@ export type BookContextType = {
 }
 
 export enum BOOK_SERVICE {
-    API_STATE = 'API_STATE',
-    API_DATA = 'API_DATA',
     SETTERS = 'SETTERS',
-    FORM_PAGE_SETTER = 'FORM_PAGE_SETTER',
-    ACTIVE_PAGE = 'ACTIVE_PAGE'
 }
 
-export const VUE = {
-    FORM: 'FORM',
-    NONE: 'NONE',
-    UPDATING: 'UPDATING',
-    FETCHING: 'FETCHING',
-    INIT: 'INIT',
-    ERROR: 'ERROR',
-    DOCUMENT: 'DOCUMENT'
+export const FORM = {
+
 }

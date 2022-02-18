@@ -1,6 +1,6 @@
-export * from './url';
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Ok, Err } from "ts-results";
+
+export * from './url';
 import { UPDATE_OR_DELETE } from './url';
 
 const log = true;
@@ -33,22 +33,6 @@ export const updateOrDelete = async (
     });
 }
 
-export const createNodeQuery = async (props: {
-    url: string,
-    uploadData: any,
-}) => {
-    const { url, uploadData } = props;
-    return await axios
-        .post(
-            url,
-            uploadData,
-            {
-                withCredentials: true,
-            }
-        )
-        .then((res) => Ok(res.data))
-        .catch((err) => Err(err));
-}
 
 type PostQueryData = {
   url: string,
