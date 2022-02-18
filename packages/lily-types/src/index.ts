@@ -81,6 +81,21 @@ export enum VUE {
     MODAL = 'MODAL'
 }
 
+export const getFormType = (num: number) => {
+    switch (num) {
+        case 101:
+            return NODE_TYPE.FRONT_COVER;
+        case 104:
+            return NODE_TYPE.PAGE;
+        case 105:
+            return NODE_TYPE.SECTION;
+        case 106:
+            return NODE_TYPE.SUB_SECTION;
+        default:
+            return "NONE";
+    }
+}
+
 export const vueSetter = (context: BookContextType) => {
     const { dispatch } = context;
     let vue: any = {
@@ -89,6 +104,7 @@ export const vueSetter = (context: BookContextType) => {
             type: null,
         },
         form: {
+            type: null,
             method: null,
             data: null,
         },
@@ -111,8 +127,10 @@ export const vueSetter = (context: BookContextType) => {
         }, 
         form: (formMethod: HTTP_METHODS, formData: any) => {
             vue.type = VUE.FORM;
+            vue.form.type = getFormType(formData.identity);
             vue.form.method = formMethod;
             vue.form.data = formData;
+            console.log(vue);
             __dispatch(['vue'], [vue]);
         }
     }

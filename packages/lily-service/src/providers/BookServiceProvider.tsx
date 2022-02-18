@@ -47,7 +47,6 @@ export const useBookContext = () => useContext(BookContext);
 
 const reducer = (state: BookContextType, action: BookActionType) => {
     const { type } = action;
-    
     switch (type) {
         case BOOK_SERVICE.SETTERS:
             return setters(state, action);

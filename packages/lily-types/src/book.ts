@@ -9,6 +9,7 @@ type vue = {
         type: string,
     },
     form: {
+        type: string,
         method: string,
         data: any | null,
     },

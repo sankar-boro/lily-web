@@ -24,13 +24,13 @@ const title3: ICommand = {
 
 export default function MarkDownForm() {
     const context = useBookContext();
-    const { formData, rawData, dispatch, vue }: BookContextType = context;
-    if (!formData) return null;
-    const { identity }: any = formData;
-    let defTitle = vue.type === VUE.FORM ? formData.title : '';
-    let defBody = vue.type === VUE.FORM ? formData.body : '';
-    const [title, setTitle] = useState(formData.title);
-    const [body, setBody] = useState(formData.body);
+    const { rawData, dispatch, vue }: BookContextType = context;
+    console.log('context', context);
+    // const { identity }: any = formData;
+    let defTitle = vue.type === VUE.FORM ? vue.form.data.title : '';
+    let defBody = vue.type === VUE.FORM ? vue.form.data.body : '';
+    const [title, setTitle] = useState(defTitle);
+    const [body, setBody] = useState(defBody);
     const _submit = async (e: any) => {
         e.preventDefault();
         const __formData = {
@@ -43,7 +43,7 @@ export default function MarkDownForm() {
         const notiValue = {
             data: res,
             __formData,
-            type: formData.type
+            type: vue.form.type,
         };
         dispatch({
             type: BOOK_SERVICE.SETTERS,
@@ -53,7 +53,7 @@ export default function MarkDownForm() {
             }
         })
     }
-
+    const { identity } = vue.form.data;
     const _identity = identity && identity.toString();
     const createName: any = {
         "104": "Chapter",
@@ -62,7 +62,6 @@ export default function MarkDownForm() {
     }
 
     let name = createName[_identity] ? createName[_identity] : 'Book';
-    console.log(formData);
     return <div>
         <div><h1>Create {name}</h1></div>
         <div className="form-section">

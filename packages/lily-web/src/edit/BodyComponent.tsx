@@ -26,8 +26,9 @@ import MarkdownPreview from '@uiw/react-md-editor';
 
 
 const FormView = (props: any) => {
+    console.log('props', props);
     const { vue } = props;
-    if (vue === VUE.FORM) {
+    if (vue.type === VUE.FORM) {
         return <MarkDownForm />;
     }
     return null;
@@ -126,12 +127,12 @@ const bodyComponentHandler = (context: BookContextType) => {
     }
 }
 
-const FormComponent = ({vue}:{vue: string}) => {
+const FormComponent = (vue: any) => {
     return (
         <BodyViewContainer>
             <SearchInputComponent />
             <DocumentViewContainer>
-                <FormView vue={vue} />
+                <FormView {...vue} />
             </DocumentViewContainer>
         </BodyViewContainer>
     );
@@ -143,7 +144,7 @@ const BodyComponent = () => {
     const { __editPage, __deletePage, __deleteSection } = bodyComponentHandler(context);
 
     if (!activePage) return null;
-    if (vue === VUE.FORM) return <FormComponent vue={vue} />
+    if (vue.type === VUE.FORM) return <FormComponent vue={vue} />
 
     return <BodyViewContainer>
         <SearchInputComponent />
