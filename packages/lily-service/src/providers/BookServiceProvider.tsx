@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useReducer } from "react";
 import { VUE } from "lily-types";
 import { BookHandler } from "../BookService";
-import { BookActionType, BookContextType, BOOK_SERVICE } from 'lily-types';
+import { BookActionType, BookContextType, vue, BOOK_SERVICE } from 'lily-types';
 import { useHistory } from "react-router";
 import { setters } from './ProvidersCommon';
 
@@ -102,6 +102,7 @@ export type SetModalData = {
 export interface Dispatcher {
     setModal: (data: SetModalData) => void,
     setKeyVal: (key: any, val: any) => void,
+    setVue: (data: vue) => void,
 }
 
 class DispatcherImpl implements Dispatcher {
@@ -132,6 +133,10 @@ class DispatcherImpl implements Dispatcher {
 
     setKeyVal(key: string, val: any) {
         this.__dispatch([key], [val]);
+    }
+
+    setVue(data: vue) {
+        this.__dispatch(['vue'], [data]);
     }
 
     setFrom(obj: any) {

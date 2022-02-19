@@ -5,7 +5,7 @@ import { } from "lily-types";
 export * from './url';
 import { UPDATE_OR_DELETE } from './url';
 
-const log = true;
+const log = false;
 const authCreds = {
   withCredentials: true,
 }

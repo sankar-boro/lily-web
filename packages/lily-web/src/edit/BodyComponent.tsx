@@ -35,7 +35,7 @@ const FormView = (props: any) => {
 };
 
 const subSectionHandlers = (context: BookContextType, subSection: SubSection) => {
-    const { dispatch, dispatcher } = context;
+    const { dispatcher } = context;
     return {
         __delete: async (e: any) => {
             e.preventDefault();   
@@ -98,7 +98,7 @@ const SearchInputComponent = () => {
 }
 
 const bodyComponentHandler = (context: BookContextType) => {
-    const { activePage, dispatch } = context;
+    const { activePage, dispatch, dispatcher } = context;
     return {
         __editPage: () => {
             vueSetter(context)
@@ -111,10 +111,17 @@ const bodyComponentHandler = (context: BookContextType) => {
             });
         },
         __deleteSection: () => {
-            Delete({
-                context,
-                type: NODE_TYPE.SECTION
-            });
+            dispatcher?.setModal({
+                show: true,
+                action: 'delete',
+                data: {
+                    nodeType: NODE_TYPE.SECTION
+                }
+            })
+            // Delete({
+            //     context,
+            //     type: NODE_TYPE.SECTION
+            // });
         },
     }
 }

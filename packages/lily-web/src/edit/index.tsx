@@ -56,7 +56,8 @@ const Main = () => {
 const RenderDeleteComponent = ({
     modal
 }: any) => {
-    if (modal && modal.type === 'DELETE') return <DeleteComponent />
+    console.log('modal', modal);
+    if (modal && modal.show) return <DeleteComponent />
     return null;
 }
 

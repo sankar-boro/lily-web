@@ -1,5 +1,5 @@
 import { setActivePageFn, useBookContext } from "lily-service";
-import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
+import { BookContextType, BOOK_SERVICE, NODE_TYPE, VUE } from "lily-types";
 import { 
     AddSectionUpperContainer, 
     AddSectionInnerContainer,
@@ -38,7 +38,7 @@ const AddNewSectionComponent = (props: {
     sections: any,
 }) => {
     const context = useBookContext();
-    const { dispatch } = context;
+    const { dispatch, dispatcher } = context;
     const { section, sections } = props;
     const topUniqueId = section.uniqueId;
     let botUniqueId: any = null;
@@ -56,7 +56,20 @@ const AddNewSectionComponent = (props: {
         type: 'NEW_NODE'
     }
 
-    const createSection = () => __create(dispatch, formData);
+    const createSection = () => {
+        dispatcher?.setVue({
+            type: 'FORM',
+            document: {
+                type: null,   
+            },
+            form: {
+                type: NODE_TYPE.SECTION,
+                method: 'CREATE',
+                url: '',
+                data: formData
+            }
+        })
+    }
 
     return <AddSectionInnerContainer>
         <div onClick={createSection}>
@@ -89,7 +102,7 @@ const AddChapter = (props: {
 }) => {
     const { page, pages } = props;
     const context = useBookContext();
-    const { dispatch } = context;
+    const { dispatcher } = context;
     const topUniqueId = page.uniqueId;
     let botUniqueId: any = null;
     pages.forEach((_page: any, pageIndex: number) => {
@@ -104,7 +117,18 @@ const AddChapter = (props: {
         type: 'NEW_NODE'
     }
     const createNewChapter = () => {
-        __create(dispatch, formData);
+        dispatcher?.setVue({
+            type: 'FORM',
+            document: {
+                type: null,   
+            },
+            form: {
+                type: NODE_TYPE.PAGE,
+                method: 'CREATE',
+                url: '',
+                data: formData
+            }
+        })
     }
     return <AddChapterUpperContainer>
         <div onClick={createNewChapter}>
@@ -120,7 +144,7 @@ const AddNewSectionUpper = (props: {
     const { page, pageIndex } = props;
     if (pageIndex === 0) return null;
     const context = useBookContext();
-    const { dispatch } = context;
+    const { dispatcher } = context;
     const { child: sections } = page;
     const topUniqueId = page.uniqueId;
     let botUniqueId = null;
@@ -135,7 +159,18 @@ const AddNewSectionUpper = (props: {
     }
 
     const createNewSection = () => {
-        __create(dispatch, formData);
+        dispatcher?.setVue({
+            type: 'FORM',
+            document: {
+                type: null,   
+            },
+            form: {
+                type: NODE_TYPE.SECTION,
+                method: 'CREATE',
+                url: '',
+                data: formData
+            }
+        })
     }
 
     return <AddSectionUpperContainer>        

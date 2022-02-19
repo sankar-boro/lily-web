@@ -4,7 +4,7 @@ import { BookHandler } from "lily-service/BookService";
 import { Dispatcher } from "lily-service";
 
 export type BookActionType = DefaultActionType;
-type vue = {
+export type vue = {
     type: string,
     document: {
         type: string | null,
