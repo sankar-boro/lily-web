@@ -38,25 +38,22 @@ const useBookFetch = (bookId: string | null) => {
 
 const Main = () => {
     const context = useBookContext();
-    const { dispatch, vue, bookId, notifications } = context;
+    const { vue, bookId, notifications, dispatcher } = context;
     const [bookData] = useBookFetch(bookId);
     const { dispatch: homeDispatch } = useHomeContext();
     const [notif, setNotif] = useState(null);
     useEffect(() => {
         if (!bookData) return;
-        const {rawData, apiData, activePage } = bookData;
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: {
-                keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
-                values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
-            }
+        dispatcher.setFrom(bookData);
+        dispatcher.setFrom({
+            bookId,
+            vue: VUE.DOCUMENT
         })
         homeDispatch({
             type: HOME_SERVICE.SETTERS,
             setters: {
                 keys: ['title'],
-                values: [activePage?.title]
+                values: [bookData?.activePage?.title]
             }
         })
     }, [bookData]);

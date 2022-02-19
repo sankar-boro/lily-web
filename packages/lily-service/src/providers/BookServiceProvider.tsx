@@ -116,6 +116,21 @@ class Dispatcher {
     setBookId(val: any) {
         this.__dispatch(['bookId'], [val]);
     }
+
+    setKeyVal(key: string, val: any) {
+        this.__dispatch([key], [val]);
+    }
+
+    setFrom(obj: any) {
+        let keys: any = [];
+        let vals: any = [];
+        Object.entries(obj).forEach((entry: any) => {
+            const [key, val] = entry;
+            keys.push(key);
+            vals.push(val);
+        })
+        this.__dispatch(keys, vals);
+    }
 }
 
 export const BookServiceProvider = (props: { children: object }) => {
