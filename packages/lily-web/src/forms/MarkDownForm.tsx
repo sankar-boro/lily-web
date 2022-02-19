@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
 import { useBookContext} from "lily-service";
-import { createNode } from "lily-components";
+import { createNode } from "lily-utils";
 import MDEditor, { commands, ICommand, TextState, TextAreaTextApi } from '@uiw/react-md-editor';
 
 const title3: ICommand = {

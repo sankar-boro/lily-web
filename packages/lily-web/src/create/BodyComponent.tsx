@@ -1,4 +1,4 @@
-import { Delete } from "lily-components";
+import { Delete } from "lily-utils";
 import { useBookContext } from "lily-service";
 import { MdModeEdit, MdDelete } from 'react-icons/md';
 import { 
