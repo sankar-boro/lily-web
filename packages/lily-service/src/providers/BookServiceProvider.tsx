@@ -34,7 +34,8 @@ const initBookState = {
     notifications: null,
     modal: null,
     activity: null,
-    error: ''
+    error: '',
+    dispatcher: null,
 }
 
 export const BookContext = React.createContext<BookContextType>({
@@ -62,6 +63,7 @@ export const BookContext = React.createContext<BookContextType>({
     notifications: null,
     modal: null,
     activity: null,
+    dispatcher: null,
 });
 
 export const useBookContext = () => useContext(BookContext);
@@ -81,35 +83,53 @@ const getBookId = (dispatch: any, location: any) => {
     if (!historyState && pathname) {
         const splitPathName = pathname.split('/').filter((t: string) => t);            
         if (splitPathName.length === 3) {
-            dispatch({
-                type: BOOK_SERVICE.SETTERS,
-                setters: {
-                    keys: ['bookId'],
-                    values: [splitPathName[2]]
-                },
-            });
+            dispatch.setBookId(splitPathName[2]);
         }
     }
     if (historyState && historyState.bookId) {
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
+        dispatch.setBookId(historyState.bookId);
+    }
+}
+
+class Dispatcher {
+    state: any = null;
+    dispatch: any = null;
+    constructor(state: any, dispatch: any) {
+        this.state = state;
+        this.dispatch = dispatch;
+    }
+
+    __dispatch(keys: any, values: any) {
+        this.dispatch({
+            type: 'SETTERS',
             setters: {
-                keys: ['bookId'],
-                values: [historyState.bookId]
-            },
-        });
+                keys,
+                values
+            }
+        })
+    }
+
+    setApiData(val: any) {
+        this.__dispatch(['apiData'], [val]);
+    }
+
+    setBookId(val: any) {
+        this.__dispatch(['bookId'], [val]);
     }
 }
 
 export const BookServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, initBookState);
+    const dispatcher = new Dispatcher(state, dispatch);
     const { location } = useHistory();
-    useEffect(() => getBookId(dispatch, location), []);
+    useEffect(() => getBookId(dispatcher, location), []);
+
     return (
         <BookContext.Provider
             value={{
                 ...state,
-                dispatch
+                dispatch,
+                dispatcher,
             }}
         >
             {props.children}

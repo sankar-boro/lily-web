@@ -31,7 +31,8 @@ export type BookContextType = {
     activity: null | {
         type: string,
         data: any,
-    }
+    },
+    dispatcher: any
 }
 
 export enum BOOK_SERVICE {
