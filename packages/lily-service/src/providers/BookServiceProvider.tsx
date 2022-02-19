@@ -19,11 +19,22 @@ const initBookState = {
     editData: {},
     activePage: null,
     dispatch: (data: any): void => {},
-    vue: VUE.INIT,
+    vue: {
+        type: 'NONE',
+        document: {
+            type: null,
+        },
+        form: {
+            type: null,
+            method: null,
+            data: null,
+        }
+    },
     service: new BookHandler(),
     notifications: null,
     modal: null,
     activity: null,
+    error: ''
 }
 
 export const BookContext = React.createContext<BookContextType>({
@@ -37,7 +48,17 @@ export const BookContext = React.createContext<BookContextType>({
     activePage: null,
     error: '',
     dispatch: (data: any): void => {},
-    vue: VUE.INIT,
+    vue: {
+        type: 'NONE',
+        document: {
+            type: null,
+        },
+        form: {
+            type: null,
+            method: null,
+            data: null,
+        }
+    },
     notifications: null,
     modal: null,
     activity: null,
@@ -55,33 +76,35 @@ const reducer = (state: BookContextType, action: BookActionType) => {
     }
 }
 
-export const BookServiceProvider = (props: { children: object }) => {
-    const [state, dispatch] = useReducer(reducer, initBookState);
-    const { location } = useHistory();
+const getBookId = (dispatch: any, location: any) => {
     const { state: historyState, pathname }: any = location;
-    useEffect(() => {
-        if (!historyState && pathname) {
-            const splitPathName = pathname.split('/').filter((t: string) => t);            
-            if (splitPathName.length === 3) {
-                dispatch({
-                    type: BOOK_SERVICE.SETTERS,
-                    setters: {
-                        keys: ['bookId'],
-                        values: [splitPathName[2]]
-                    },
-                });
-            }
-        }
-        if (historyState && historyState.bookId) {
+    if (!historyState && pathname) {
+        const splitPathName = pathname.split('/').filter((t: string) => t);            
+        if (splitPathName.length === 3) {
             dispatch({
                 type: BOOK_SERVICE.SETTERS,
                 setters: {
                     keys: ['bookId'],
-                    values: [historyState.bookId]
+                    values: [splitPathName[2]]
                 },
             });
         }
-    }, []);
+    }
+    if (historyState && historyState.bookId) {
+        dispatch({
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
+                keys: ['bookId'],
+                values: [historyState.bookId]
+            },
+        });
+    }
+}
+
+export const BookServiceProvider = (props: { children: object }) => {
+    const [state, dispatch] = useReducer(reducer, initBookState);
+    const { location } = useHistory();
+    useEffect(() => getBookId(dispatch, location), []);
     return (
         <BookContext.Provider
             value={{

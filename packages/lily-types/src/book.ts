@@ -6,11 +6,11 @@ export type BookActionType = DefaultActionType;
 type vue = {
     type: string,
     document: {
-        type: string,
+        type: string | null,
     },
     form: {
-        type: string,
-        method: string,
+        type: string | null,
+        method: string | null,
         data: any | null,
     },
 }
