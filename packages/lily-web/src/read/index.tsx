@@ -19,51 +19,54 @@ const RenderComponent = () => {
     </MainContainer>
 }
 
+const useBookFetch = (bookId: string | null) => {
+    const [data, setData] = useState<any>(null);
+    useEffect(() => {
+        if (!bookId) return;
+        const service = new BookHandler();
+        service.fetch(bookId)
+        .then((res) => res.map_res())
+        .then((res) => {
+            const { rawData, apiData, activePage } = res;
+            setData({
+                rawData, apiData, activePage
+            })
+        })
+    }, [bookId]);
+    return [data];
+}
+
 const Main = () => {
     const context = useBookContext();
-    const { dispatch: homeDispatch } = useHomeContext();
-    const { activePage } = context;
-    const [notif, setNotif] = useState(null);
-
     const { dispatch, vue, bookId, notifications } = context;
-
+    const [bookData] = useBookFetch(bookId);
+    const { dispatch: homeDispatch } = useHomeContext();
+    const [notif, setNotif] = useState(null);
     useEffect(() => {
-        if (bookId) {
-            const service = new BookHandler();
-            service.fetch(bookId)
-            .then((res) => res.map_res())
-            .then((res) => {
-                const { rawData, apiData, activePage } = res;
-                dispatch({
-                    type: BOOK_SERVICE.SETTERS,
-                    setters: {
-                        keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
-                        values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
-                    }
-                })
-                homeDispatch({
-                    type: HOME_SERVICE.SETTERS,
-                    setters: {
-                        keys: ['title'],
-                        values: [activePage?.title]
-                    }
-                })
-            })
-            .catch((err) => {
-                setNotif(err);
-            });
-        }
-    }, [bookId]);
+        if (!bookData) return;
+        const {rawData, apiData, activePage } = bookData;
+        dispatch({
+            type: BOOK_SERVICE.SETTERS,
+            setters: {
+                keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
+                values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
+            }
+        })
+        homeDispatch({
+            type: HOME_SERVICE.SETTERS,
+            setters: {
+                keys: ['title'],
+                values: [activePage?.title]
+            }
+        })
+    }, [bookData]);
 
     useEffect(() => {
         updatePage(context);
     }, [notifications]);
 
-    if (vue === VUE.INIT) return <>Initializing.</>
-    if (vue === VUE.ERROR) return <>Api Error. {notif}</>
-    if (vue === VUE.FETCHING) return <>Fetching Book.</>
-    if (vue === VUE.NONE) return <>Book does not exist with id {bookId}</>;
-    if (!bookId || !activePage) return null;
+    if (vue.type === VUE.NONE) return null;
+    if (!bookId || !context.activePage) return null;
     return <RenderComponent />;
 }
 
