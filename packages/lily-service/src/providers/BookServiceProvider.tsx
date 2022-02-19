@@ -59,7 +59,7 @@ export const BookContext = React.createContext<BookContextType>({
             type: null,
             method: null,
             data: null,
-            url: null,
+            url: null
         }
     },
     notifications: null,

@@ -158,6 +158,7 @@ const BodyComponent = () => {
                     <DeleteActivePageComponent
                         deletePage={__deletePage}
                         deleteSection={__deleteSection}
+                        identity={activePage.identity}
                     />
                 </EditTitleIcons>
             </EditTitleContainer>
