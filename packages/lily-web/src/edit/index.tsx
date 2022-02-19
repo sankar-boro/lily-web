@@ -48,11 +48,8 @@ const Main = () => {
         updatePage(context);
     }, [notifications]);
 
+    if (vue.type === VUE.NONE) return null;
     if (!bookId) return null;
-    // if (vue === VUE.INIT) return <>Initializing.</>
-    if (vue === VUE.ERROR) return <>Api Error. {notif}</>
-    if (vue === VUE.OTHERS) return <>Fetching Book.</>
-    if (vue === VUE.NONE) return <>Book does not exist with id {bookId}</>;
     return <RenderComponent />;
 }
 

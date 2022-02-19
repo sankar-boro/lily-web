@@ -25,8 +25,6 @@ const title3: ICommand = {
 export default function MarkDownForm() {
     const context = useBookContext();
     const { rawData, dispatch, vue }: BookContextType = context;
-    console.log('context', context);
-    // const { identity }: any = formData;
     let defTitle = vue.type === VUE.FORM ? vue.form.data.title : '';
     let defBody = vue.type === VUE.FORM ? vue.form.data.body : '';
     const [title, setTitle] = useState(defTitle);

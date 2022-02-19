@@ -12,6 +12,7 @@ type vue = {
         type: string | null,
         method: string | null,
         data: any | null,
+        url: string | null,
     },
 }
 export type BookContextType = {

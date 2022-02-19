@@ -28,6 +28,7 @@ const initBookState = {
             type: null,
             method: null,
             data: null,
+            url: null,
         }
     },
     service: new BookHandler(),
@@ -58,6 +59,7 @@ export const BookContext = React.createContext<BookContextType>({
             type: null,
             method: null,
             data: null,
+            url: null,
         }
     },
     notifications: null,

@@ -12,20 +12,27 @@ import NavigationComponent from "./NavigationComponent";
 
 const Main = () => {
     const context: BookContextType = useBookContext();
-    const { dispatch, notifications, vue, bookId } = context;
+    const { dispatch, notifications, vue, bookId, dispatcher } = context;
     const [notif, setNotif] = useState(null);
     
     useEffect(() => {
-        const formDataValue = {
-            url: CREATE_NEW_BOOK,
-            identity: 101,
-            type: 'NEW_BOOK'
+        const __vue = {
+            type: 'FORM',
+            document: {},
+            form: {
+                type: 'NEW_BOOK',
+                method: 'CREATE',
+                url: CREATE_NEW_BOOK,
+                data: {
+                    identity: 101
+                } 
+            }
         }
         dispatch({
             type: BOOK_SERVICE.SETTERS,
             setters: {
-                keys: ['formData', 'vue'],
-                values: [formDataValue, VUE.FORM]
+                keys: ['vue'],
+                values: [__vue]
             }
         })
     }, []);
@@ -35,11 +42,8 @@ const Main = () => {
         updatePage(context);
     }, [notifications]);
 
-    // if (!bookId) return null;
-    if (vue === VUE.INIT) return <>Initializing.</>
-    if (vue === VUE.ERROR) return <>Api Error. {notif}</>
-    if (vue === VUE.FETCHING) return <>Fetching Book.</>
-    if (vue === VUE.NONE) return <>Book does not exist with id {bookId}</>;
+    console.log(vue)
+    if (vue.type === VUE.NONE) return null;
     return <RenderComponent />
 }
 

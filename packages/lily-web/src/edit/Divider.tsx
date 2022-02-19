@@ -17,8 +17,6 @@ const Divider = () => {
     const { activePage: section, dispatch } = context;
     const { identity, child: subSections, uniqueId } = section as Section;    
     
-    // Do not render if activePage is of type = Page | Common
-    // Render if activePage is Section;
     if (identity === 104) return <DividerContainer />;
 
     const __click = {
