@@ -93,7 +93,18 @@ const getBookId = (dispatch: any, location: any) => {
     }
 }
 
-class Dispatcher {
+export type SetModalData = {
+    show: boolean,
+    action: string,
+    data: any,
+}
+
+export interface Dispatcher {
+    setModal: (data: SetModalData) => void,
+    setKeyVal: (key: any, val: any) => void,
+}
+
+class DispatcherImpl implements Dispatcher {
     state: any = null;
     dispatch: any = null;
     constructor(state: any, dispatch: any) {
@@ -133,11 +144,15 @@ class Dispatcher {
         })
         this.__dispatch(keys, vals);
     }
+
+    setModal(modalData: SetModalData) {
+        this.__dispatch(['modal'], [modalData])
+    }
 }
 
 export const BookServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, initBookState);
-    const dispatcher = new Dispatcher(state, dispatch);
+    const dispatcher = new DispatcherImpl(state, dispatch);
     const { location } = useHistory();
     useEffect(() => getBookId(dispatcher, location), []);
 

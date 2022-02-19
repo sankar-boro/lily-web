@@ -52,7 +52,7 @@ const Login = () => {
                 type: AUTH_SERVICE.SETTERS,
                 setters: {
                     keys: ['auth', 'authUserData'],
-                    values: [true, loginData.data]
+                    values: ['true', loginData.data]
                 }
             })
         }

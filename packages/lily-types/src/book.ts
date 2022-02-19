@@ -1,6 +1,7 @@
 import { RawData, ApiData, Chapter, Page, Section } from 'lily-types'
 import { DefaultActionType } from './index';
 import { BookHandler } from "lily-service/BookService";
+import { Dispatcher } from "lily-service";
 
 export type BookActionType = DefaultActionType;
 type vue = {
@@ -33,7 +34,7 @@ export type BookContextType = {
         type: string,
         data: any,
     },
-    dispatcher: any
+    dispatcher: null | Dispatcher
 }
 
 export enum BOOK_SERVICE {

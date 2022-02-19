@@ -32,7 +32,7 @@ const Header = () => {
             type: AUTH_SERVICE.SETTERS,
             setters: {
                 keys: ['auth', 'authUserData'],
-                values: [false, null]
+                values: ['false', null]
             }
         })
     }

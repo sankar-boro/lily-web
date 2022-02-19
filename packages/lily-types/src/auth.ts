@@ -10,7 +10,7 @@ export type UserInfo = {
     email: string;
 };
 export type AuthContextType = {
-    auth: null | boolean;
+    auth: string;
     authUserData: null | UserInfo;
     dispatch: (e: any) => void,
 }

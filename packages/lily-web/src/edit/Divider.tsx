@@ -1,20 +1,10 @@
 import { useBookContext } from "lily-service";
-import { BookContextType, BOOK_SERVICE, Section, VUE, ActivePage, SubSection } from "lily-types";
+import { BookContextType, BOOK_SERVICE, Section, VUE, ActivePage, SubSection, NODE_TYPE } from "lily-types";
 import { DividerContainer } from "lily-web/components";
-
-const __create = (dispatch: any, formData: any) => {
-    dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['vue', 'formData'],
-            values: [VUE.FORM, formData]
-        }
-    })
-}
 
 const Divider = () => {
     const context: BookContextType = useBookContext();
-    const { activePage: section, dispatch } = context;
+    const { activePage: section, dispatch, dispatcher } = context;
     const { identity, child: subSections, uniqueId } = section as Section;    
     
     if (identity === 104) return <DividerContainer />;
@@ -29,7 +19,16 @@ const Divider = () => {
                 identity: 106,
                 type: 'NEW_NODE'
             }
-            __create(dispatch, formData)
+            dispatcher?.setKeyVal('vue', {
+                type: VUE.FORM,
+                form: {
+                    type: NODE_TYPE.SUB_SECTION,
+                    method: 'CREATE',
+                    url: '',
+                    data: formData
+                },
+                document: {}
+            });
         },
         inner: (subSection: SubSection) => {
             let topUniqueId = subSection.uniqueId;
@@ -45,7 +44,17 @@ const Divider = () => {
                 identity: 106,
                 type: 'NEW_NODE'
             }
-            __create(dispatch, formData)
+            dispatcher?.setKeyVal('vue', {
+                type: VUE.FORM,
+                form: {
+                    type: NODE_TYPE.SUB_SECTION,
+                    method: 'CREATE',
+                    url: '',
+                    data: formData
+                },
+                document: {}
+            });
+            // __create(dispatch, formData)
         }
     };
 

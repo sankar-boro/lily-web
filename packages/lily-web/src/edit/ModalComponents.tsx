@@ -2,21 +2,22 @@ import { useBookContext } from "lily-service"
 import { BOOK_SERVICE, BookContextType } from "lily-types";
 import { Delete } from "lily-utils";
 
-type Activity = {
-    type: string;
-    data: any;
-}
-
 export const DeleteComponent = () => {
     const context = useBookContext();
-    const { activity, modal, dispatch }: BookContextType = context;
-    if (activity === null || modal === null) return null;
+    const { modal, dispatch }: BookContextType = context;
+    if (modal === null) return null;
     
-    const act = activity as Activity;
     const __delete = async () => {
+        if(!modal.data && !modal.data.nodeType && !modal.data.deleteId) {
+            console.log('Delete SubSection failed');
+            return;
+        }
         await Delete({
             context,
-            ...act.data
+            type: modal.data.nodeType,
+            deleteProps: {
+                deleteId: modal.data.deleteId,
+            }
         })
         dispatch({
             type: BOOK_SERVICE.SETTERS,
@@ -38,7 +39,7 @@ export const DeleteComponent = () => {
 
     return <div>
         <div>
-            Are your sure you want to delete {act.data.type}?
+            Are your sure you want to delete {modal.data.nodeType}?
         </div>
         <div className="margin-top-50"/>
         <div>

@@ -3,14 +3,15 @@ import { CREATE_UPDATE_ANY, postQuery } from "lily-query";
 const log = false;
 
 export const createNode = async (context: any, __formData: any) => {
-    const { formData, bookId, activePage } = context;
-    const { identity, topUniqueId, botUniqueId } = formData;
+    const { formData, bookId, activePage, vue } = context;
+    const { identity, topUniqueId, botUniqueId } = vue.form.data;
     const { title, body } = __formData;
     if(!title || !body) return null;
     let uploadData: any = {
         title,
         body,
     };
+    console.log(uploadData);
 
     if (bookId) uploadData = { ...uploadData, bookId };
     if (identity) uploadData = { ...uploadData, identity };

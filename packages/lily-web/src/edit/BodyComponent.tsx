@@ -35,26 +35,18 @@ const FormView = (props: any) => {
 };
 
 const subSectionHandlers = (context: BookContextType, subSection: SubSection) => {
-    const { dispatch } = context;
+    const { dispatch, dispatcher } = context;
     return {
         __delete: async (e: any) => {
-            e.preventDefault();
-            const act = {
-                type: 'DELETE',
+            e.preventDefault();   
+            dispatcher?.setModal({
+                show: true,
+                action: 'delete',
                 data: {
-                    type: NODE_TYPE.SUB_SECTION,
-                    deleteProps: {
-                        deleteId: subSection.uniqueId
-                    }
+                    deleteId: subSection.uniqueId,
+                    nodeType: NODE_TYPE.SUB_SECTION
                 }
-            }
-            dispatch({
-                type: BOOK_SERVICE.SETTERS,
-                setters: {
-                    keys: ['modal', 'activity'],
-                    values: [{ type: 'DELETE' }, act]
-                }
-            })        
+            })
         },
         __edit: () => {
             vueSetter(context)

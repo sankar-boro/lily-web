@@ -62,7 +62,7 @@ export const HomeServiceProvider = (props: { children: object }) => {
                 type: AUTH_SERVICE.SETTERS,
                 setters: {
                     keys: ['auth', 'authUserData'],
-                    values: [false, null]
+                    values: ['false', null]
                 }
             })
         });
