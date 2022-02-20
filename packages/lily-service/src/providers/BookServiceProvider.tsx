@@ -25,11 +25,11 @@ const initBookState = {
             type: null,
         },
         form: {
-            type: null,
             method: null,
             data: null,
             url: null,
-        }
+        },
+        callback: (res: any) => {}
     },
     service: new BookHandler(),
     notifications: null,
@@ -56,11 +56,11 @@ export const BookContext = React.createContext<BookContextType>({
             type: null,
         },
         form: {
-            nodeType: null,
             method: null,
             data: null,
             url: null
-        }
+        },
+        callback: (res: any) => {}
     },
     notifications: null,
     modal: null,

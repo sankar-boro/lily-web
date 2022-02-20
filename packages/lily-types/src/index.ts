@@ -1,4 +1,4 @@
-import { BookContextType, BOOK_SERVICE } from "./book";
+import { BookContextType, BOOK_SERVICE, vue } from "./book";
 
 export * from "./book";
 export * from "./form";
@@ -93,45 +93,5 @@ export const getFormType = (num: number) => {
             return NODE_TYPE.SUB_SECTION;
         default:
             return "NONE";
-    }
-}
-
-export const vueSetter = (context: BookContextType) => {
-    const { dispatch } = context;
-    let vue: any = {
-        type: null,
-        document: {
-            type: null,
-        },
-        form: {
-            type: null,
-            method: null,
-            data: null,
-        },
-    }
-
-    const __dispatch = (keys: any, values: any) => {
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: {
-                keys,
-                values
-            }
-        })
-    }
-    return {
-        document: (documentType: NODE_TYPE) => {
-            vue.type = VUE.DOCUMENT;
-            vue.document.type = documentType;
-            __dispatch(['vue'], [vue]);
-        }, 
-        form: (formMethod: HTTP_METHODS, formData: any) => {
-            vue.type = VUE.FORM;
-            vue.form.type = getFormType(formData.identity);
-            vue.form.method = formMethod;
-            vue.form.data = formData;
-            console.log(vue);
-            __dispatch(['vue'], [vue]);
-        }
     }
 }

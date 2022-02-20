@@ -6,15 +6,13 @@ import { Dispatcher } from "lily-service";
 export type BookActionType = DefaultActionType;
 export type vue = {
     viewType: string,
-    document: {
-        type: string | null,
-    },
-    form: {
-        nodeType: string | null,
+    document?: any,
+    form?: {
         method: string | null,
         data: any | null,
         url: string | null,
     },
+    callback?: (res: any) => void
 }
 export type BookContextType = {
     rawData: null | RawData,
@@ -28,7 +26,7 @@ export type BookContextType = {
     vue: vue,
     service: BookHandler,
     notifications: null,
-    dispatch: (data: any) => void,
+    dispatch: (res: any) => void,
     modal: any,
     activity: null | {
         type: string,

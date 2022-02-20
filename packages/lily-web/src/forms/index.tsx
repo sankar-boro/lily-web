@@ -6,13 +6,37 @@ import MarkDownForm from './MarkDownForm';
 
 export default function FormComponent() {
     const context: BookContextType = useBookContext();
-    const {vue, dispatch } = context;
+    const { vue } = context;
+    if (!vue.form || !vue.callback) return null;
     if (vue.viewType !== VUE.FORM) return null;
-    const { data, method, nodeType } = vue.form;
-    const [title, setTitle] = useState(data.title ? data.title : '');
-    const [body, setBody] = useState(data.body ? data.body : '');
-    const [identity] = useState(data.identity ? data.identity : 0);
+    
+    const { data, method } = vue.form;
+    const { callback } = vue;
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
+    const [identity] = useState(data.identity ? data.identity : null);
+    
+    useEffect(() => {
+        setTitle(data.title);
+        setBody(data.body);
+    }, [data.title, data.body]);
+
     if (!identity) return null;
+
+    const __submit = async () => {
+        let res: any = await createNode(context, {title, body, identity});
+        let cache: any = {
+            title,
+            body
+        }
+        if (data.topUniqueId) cache['topUniqueId'] = data.topUniqueId;
+        if (data.botUniqueId) cache['botUniqueId'] = data.botUniqueId;
+        callback({
+            res,
+            cache
+        });
+    }
+
     const createName: any = {
         "104": "Chapter",
         "105": "Section",
@@ -20,37 +44,9 @@ export default function FormComponent() {
     }
     let name = createName[identity] ? createName[identity] : 'Book';
 
-    const __submit = async () => {
-        let res: any = await createNode(context, {title, body});
-        let cache: any = {
-            title, 
-            body,
-            identity
-        }
-        if (data.topUniqueId) cache['topUniqueId'] = data.topUniqueId;    
-        if (data.botUniqueId) cache['botUniqueId'] = data.botUniqueId;
-        let newNotification = {
-            from: 'FORM',
-            to: 'DOCUMENT',
-            form: {
-                cache,
-                fetch: res,
-                method,
-            }
-        }
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: {
-                keys: ['notifications'],
-                values: [newNotification]
-            }
-        })
-        setTitle('')
-        setBody('')  
-    }
     return <div>
         <div>
-            <h1>Create {name}</h1>
+            <h1>{method} {name}</h1>
         </div>
         <div className="form-section">
             <div className='form-label h4'>Title <span className='required'>required?</span></div>

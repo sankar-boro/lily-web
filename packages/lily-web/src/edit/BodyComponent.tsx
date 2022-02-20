@@ -6,7 +6,6 @@ import {
     SubSection,
     BookContextType,
     Page,
-    vueSetter,
     HTTP_METHODS,
     NODE_TYPE
 } from "lily-types";
@@ -21,6 +20,7 @@ import {
     SubSectionViewContainer 
 } from "lily-web/components";
 import MarkdownPreview from '@uiw/react-md-editor';
+import { editActivePage, editSubSection } from "./utils";
 
 
 const FormView = (props: any) => {
@@ -46,8 +46,7 @@ const subSectionHandlers = (context: BookContextType, subSection: SubSection) =>
             })
         },
         __edit: () => {
-            vueSetter(context)
-            .form(HTTP_METHODS.UPDATE, subSection);
+            editSubSection(context, subSection);
         }
     }
 }
@@ -98,8 +97,7 @@ const bodyComponentHandler = (context: BookContextType) => {
     const { activePage, dispatcher } = context;
     return {
         __editPage: () => {
-            vueSetter(context)
-            .form(HTTP_METHODS.UPDATE, activePage)
+            editActivePage(context, activePage as Page | Section)
         },
         __deletePage: () => {
             dispatcher?.setModal({

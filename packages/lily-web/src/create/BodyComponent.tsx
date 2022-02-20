@@ -9,7 +9,6 @@ import {
     BookContextType,
     Page,
     NODE_TYPE,
-    vueSetter,
     HTTP_METHODS
 } from "lily-types";
 import MarkDownForm from "lily-web/forms";
@@ -23,6 +22,7 @@ import {
     SubSectionViewContainer 
 } from "lily-web/components";
 import MarkdownPreview from '@uiw/react-md-editor';
+import { editActivePage, editSubSection } from "lily-web/edit/utils";
 
 const subSectionHandlers = (context: BookContextType, subSection: SubSection) => {
     const { dispatch } = context;
@@ -47,8 +47,7 @@ const subSectionHandlers = (context: BookContextType, subSection: SubSection) =>
             })        
         },
         __edit: () => {
-            vueSetter(context)
-            .form(HTTP_METHODS.UPDATE, subSection);
+            editSubSection(context, subSection);
         }
     }
 }
@@ -96,11 +95,10 @@ const SearchInputComponent = () => {
 }
 
 const bodyComponentHandler = (context: BookContextType) => {
-    const { activePage, dispatch } = context;
+    const { activePage } = context;
     return {
         __editPage: () => {
-            vueSetter(context)
-            .form(HTTP_METHODS.UPDATE, activePage);
+            editActivePage(context, activePage as Page | Section)
         },
         __deletePage: () => {
             Delete({
