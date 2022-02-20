@@ -5,12 +5,12 @@ import { Dispatcher } from "lily-service";
 
 export type BookActionType = DefaultActionType;
 export type vue = {
-    type: string,
+    viewType: string,
     document: {
         type: string | null,
     },
     form: {
-        type: string | null,
+        nodeType: string | null,
         method: string | null,
         data: any | null,
         url: string | null,
@@ -39,8 +39,4 @@ export type BookContextType = {
 
 export enum BOOK_SERVICE {
     SETTERS = 'SETTERS',
-}
-
-export const FORM = {
-
 }

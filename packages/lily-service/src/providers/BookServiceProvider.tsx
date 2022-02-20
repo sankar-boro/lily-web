@@ -51,12 +51,12 @@ export const BookContext = React.createContext<BookContextType>({
     error: '',
     dispatch: (data: any): void => {},
     vue: {
-        type: 'NONE',
+        viewType: 'NONE',
         document: {
             type: null,
         },
         form: {
-            type: null,
+            nodeType: null,
             method: null,
             data: null,
             url: null
@@ -103,6 +103,7 @@ export interface Dispatcher {
     setModal: (data: SetModalData) => void,
     setKeyVal: (key: any, val: any) => void,
     setVue: (data: vue) => void,
+    setFrom: (obj: any) => void,
 }
 
 class DispatcherImpl implements Dispatcher {

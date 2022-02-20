@@ -5,6 +5,7 @@ import { DividerContainer } from "lily-web/components";
 const Divider = () => {
     const context: BookContextType = useBookContext();
     const { activePage: section, dispatch, dispatcher } = context;
+    if (!section) return null;
     const { identity, child: subSections, uniqueId } = section as Section;    
     
     if (identity === 104) return <DividerContainer />;

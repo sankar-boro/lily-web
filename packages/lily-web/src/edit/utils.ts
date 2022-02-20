@@ -40,22 +40,21 @@ export const getPageProps = (props: any, context: BookContextType) => {
             if (sections && Array.isArray(sections) && sections.length > 0) {
                 botUniqueId = sections[0].uniqueId;
             }
-            let formData = {
-                topUniqueId,
-                botUniqueId,
-                identity: 105,
-                type: 'NEW_NODE'
-            }
             dispatcher?.setVue({
-                type: 'FORM',
+                viewType: 'FORM',
                 document: {
                     type: null,   
                 },
                 form: {
-                    type: NODE_TYPE.SECTION,
+                    nodeType: NODE_TYPE.SECTION,
                     method: 'CREATE',
                     url: '',
-                    data: formData
+                    data: {
+                        topUniqueId,
+                        botUniqueId,
+                        identity: 105,
+                        type: 'NEW_NODE'
+                    }
                 }
             })
         },
@@ -67,22 +66,21 @@ export const getPageProps = (props: any, context: BookContextType) => {
                     botUniqueId = pages[pageIndex + 1].uniqueId;
                 }
             })
-            const formData = {
-                topUniqueId,
-                botUniqueId,
-                identity: 104,
-                type: 'NEW_NODE'
-            }
             dispatcher?.setVue({
-                type: 'FORM',
+                viewType: 'FORM',
                 document: {
                     type: null,   
                 },
                 form: {
-                    type: NODE_TYPE.PAGE,
+                    nodeType: NODE_TYPE.PAGE,
                     method: 'CREATE',
                     url: '',
-                    data: formData
+                    data: {
+                        topUniqueId,
+                        botUniqueId,
+                        identity: 104,
+                        type: 'NEW_NODE'
+                    }
                 }
             })
         },
@@ -102,23 +100,21 @@ export const getPageProps = (props: any, context: BookContextType) => {
                     botUniqueId = sections[sectionIndex + 1].uniqueId;
                 }
             })
-    
-            const formData = {
-                topUniqueId,
-                botUniqueId,
-                identity: 105,
-                type: 'NEW_NODE'
-            }
             dispatcher?.setVue({
-                type: 'FORM',
+                viewType: 'FORM',
                 document: {
                     type: null,   
                 },
                 form: {
-                    type: NODE_TYPE.SECTION,
+                    nodeType: NODE_TYPE.SECTION,
                     method: 'CREATE',
                     url: '',
-                    data: formData
+                    data: {
+                        topUniqueId,
+                        botUniqueId,
+                        identity: 105,
+                        type: 'NEW_NODE'
+                    }
                 }
             })
         }

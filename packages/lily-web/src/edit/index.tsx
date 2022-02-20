@@ -48,7 +48,7 @@ const Main = () => {
         updatePage(context);
     }, [notifications]);
 
-    if (vue.type === VUE.NONE) return null;
+    if (vue.viewType === VUE.NONE) return null;
     if (!bookId) return null;
     return <RenderComponent />;
 }

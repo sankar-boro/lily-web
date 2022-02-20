@@ -24,24 +24,31 @@ const title3: ICommand = {
 
 export default function MarkDownForm() {
     const context = useBookContext();
-    const { rawData, dispatch, vue }: BookContextType = context;
-    let defTitle = vue.type === VUE.FORM ? vue.form.data.title : '';
-    let defBody = vue.type === VUE.FORM ? vue.form.data.body : '';
+    const { dispatch, vue }: BookContextType = context;
+    let defTitle = vue.viewType === VUE.FORM ? vue.form.data.title : '';
+    let defBody = vue.viewType === VUE.FORM ? vue.form.data.body : '';
     const [title, setTitle] = useState(defTitle);
     const [body, setBody] = useState(defBody);
     const _submit = async (e: any) => {
         e.preventDefault();
-        const __formData = {
-            title,
-            body,
-        }
-        let res = await createNode(context, __formData);
+        let res: any = await createNode(context, {title, body});
         setTitle('');
         setBody('');
+        const { topUniqueId, botUniqueId, identity } = vue.form.data;
         const notiValue = {
-            data: res,
-            __formData,
-            type: vue.form.type,
+            notificationType: 'create_new_node',
+            newNode: {
+                nodeType: vue.form.nodeType,
+                data: {
+                    title,
+                    body,
+                    topUniqueId,
+                    botUniqueId,
+                    identity,
+                    res
+                }
+            }
+
         };
         dispatch({
             type: BOOK_SERVICE.SETTERS,

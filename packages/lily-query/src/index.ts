@@ -50,6 +50,7 @@ export const postQuery = (postQueryData: PostQueryData) => {
   return new Promise((resolve, reject) => {
     axios.post(url,data,authCreds)
     .then((res: AxiosResponse<any>) => {
+        console.log('res', res)
         resolve(res);
     })
     .catch((err: AxiosError<any>) => {

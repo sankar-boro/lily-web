@@ -121,12 +121,12 @@ export const vueSetter = (context: BookContextType) => {
     }
     return {
         document: (documentType: NODE_TYPE) => {
-            vue.type = VUE.DOCUMENT;
+            vue.viewType = VUE.DOCUMENT;
             vue.document.type = documentType;
             __dispatch(['vue'], [vue]);
         }, 
         form: (formMethod: HTTP_METHODS, formData: any) => {
-            vue.type = VUE.FORM;
+            vue.viewType = VUE.FORM;
             vue.form.type = getFormType(formData.identity);
             vue.form.method = formMethod;
             vue.form.data = formData;

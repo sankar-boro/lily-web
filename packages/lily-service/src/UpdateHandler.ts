@@ -51,30 +51,28 @@ export const updateData = (data: any, props: any) => {
 
 export const updatePage = (context: any) => {
     const { notifications, rawData, bookId, activePage, formData, dispatch } = context;
-    if (notifications && notifications.type === 'NEW_NODE') {
-        const res = notifications.data;
-        if (res.err) {
-            console.log(res.val);
+    if (!notifications) return null;
+    const { notificationType, newNode } = notifications;
+    if (notificationType === 'create_new_node') {
+        const { nodeType, data } = newNode;
+        const { topUniqueId, botUniqueId, identity, res } = data;
+        if (!res) {
             return;
         }
-        if (!res.val) {
-            console.log("App in debug mode.");
-            return;
-        }
-        if (res.val) {
+        if (res && res.data) {
             if (rawData && bookId && activePage) {
-                const { __formData } = notifications;
-                let resData: any = res.val;
+                const { uniqueId } = res.data;
+                const { title, body} = data;
                 let __rawData: any[] = [];
                 rawData.forEach((__page: any) => {
                     __rawData.push(__page);
                 });
-                if (formData.topUniqueId && formData.botUniqueId) {
+                if (topUniqueId && botUniqueId) {
                     __rawData = __rawData.map((__node: any) => {
-                        if (__node.uniqueId === formData.botUniqueId) {
+                        if (__node.uniqueId === botUniqueId) {
                             return {
                                 ...__node,
-                                parentId: resData.uniqueId,
+                                parentId: uniqueId,
                             }
                         }
                         return __node;
@@ -82,15 +80,16 @@ export const updatePage = (context: any) => {
                 }
 
                 let newResData = {
-                    parentId: formData.topUniqueId,
-                    uniqueId: resData.uniqueId,
-                    title: __formData.title,
-                    body: __formData.body,
-                    createdAt: resData.uniqueId,
-                    updatedAt: resData.uniqueId,
+                    parentId: topUniqueId,
+                    uniqueId: uniqueId,
+                    title,
+                    body,
+                    createdAt: uniqueId,
+                    updatedAt: uniqueId,
                     bookId,
-                    identity: formData.identity
+                    identity
                 };
+                console.log(newResData);
                 let newRawData = __rawData;
                 newRawData.push(newResData);
                 let newApiData = sortAll(newRawData, []);
@@ -98,11 +97,16 @@ export const updatePage = (context: any) => {
                     apiData: newApiData,
                     compareId: activePage.uniqueId
                 });
+                const vue = {
+                    viewType: "DOCUMENT",
+                    document: {},
+                    form: {},
+                }
                 dispatch({
                     type: BOOK_SERVICE.SETTERS,
                     setters: {
                         keys: ['rawData', 'apiData', 'activePage', 'notifications', 'formData', 'vue'],
-                        values: [newRawData, newApiData, newActivePage, null, null, VUE.DOCUMENT]
+                        values: [newRawData, newApiData, newActivePage, null, null, vue]
                     }
                 })
             }
@@ -112,14 +116,14 @@ export const updatePage = (context: any) => {
 
 export const updateNewBook = (context: any) => {
     const { notifications, rawData, dispatch } = context
-    if (notifications && notifications.type === 'NEW_BOOK') {
+    if(!notifications) return;
+    const { notificationType } = notifications;
+    if (notificationType === 'NEW_BOOK') {
         const res = notifications.data;
         if (res.err) {
-            console.log(res.val);
             return;
         }
         if (!res.val) {
-            console.log("App in debug mode.");
             return;
         }
         if (res.val) {
@@ -136,7 +140,7 @@ export const updateNewBook = (context: any) => {
                     type: BOOK_SERVICE.SETTERS,
                     setters: {
                         keys: ['rawData', 'apiData', 'activePage', 'bookId', 'notifications', 'formData', 'vue'],
-                        values: [newRawData, newApiData, newActivePage, bookId, notifications, null, VUE.DOCUMENT],
+                        values: [newRawData, newApiData, newActivePage, bookId, null, null, VUE.DOCUMENT],
                     }
                 })
             }

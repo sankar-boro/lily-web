@@ -16,7 +16,7 @@ const Main = () => {
     const [notif, setNotif] = useState(null);
     
     useEffect(() => {
-        dispatcher.setFrom({vue: newBookVueData});
+        dispatcher?.setFrom({vue: newBookVueData});
     }, []);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const Main = () => {
         updatePage(context);
     }, [notifications]);
 
-    if (vue.type === VUE.NONE) return null;
+    if (vue.viewType === VUE.NONE) return null;
     return <RenderComponent />
 }
 

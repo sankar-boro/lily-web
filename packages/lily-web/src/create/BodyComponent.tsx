@@ -122,7 +122,7 @@ const BodyComponent = () => {
     const { activePage, vue } = context;
     const { __editPage, __deletePage, __deleteSection } = bodyComponentHandler(context);
 
-    if (vue.type === VUE.FORM) return <MarkDownForm />
+    if (vue.viewType === VUE.FORM) return <MarkDownForm />
     if (!activePage) return null;
 
     return <BodyViewContainer>
