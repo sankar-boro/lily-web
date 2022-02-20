@@ -71,7 +71,7 @@ export const SubSectionsViewContainer = (props: any) => {
 }
 
 export const SubSectionViewContainer = (props: any) => {
-    return <div>
+    return <div className="subSection-view-container">
         {props.children}
     </div>
 }

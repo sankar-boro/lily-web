@@ -18,7 +18,7 @@ const AddChapter = (props: any) => {
     if (pageIndex === 0) return null;
 
     return <AddSectionUpperContainer>        
-        <div onClick={() => createNewSection()}>
+        <div className="add-item" onClick={() => createNewSection()}>
             + Add section
         </div>
     </AddSectionUpperContainer>
@@ -62,7 +62,7 @@ const PageNavComponent = (props: {
                         </div>
                     </SectionTitleContainer>
                     <AddSectionInnerContainer>
-                        <div onClick={() => createSection(section)}>
+                        <div className="add-item" onClick={() => createSection(section)}>
                             + Add section
                         </div>
                     </AddSectionInnerContainer>
@@ -70,7 +70,7 @@ const PageNavComponent = (props: {
                 })} 
             </SectionsNavContainer>
             <AddChapterUpperContainer>
-                <div onClick={() => createNewChapter()}>
+                <div className="add-item" onClick={() => createNewChapter()}>
                     + Add chapter
                 </div>
             </AddChapterUpperContainer>

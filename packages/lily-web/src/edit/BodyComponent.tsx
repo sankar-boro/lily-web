@@ -59,11 +59,11 @@ const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
     return <SubSectionViewContainer>
         <EditTitleContainer>
             <EditTitle>
-                {subSection.title}
+                <h3>{subSection.title}</h3>
             </EditTitle>
             <EditTitleIcons>
-                <MdModeEdit onClick={__edit}/>
-                <MdDelete onClick={__delete}/>
+                <span className="edit-click hover" onClick={__edit}>Edit</span>
+                <span className="delete-click hover" onClick={__delete}>Delete</span>
             </EditTitleIcons>
         </EditTitleContainer>
         <div className="description">
@@ -73,8 +73,8 @@ const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
 }
 
 const DeleteActivePageComponent = ({deletePage, deleteSection, identity}: any) => {
-    if (identity === 104) return <MdDelete onClick={deletePage}/>
-    if (identity === 105) return <MdDelete onClick={deleteSection}/>
+    if (identity === 104) return <span className="delete-click hover" onClick={deletePage}>Delete</span>
+    if (identity === 105) return <span className="delete-click hover" onClick={deleteSection}>Delete</span>
     return null;
 }
 
@@ -146,10 +146,10 @@ const BodyComponent = () => {
         <DocumentViewContainer>
             <EditTitleContainer>
                 <EditTitleContainer>
-                    <h3 className="h3">{activePage.title}</h3>
+                    <h2 className="h3">{activePage.title}</h2>
                 </EditTitleContainer>
                 <EditTitleIcons>
-                    <MdModeEdit onClick={__editPage}/>
+                    <span className="edit-click hover" onClick={__editPage}>Edit</span>
                     <DeleteActivePageComponent
                         deletePage={__deletePage}
                         deleteSection={__deleteSection}

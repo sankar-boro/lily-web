@@ -61,7 +61,7 @@ const Divider = () => {
     return <DividerContainer>
         <div className="li-item hover">Delete</div>
         <div 
-            className="li-item hover"
+            className="add-item li-item hover"
             onClick={() => {__click.outer()}}
         >
             + Sub-section
@@ -70,7 +70,7 @@ const Divider = () => {
             return <div key={subSection.uniqueId}>
                 {subSection.title}
                 <div 
-                    className="li-item hover"
+                    className="add-item li-item hover"
                     onClick={() => {__click.inner(subSection)}}
                 >
                     + Sub-section
