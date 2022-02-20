@@ -1,8 +1,6 @@
-import { Delete } from "lily-utils";
 import { useBookContext } from "lily-service";
 import { MdModeEdit, MdDelete } from 'react-icons/md';
-import { 
-    BOOK_SERVICE,
+import {
     VUE,
     Section,
     SubSection,
@@ -26,7 +24,6 @@ import MarkdownPreview from '@uiw/react-md-editor';
 
 
 const FormView = (props: any) => {
-    console.log('props', props);
     const { vue } = props;
     if (vue.type === VUE.FORM) {
         return <MarkDownForm />;
@@ -98,17 +95,20 @@ const SearchInputComponent = () => {
 }
 
 const bodyComponentHandler = (context: BookContextType) => {
-    const { activePage, dispatch, dispatcher } = context;
+    const { activePage, dispatcher } = context;
     return {
         __editPage: () => {
             vueSetter(context)
             .form(HTTP_METHODS.UPDATE, activePage)
         },
         __deletePage: () => {
-            Delete({
-                context,
-                type: NODE_TYPE.PAGE
-            });
+            dispatcher?.setModal({
+                show: true,
+                action: 'delete',
+                data: {
+                    nodeType: NODE_TYPE.PAGE
+                }
+            })
         },
         __deleteSection: () => {
             dispatcher?.setModal({
@@ -118,10 +118,6 @@ const bodyComponentHandler = (context: BookContextType) => {
                     nodeType: NODE_TYPE.SECTION
                 }
             })
-            // Delete({
-            //     context,
-            //     type: NODE_TYPE.SECTION
-            // });
         },
     }
 }
