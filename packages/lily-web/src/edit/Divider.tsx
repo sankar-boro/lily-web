@@ -18,7 +18,7 @@ const Divider = () => {
                 topUniqueId,
                 botUniqueId,
                 identity: 106,
-                type: 'NEW_NODE'
+                type: 'create_new_node'
             }
             dispatcher?.setKeyVal('vue', {
                 type: VUE.FORM,
@@ -43,7 +43,7 @@ const Divider = () => {
                 topUniqueId,
                 botUniqueId,
                 identity: 106,
-                type: 'NEW_NODE'
+                type: 'create_new_node'
             }
             dispatcher?.setKeyVal('vue', {
                 type: VUE.FORM,

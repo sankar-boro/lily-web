@@ -12,7 +12,7 @@ import {
     vueSetter,
     HTTP_METHODS
 } from "lily-types";
-import MarkDownForm from "lily-web/forms/MarkDownForm";
+import MarkDownForm from "lily-web/forms";
 import { 
     BodyViewContainer,
     DocumentViewContainer,

@@ -41,7 +41,7 @@ const AddNewSectionInner = (props: {
         topUniqueId,
         botUniqueId,
         identity: 105,
-        type: 'NEW_NODE',
+        type: 'create_new_node',
     }
 
     const createSection = () => __create(dispatch, formData);
@@ -140,7 +140,7 @@ const AddChapter = (props: {
         topUniqueId,
         botUniqueId,
         identity: 104,
-        type: 'NEW_NODE'
+        type: 'create_new_node'
     }
     const createNewChapter = () => {
         __create(dispatch, formData);
@@ -175,7 +175,7 @@ const AddNewSectionUpper = (props: {
         topUniqueId,
         botUniqueId,
         identity: 105,
-        type: 'NEW_NODE'
+        type: 'create_new_node'
     }
 
     const createNewSection = () => {

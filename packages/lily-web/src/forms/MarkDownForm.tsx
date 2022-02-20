@@ -1,7 +1,3 @@
-import { useState } from 'react';
-import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
-import { useBookContext} from "lily-service";
-import { createNode } from "lily-utils";
 import MDEditor, { commands, ICommand, TextState, TextAreaTextApi } from '@uiw/react-md-editor';
 
 const title3: ICommand = {
@@ -22,123 +18,47 @@ const title3: ICommand = {
     },
 };
 
-export default function MarkDownForm() {
-    const context = useBookContext();
-    const { dispatch, vue }: BookContextType = context;
-    let defTitle = vue.viewType === VUE.FORM ? vue.form.data.title : '';
-    let defBody = vue.viewType === VUE.FORM ? vue.form.data.body : '';
-    const [title, setTitle] = useState(defTitle);
-    const [body, setBody] = useState(defBody);
-    const _submit = async (e: any) => {
-        e.preventDefault();
-        let res: any = await createNode(context, {title, body});
-        setTitle('');
-        setBody('');
-        const { topUniqueId, botUniqueId, identity } = vue.form.data;
-        const notiValue = {
-            notificationType: 'create_new_node',
-            newNode: {
-                nodeType: vue.form.nodeType,
-                data: {
-                    title,
-                    body,
-                    topUniqueId,
-                    botUniqueId,
-                    identity,
-                    res
-                }
-            }
-
-        };
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: {
-                keys: ['notifications'],
-                values: [notiValue]
-            }
-        })
-    }
-    const { identity } = vue.form.data;
-    const _identity = identity && identity.toString();
-    const createName: any = {
-        "104": "Chapter",
-        "105": "Section",
-        "106": "Sub Section"
-    }
-
-    let name = createName[_identity] ? createName[_identity] : 'Book';
-    return <div>
-        <div><h1>Create {name}</h1></div>
-        <div className="form-section">
-            <div className='form-label h4'>Title <span className='required'>required?</span></div>
-            <input
-                type="text"
-                placeholder="Title"
-                name="title"
-                required
-                onChange={(e) => {
-                    e.preventDefault();
-                    setTitle(e.target.value);
-                }}
-                value={title}
-                className="form-input"
-            />
-        </div>
-        <div className="form-section">
-            <div className='form-label h4'>Body <span className='required'>required?</span></div>
-            <div>
-                <MDEditor
-                    value={body}
-                    onChange={(val) => {
-                        setBody(val!);
-                    }}
-                    placeholder="# Hello, *world*!"
-                    commands={[
-                    // Custom Toolbars
-                    title3,
-                    commands.group([commands.title4, commands.title5, commands.title6], {
-                        name: 'title',
-                        groupName: 'title',
-                        buttonProps: { 'aria-label': 'Insert title'}
-                    }),
-                    commands.divider,
-                    commands.group([], {
-                        name: 'update',
-                        groupName: 'update',
-                        icon: (
-                        <svg viewBox="0 0 1024 1024" width="12" height="12">
-                            <path fill="currentColor" d="M716.8 921.6a51.2 51.2 0 1 1 0 102.4H307.2a51.2 51.2 0 1 1 0-102.4h409.6zM475.8016 382.1568a51.2 51.2 0 0 1 72.3968 0l144.8448 144.8448a51.2 51.2 0 0 1-72.448 72.3968L563.2 541.952V768a51.2 51.2 0 0 1-45.2096 50.8416L512 819.2a51.2 51.2 0 0 1-51.2-51.2v-226.048l-57.3952 57.4464a51.2 51.2 0 0 1-67.584 4.2496l-4.864-4.2496a51.2 51.2 0 0 1 0-72.3968zM512 0c138.6496 0 253.4912 102.144 277.1456 236.288l10.752 0.3072C924.928 242.688 1024 348.0576 1024 476.5696 1024 608.9728 918.8352 716.8 788.48 716.8a51.2 51.2 0 1 1 0-102.4l8.3968-0.256C866.2016 609.6384 921.6 550.0416 921.6 476.5696c0-76.4416-59.904-137.8816-133.12-137.8816h-97.28v-51.2C691.2 184.9856 610.6624 102.4 512 102.4S332.8 184.9856 332.8 287.488v51.2H235.52c-73.216 0-133.12 61.44-133.12 137.8816C102.4 552.96 162.304 614.4 235.52 614.4l5.9904 0.3584A51.2 51.2 0 0 1 235.52 716.8C105.1648 716.8 0 608.9728 0 476.5696c0-132.1984 104.8064-239.872 234.8544-240.2816C258.5088 102.144 373.3504 0 512 0z" />
-                        </svg>
-                        ),
-                        children: ({ close, execute, getState, textApi }) => {
-                        return (
-                            <div style={{ width: 120, padding: 10 }}>
-                            <div>My Custom Toolbar</div>
-                            <button type="button" onClick={() => console.log('> execute: >>>>>', getState!())}>State</button>
-                            <button type="button" onClick={() => close()}>Close</button>
-                            <button type="button" onClick={() => execute()}>Execute</button>
-                            </div>
-                        );
-                        },
-                        execute: (state: TextState, api: TextAreaTextApi)  => {
-                        console.log('>>>>>>update>>>>>', state)
-                        },
-                        buttonProps: { 'aria-label': 'Insert title'}
-                    }),
-                    ]}
-                    height={500}
-                />
-            </div>
-        </div>
-        <div>
-            <button
-                type="submit"
-                name="Submit"
-                className="button"
-                onClick={_submit}
-                >
-                Submit
-            </button>
-        </div>
-    </div>;
+export default function MarkDownForm(props: any) {
+    const { body, setBody } = props;
+    return <MDEditor
+        value={body}
+        onChange={(val) => {
+            setBody(val!);
+        }}
+        placeholder="# Hello, *world*!"
+        commands={[
+        // Custom Toolbars
+        title3,
+        commands.group([commands.title4, commands.title5, commands.title6], {
+            name: 'title',
+            groupName: 'title',
+            buttonProps: { 'aria-label': 'Insert title'}
+        }),
+        commands.divider,
+        commands.group([], {
+            name: 'update',
+            groupName: 'update',
+            icon: (
+            <svg viewBox="0 0 1024 1024" width="12" height="12">
+                <path fill="currentColor" d="M716.8 921.6a51.2 51.2 0 1 1 0 102.4H307.2a51.2 51.2 0 1 1 0-102.4h409.6zM475.8016 382.1568a51.2 51.2 0 0 1 72.3968 0l144.8448 144.8448a51.2 51.2 0 0 1-72.448 72.3968L563.2 541.952V768a51.2 51.2 0 0 1-45.2096 50.8416L512 819.2a51.2 51.2 0 0 1-51.2-51.2v-226.048l-57.3952 57.4464a51.2 51.2 0 0 1-67.584 4.2496l-4.864-4.2496a51.2 51.2 0 0 1 0-72.3968zM512 0c138.6496 0 253.4912 102.144 277.1456 236.288l10.752 0.3072C924.928 242.688 1024 348.0576 1024 476.5696 1024 608.9728 918.8352 716.8 788.48 716.8a51.2 51.2 0 1 1 0-102.4l8.3968-0.256C866.2016 609.6384 921.6 550.0416 921.6 476.5696c0-76.4416-59.904-137.8816-133.12-137.8816h-97.28v-51.2C691.2 184.9856 610.6624 102.4 512 102.4S332.8 184.9856 332.8 287.488v51.2H235.52c-73.216 0-133.12 61.44-133.12 137.8816C102.4 552.96 162.304 614.4 235.52 614.4l5.9904 0.3584A51.2 51.2 0 0 1 235.52 716.8C105.1648 716.8 0 608.9728 0 476.5696c0-132.1984 104.8064-239.872 234.8544-240.2816C258.5088 102.144 373.3504 0 512 0z" />
+            </svg>
+            ),
+            children: ({ close, execute, getState, textApi }) => {
+            return (
+                <div style={{ width: 120, padding: 10 }}>
+                <div>My Custom Toolbar</div>
+                <button type="button" onClick={() => console.log('> execute: >>>>>', getState!())}>State</button>
+                <button type="button" onClick={() => close()}>Close</button>
+                <button type="button" onClick={() => execute()}>Execute</button>
+                </div>
+            );
+            },
+            execute: (state: TextState, api: TextAreaTextApi)  => {
+            console.log('>>>>>>update>>>>>', state)
+            },
+            buttonProps: { 'aria-label': 'Insert title'}
+        }),
+        ]}
+        height={500}
+    />;
 };

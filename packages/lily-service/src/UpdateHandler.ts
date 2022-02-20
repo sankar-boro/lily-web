@@ -52,16 +52,16 @@ export const updateData = (data: any, props: any) => {
 export const updatePage = (context: any) => {
     const { notifications, rawData, bookId, activePage, formData, dispatch } = context;
     if (!notifications) return null;
-    const { notificationType, newNode } = notifications;
-    if (notificationType === 'create_new_node') {
-        const { nodeType, data } = newNode;
-        const { topUniqueId, botUniqueId, identity, res } = data;
-        if (!res) {
+    const { from, to, form } = notifications;
+    const { data, method, fetch } = form;
+    if (method === 'update') {
+        const { topUniqueId, botUniqueId, identity } = data;
+        if (!fetch.data) {
             return;
         }
-        if (res && res.data) {
+        if (fetch && fetch.data) {
             if (rawData && bookId && activePage) {
-                const { uniqueId } = res.data;
+                const { uniqueId } = fetch.data;
                 const { title, body} = data;
                 let __rawData: any[] = [];
                 rawData.forEach((__page: any) => {
@@ -117,33 +117,27 @@ export const updatePage = (context: any) => {
 export const updateNewBook = (context: any) => {
     const { notifications, rawData, dispatch } = context
     if(!notifications) return;
-    const { notificationType } = notifications;
-    if (notificationType === 'NEW_BOOK') {
-        const res = notifications.data;
-        if (res.err) {
-            return;
-        }
-        if (!res.val) {
-            return;
-        }
-        if (res.val) {
-            if (!rawData) {
-                let resData: any = res.val;
-                let bookId = resData.uniqueId;
-                let newRawData = [resData];
-                let newApiData = sortAll(newRawData, []);
-                let newActivePage = setActivePageFn({
-                    apiData: newApiData,
-                    compareId: bookId
-                });
-                dispatch({
-                    type: BOOK_SERVICE.SETTERS,
-                    setters: {
-                        keys: ['rawData', 'apiData', 'activePage', 'bookId', 'notifications', 'formData', 'vue'],
-                        values: [newRawData, newApiData, newActivePage, bookId, null, null, VUE.DOCUMENT],
-                    }
-                })
-            }
+    const { from, to, form } = notifications;
+    const { data, method, fetch } = form;
+
+    if (method === 'create') {
+        if (fetch.data) {
+            const { uniqueId } = data;
+            let resData = fetch.data;
+            let bookId = uniqueId;
+            let newRawData = [resData];
+            let newApiData = sortAll(newRawData, []);
+            let newActivePage = setActivePageFn({
+                apiData: newApiData,
+                compareId: bookId
+            });
+            dispatch({
+                type: BOOK_SERVICE.SETTERS,
+                setters: {
+                    keys: ['rawData', 'apiData', 'activePage', 'bookId', 'notifications', 'formData', 'vue'],
+                    values: [newRawData, newApiData, newActivePage, bookId, null, null, VUE.DOCUMENT],
+                }
+            })
         }
     }
 }

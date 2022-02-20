@@ -53,7 +53,7 @@ export const getPageProps = (props: any, context: BookContextType) => {
                         topUniqueId,
                         botUniqueId,
                         identity: 105,
-                        type: 'NEW_NODE'
+                        type: 'create_new_node'
                     }
                 }
             })
@@ -79,7 +79,7 @@ export const getPageProps = (props: any, context: BookContextType) => {
                         topUniqueId,
                         botUniqueId,
                         identity: 104,
-                        type: 'NEW_NODE'
+                        type: 'create_new_node'
                     }
                 }
             })
@@ -113,7 +113,7 @@ export const getPageProps = (props: any, context: BookContextType) => {
                         topUniqueId,
                         botUniqueId,
                         identity: 105,
-                        type: 'NEW_NODE'
+                        type: 'create_new_node'
                     }
                 }
             })
