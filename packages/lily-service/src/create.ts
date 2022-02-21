@@ -1,6 +1,7 @@
 import { CREATE_NEW_BOOK, postQuery } from "lily-query";
-import { setActivePageFn, sortAll } from "lily-service";
 import { BookContextType, HTTP_METHODS } from "lily-types";
+
+import { sortAll, setActivePageFn } from './utils';
 
 const createBook = async (context: BookContextType, formData: any, formResponse: { title: string, body: string}) => {
     const { dispatch } = context;
@@ -30,8 +31,8 @@ const createBook = async (context: BookContextType, formData: any, formResponse:
     dispatch({
         type: 'SETTERS',
         setters: {
-            keys: ['rawData', 'apiData', 'activePage', 'vue'],
-            values: [newRawData, newApiData, newActivePage, vue]
+            keys: ['rawData', 'apiData', 'activePage', 'vue', 'bookId'],
+            values: [newRawData, newApiData, newActivePage, vue, res.data.uniqueId]
         }
     })
 }

@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
+import { BookContextType, VUE } from "lily-types";
 import { useBookContext} from "lily-service";
-import { createNode } from "lily-utils";
 import MarkDownForm from './MarkDownForm';
 
 export default function FormComponent() {
     const context: BookContextType = useBookContext();
-    const { vue } = context;
-    if (!vue.form || !vue.callback) return null;
-    if (vue.viewType !== VUE.FORM) return null;
-    
-    const { data, method, create, update } = vue.form;
-    const { callback } = vue;
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const { vue } = context;
+    
+    if (!vue.form || !vue.callback) return null;
+    if (vue.viewType !== VUE.FORM) return null;
+
+    const { data, method, create, update } = vue.form;
+    const { callback } = vue;
     
     useEffect(() => {
         setTitle(data.title);

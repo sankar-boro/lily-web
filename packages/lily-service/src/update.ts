@@ -1,5 +1,5 @@
 import { BOOK_SERVICE, VUE } from "lily-types";
-import { sortAll, setActivePageFn } from "./DataHandler";
+import { sortAll, setActivePageFn } from "./utils";
 
 export const updateData = (data: any, props: any) => {
     const {

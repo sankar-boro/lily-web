@@ -56,9 +56,10 @@ export const BookContext = React.createContext<BookContextType>({
             type: null,
         },
         form: {
-            method: null,
+            method: '',
             data: null,
-            url: null
+            create: '',
+            update: ''
         },
         callback: (res: any) => {}
     },

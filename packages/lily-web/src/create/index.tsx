@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { BOOK_SERVICE, VUE, BookContextType } from "lily-types";
 import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
-import { BookServiceProvider, useBookContext, updatePage, updateNewBook } from 'lily-service';
-import { createNewBookForm } from './utils';
+import { BookServiceProvider, useBookContext, updatePage, updateNewBook, createNewBookForm } from 'lily-service';
 
 import Divider from "./Divider";
 import BodyComponent from "./BodyComponent";
@@ -12,10 +11,12 @@ import NavigationComponent from "./NavigationComponent";
 
 const Main = () => {
     const context: BookContextType = useBookContext();
-    const { vue } = context;
+    const { vue, bookId } = context;
 
     useEffect(() => {
-        createNewBookForm(context);
+        if (!bookId) {
+            createNewBookForm(context);
+        }
     }, []);
 
     if (vue.viewType === VUE.NONE) return null;

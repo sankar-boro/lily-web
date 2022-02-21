@@ -1,6 +1,6 @@
 import { GET_BOOK_FROM_ID, getQueryAuth } from "lily-query";
 import { RawData, ApiData, ActivePage } from "lily-types";
-import { sortAll } from './DataHandler';
+import { sortAll } from './utils';
 
 interface BookService {
     readonly bookId: any;
