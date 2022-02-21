@@ -1,4 +1,4 @@
-import { useBookContext } from "lily-service";
+import { useBookContext, getPageProps } from "lily-service";
 import { BookContextType} from "lily-types";
 import { 
     AddSectionUpperContainer, 
@@ -11,7 +11,6 @@ import {
     PageTitleContainer,
     SectionTitleContainer
 } from "lily-web/components";
-import { getPageProps } from "./utils";
 
 const AddChapter = (props: any) => {
     const { createNewSection, pageIndex } = props;

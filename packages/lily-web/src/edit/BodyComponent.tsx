@@ -1,12 +1,10 @@
-import { useBookContext } from "lily-service";
-import { MdModeEdit, MdDelete } from 'react-icons/md';
+import { useBookContext, editActivePage, editSubSection } from "lily-service";
 import {
     VUE,
     Section,
     SubSection,
     BookContextType,
     Page,
-    HTTP_METHODS,
     NODE_TYPE
 } from "lily-types";
 import MarkDownForm from "lily-web/forms";
@@ -20,7 +18,6 @@ import {
     SubSectionViewContainer 
 } from "lily-web/components";
 import MarkdownPreview from '@uiw/react-md-editor';
-import { editActivePage, editSubSection } from "./utils";
 
 
 const FormView = (props: any) => {

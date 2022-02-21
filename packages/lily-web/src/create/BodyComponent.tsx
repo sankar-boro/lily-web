@@ -1,5 +1,5 @@
 import { Delete } from "lily-utils";
-import { useBookContext } from "lily-service";
+import { useBookContext, editSubSection, editActivePage } from "lily-service";
 import { MdModeEdit, MdDelete } from 'react-icons/md';
 import { 
     BOOK_SERVICE,
@@ -8,8 +8,7 @@ import {
     SubSection,
     BookContextType,
     Page,
-    NODE_TYPE,
-    HTTP_METHODS
+    NODE_TYPE
 } from "lily-types";
 import MarkDownForm from "lily-web/forms";
 import { 
@@ -22,7 +21,6 @@ import {
     SubSectionViewContainer 
 } from "lily-web/components";
 import MarkdownPreview from '@uiw/react-md-editor';
-import { editActivePage, editSubSection } from "lily-web/edit/utils";
 
 const subSectionHandlers = (context: BookContextType, subSection: SubSection) => {
     const { dispatch } = context;

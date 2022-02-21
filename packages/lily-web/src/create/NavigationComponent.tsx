@@ -1,208 +1,78 @@
-import { setActivePageFn, useBookContext } from "lily-service";
-import { BOOK_SERVICE, VUE } from "lily-types";
+import { getPageProps, useBookContext } from "lily-service";
+import { 
+    AddSectionUpperContainer, 
+    AddSectionInnerContainer,
+    AddChapterUpperContainer,
+    PageNavContainer, 
+    PagesNavContainer, 
+    SectionNavContainer, 
+    SectionsNavContainer, 
+    PageTitleContainer,
+    SectionTitleContainer
+} from "lily-web/components";
 
-const __create = (dispatch: any, formData: any) => {
-    dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['vue', 'formData'],
-            values: [VUE.FORM, formData]
-        }
-    })
-}
-
-const __set = (dispatch: any, activePage: any) => {
-    dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['vue', 'activePage'],
-            values: [VUE.DOCUMENT, activePage]
-        }
-    })
-}
-
-const AddNewSectionInner = (props: {
-    section: any,
-    sections: any,
-}) => {
-    const context = useBookContext();
-    const { dispatch } = context;
-    const { section, sections } = props;
-    const topUniqueId = section.uniqueId;
-    let botUniqueId: any = null;
-
-    sections.forEach((_section: any, sectionIndex: number) => {
-        if (_section.uniqueId === section.uniqueId && sections[sectionIndex + 1]) {
-            botUniqueId = sections[sectionIndex + 1].uniqueId;
-        }
-    })
-
-    const formData = {
-        topUniqueId,
-        botUniqueId,
-        identity: 105,
-        type: 'create_new_node',
-    }
-
-    const createSection = () => __create(dispatch, formData);
-
-    return <div 
-        className="hover" 
-        style={{marginTop:5}}
-        onClick={createSection}
-    >
-        <span style={{ marginLeft: 20, fontSize: 12 }}>+ Add section</span>
-    </div>
-}
-
-const Section = (props: any) => {
-    const { section, sections } = props;
-    const { dispatch, apiData } = useBookContext();
-    
-    const setActiveSection = (e: any) => {
-        e.preventDefault();
-        const activePage = setActivePageFn({
-            apiData,
-            compareId: section.uniqueId
-        });
-        __set(dispatch, activePage);
-    };
-
-    return <div key={`${section.uniqueId}`} className="Section">
-        <div
-            onClick={setActiveSection}
-            key={section.uniqueId}
-            className="section-nav hover tooltip"
-        >
-            {section.title}
-            <span className="tooltiptext">{section.uniqueId}</span>
-        </div>
-        <AddNewSectionInner {...props} sections={sections} section={section} />
-    </div>
-}
-
-const Sections = (props: {
-    page: any,
-    pageIndex: number
-}) => {
-    const { page } = props;
-    let sections: any = null;
-    if (page.child && Array.isArray(page.child) && page.child.length > 0) {
-        sections = page.child;
-    }
-    if (!sections) return null;
-    if (sections && sections.length === 0) return null;
-
-    return <div> 
-        {sections.map((section: any, sectionIndex: number) => {
-            return <Section section={section} sections={sections} key={sectionIndex} />;
-        })} 
-    </div>
-}
-
-const PageTitle = (props: any) => {
-    const { page } = props;
-    const { dispatch, apiData } = useBookContext();
-    
-    const setActivePage = () => {
-        const activePage = setActivePageFn({
-            apiData,
-            compareId: page.uniqueId
-        });
-        __set(dispatch, activePage);
-    };
-
-    return <div
-        onClick={setActivePage}
-        className="chapter-nav hover tooltip"
-    >
-        {page.title}
-        <span className="tooltiptext">{page.uniqueId}</span>
-    </div>
-}
-
-const AddChapter = (props: {
-    page: any,
-    pageIndex: number,
-    pages: any
-}) => {
-    const { page, pages } = props;
-    const context = useBookContext();
-    const { dispatch } = context;
-    const topUniqueId = page.uniqueId;
-    let botUniqueId: any = null;
-    pages.forEach((_page: any, pageIndex: number) => {
-        if (_page.uniqueId === page.uniqueId && pages[pageIndex + 1]) {
-            botUniqueId = pages[pageIndex + 1].uniqueId;
-        }
-    })
-    const formData = {
-        topUniqueId,
-        botUniqueId,
-        identity: 104,
-        type: 'create_new_node'
-    }
-    const createNewChapter = () => {
-        __create(dispatch, formData);
-    }
-    return (
-        <div
-            style={{marginTop:5}}
-            className="hover"
-            onClick={createNewChapter}
-        >
-            <span style={{ fontSize: 12 }}>+ Add chapter</span>
-        </div>
-    );
-}
-
-const AddNewSectionUpper = (props: {
-    page: any,
-    pageIndex: number
-}) => {
-    const { page, pageIndex } = props;
+const AddSectionComponent = (props: any) => {
+    const { createNewSection, pageIndex } = props;
     if (pageIndex === 0) return null;
-    
-    const context = useBookContext();
-    const { dispatch } = context;
-    const { child: sections } = page;
-    const topUniqueId = page.uniqueId;
-    let botUniqueId = null;
-    if (sections && Array.isArray(sections) && sections.length > 0) {
-        botUniqueId = sections[0].uniqueId;
-    }
-    let formData = {
-        topUniqueId,
-        botUniqueId,
-        identity: 105,
-        type: 'create_new_node'
-    }
 
-    const createNewSection = () => {
-        __create(dispatch, formData);
-    }
-
-    return <div 
-        className="hover" 
-        style={{ marginTop: 5, marginBottom: 5 }}
-        onClick={createNewSection}
-    >
-        <span style={{ marginLeft: 20, fontSize: 12 }}>+ Add section</span>
-    </div>
+    return <AddSectionUpperContainer>        
+        <div className="add-item" onClick={() => createNewSection()}>
+            + Add section
+        </div>
+    </AddSectionUpperContainer>
 }
 
-const NavigationPages = (props: {
+const PageNavComponent = (props: {
     page: any,
     pageIndex: number,
     pages: any
 }) => {
+    const context = useBookContext();
+    const sectionProps = getPageProps(props, context);
+    const {
+        createNewSection,
+        setActivePage,
+        setActiveSection,
+        createSection,
+        page,
+        getSections,
+        createNewChapter
+    } = sectionProps;
+    const allSections = getSections();
+    const { pageIndex } = props;
     return (
-        <div style={styles.chapter} key={props.page.uniqueId}>
-            <PageTitle {...props} />
-            <AddNewSectionUpper {...props } />
-            <Sections {...props} />
-            <AddChapter {...props} />
-        </div>
+        <PageNavContainer>
+            <PageTitleContainer>
+                <div onClick={() => setActivePage()}>
+                    {page.title}
+                </div>
+            </PageTitleContainer>
+            <AddSectionComponent 
+                createNewSection={createNewSection}
+                pageIndex={pageIndex}
+            />
+            <SectionsNavContainer>
+                {allSections && allSections.map((section: any, sectionIndex: number) => {
+                    return <SectionNavContainer key={sectionIndex}>
+                    <SectionTitleContainer>
+                        <div onClick={() => setActiveSection(section)}>
+                            {section.title}
+                        </div>
+                    </SectionTitleContainer>
+                    <AddSectionInnerContainer>
+                        <div className="add-item" onClick={() => createSection(section)}>
+                            + Add section
+                        </div>
+                    </AddSectionInnerContainer>
+                </SectionNavContainer>;
+                })} 
+            </SectionsNavContainer>
+            <AddChapterUpperContainer>
+                <div className="add-item" onClick={() => createNewChapter()}>
+                    + Add chapter
+                </div>
+            </AddChapterUpperContainer>
+        </PageNavContainer>
     )
 }
 
@@ -211,9 +81,16 @@ const Main = () => {
     
     if (!activePage) return null;
     return (
-        <div className="con-19 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>
-            {pages.map((page: any, pageIndex: number) => <NavigationPages page={page} pageIndex={pageIndex} key={pageIndex} pages={pages}/>)}
-        </div>
+        <PagesNavContainer>
+            {pages.map((page: any, pageIndex: number) => {
+                return <PageNavComponent 
+                    page={page} 
+                    pageIndex={pageIndex} 
+                    key={pageIndex} 
+                    pages={pages}
+                />
+            })}
+        </PagesNavContainer>
     );
 };
 

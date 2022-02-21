@@ -1,69 +1,20 @@
-import { useBookContext } from "lily-service";
-import { BookContextType, BOOK_SERVICE, Section, VUE, ActivePage, SubSection, NODE_TYPE } from "lily-types";
+import { createSubSection, useBookContext } from "lily-service";
+import { BookContextType, Section, SubSection } from "lily-types";
 import { DividerContainer } from "lily-web/components";
 
 const Divider = () => {
     const context: BookContextType = useBookContext();
-    const { activePage: section, dispatch, dispatcher } = context;
+    const { activePage: section } = context;
     if (!section) return null;
-    const { identity, child: subSections, uniqueId } = section as Section;    
+    const { identity, child: subSections } = section as Section;    
     
     if (identity === 104) return <DividerContainer />;
-
-    const __click = {
-        outer: () => {
-            const topUniqueId = uniqueId;
-            let botUniqueId: any = subSections && subSections[0] && subSections[0].uniqueId;
-            const formData = {
-                topUniqueId,
-                botUniqueId,
-                identity: 106,
-                type: 'create_new_node'
-            }
-            dispatcher?.setKeyVal('vue', {
-                type: VUE.FORM,
-                form: {
-                    type: NODE_TYPE.SUB_SECTION,
-                    method: 'CREATE',
-                    url: '',
-                    data: formData
-                },
-                document: {}
-            });
-        },
-        inner: (subSection: SubSection) => {
-            let topUniqueId = subSection.uniqueId;
-            let botUniqueId: any = null;
-            subSections.forEach((_subSection: any, index: number) => {
-                if (_subSection.uniqueId === topUniqueId && subSections[index + 1]) {
-                    botUniqueId = subSections[index + 1].uniqueId;
-                }
-            })
-            const formData = {
-                topUniqueId,
-                botUniqueId,
-                identity: 106,
-                type: 'create_new_node'
-            }
-            dispatcher?.setKeyVal('vue', {
-                type: VUE.FORM,
-                form: {
-                    type: NODE_TYPE.SUB_SECTION,
-                    method: 'CREATE',
-                    url: '',
-                    data: formData
-                },
-                document: {}
-            });
-            // __create(dispatch, formData)
-        }
-    };
 
     return <DividerContainer>
         <div className="li-item hover">Delete</div>
         <div 
             className="add-item li-item hover"
-            onClick={() => {__click.outer()}}
+            onClick={() => createSubSection(context, undefined)}
         >
             + Sub-section
         </div>
@@ -72,7 +23,7 @@ const Divider = () => {
                 {subSection.title}
                 <div 
                     className="add-item li-item hover"
-                    onClick={() => {__click.inner(subSection)}}
+                    onClick={() => createSubSection(context, subSection)}
                 >
                     + Sub-section
                 </div>
