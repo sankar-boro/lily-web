@@ -1,5 +1,5 @@
-import { useBookContext, setActivePageFn } from "lily-service";
-import { BookContextType, BOOK_SERVICE, vueSetter } from "lily-types";
+import { useBookContext, setActivePage, setActiveSection } from "lily-service";
+import { BookContextType } from "lily-types";
 import {
     PageNavContainer, 
     SectionNavContainer, 
@@ -10,45 +10,13 @@ import {
 } from "lily-web/components";
 
 const PageNavComponent = (props: any) => {
-    const { apiData, dispatch }: BookContextType = useBookContext();
+    const context: BookContextType = useBookContext();
     const { page } = props;
-    const { uniqueId: pageId, child: sections } = page;
-    const {} = page;
-    
-    const setActivePage = (e: any) => {
-        e.preventDefault();
-        const page = setActivePageFn({
-            apiData,
-            compareId: pageId, 
-        });
-
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: {
-                keys: ['activePage'],
-                values: [page]
-            }
-        });
-    }
-
-    const setActiveSection = (section: any) => {
-        const page = setActivePageFn({
-            apiData,
-            compareId: section.uniqueId, 
-        });
-
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: {
-                keys: ['activePage'],
-                values: [page]
-            }
-        });
-    }
+    const { child: sections } = page;
 
     return <PageNavContainer>            
         <PageTitleContainer>
-            <div onClick={setActivePage}>
+            <div onClick={() => setActivePage(context, page)}>
                 {page.title}
             </div>
         </PageTitleContainer>
@@ -56,7 +24,7 @@ const PageNavComponent = (props: any) => {
             {sections.map((section: any) => {
                 return <SectionNavContainer key={section.uniqueId}>
                     <SectionTitleContainer>
-                        <div onClick={() => setActiveSection(section)}>
+                        <div onClick={() => setActiveSection(context, section)}>
                             {section.title}
                         </div>
                     </SectionTitleContainer>

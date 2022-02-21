@@ -79,7 +79,7 @@ const updateRawData = async (
         body: string 
     }
 ) => {
-    const { dispatch, rawData, bookId } = context;
+    const { dispatch, rawData, bookId, activePage } = context;
     const { title, body } = formResponse;
     const { identity, topUniqueId, botUniqueId } = formData;
     const data = {
@@ -131,7 +131,7 @@ const updateRawData = async (
     let newApiData = sortAll(newRawData, []);
     let newActivePage = setActivePageFn({
         apiData: newApiData,
-        compareId: uniqueId
+        compareId: activePage?.uniqueId
     });
     let vue: vue = {
         viewType: "DOCUMENT",
@@ -256,18 +256,30 @@ export const createSubSection = (context: BookContextType, subSection: SubSectio
     const { activePage, dispatch } = context;
     if (!activePage) return;
     const { child: subSections } = activePage as Section;
-    let topUniqueId = subSection ? subSection.uniqueId : activePage.uniqueId;
+
+    let topUniqueId: any = null;
     let botUniqueId: any = null;
-    
-    subSections.forEach((_subSection: any, index: number) => {
-        if (_subSection.uniqueId === topUniqueId && subSections[index + 1]) {
-            botUniqueId = subSections[index + 1].uniqueId;
+    if (!subSection) {
+        topUniqueId = activePage.uniqueId;
+        if (subSections.length > 0) {
+            botUniqueId = subSections[0].uniqueId;
         }
-    })
+    } else if (subSection) {
+        topUniqueId = subSection.uniqueId;
+        if (subSections.length > 0) {
+            for (let i = 0; i < subSections.length; i++) {
+                if (subSections[i].uniqueId === topUniqueId && subSections[i + 1]) {
+                    botUniqueId = subSections[i + 1].uniqueId;
+                    break;
+                }
+            }
+        }
+    }
+
     let newFormData = {
         title: '',
         body: '',
-        identity: 105,
+        identity: 106,
         topUniqueId,
         botUniqueId
     }

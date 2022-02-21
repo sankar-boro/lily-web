@@ -1,4 +1,5 @@
-import { getPageProps, useBookContext } from "lily-service";
+import { useBookContext, getPageProps, createNewPage, createNewSection, setActivePage, setActiveSection } from "lily-service";
+import { BookContextType, Section} from "lily-types";
 import { 
     AddSectionUpperContainer, 
     AddSectionInnerContainer,
@@ -11,12 +12,12 @@ import {
     SectionTitleContainer
 } from "lily-web/components";
 
-const AddSectionComponent = (props: any) => {
-    const { createNewSection, pageIndex } = props;
+const AddChapter = (props: any) => {
+    const { pageIndex, page, context } = props;
     if (pageIndex === 0) return null;
 
     return <AddSectionUpperContainer>        
-        <div className="add-item" onClick={() => createNewSection()}>
+        <div className="add-item" onClick={() => createNewSection(context, page, null)}>
             + Add section
         </div>
     </AddSectionUpperContainer>
@@ -28,39 +29,26 @@ const PageNavComponent = (props: {
     pages: any
 }) => {
     const context = useBookContext();
-    const sectionProps = getPageProps(props, context);
-    const {
-        createNewSection,
-        setActivePage,
-        setActiveSection,
-        createSection,
-        page,
-        getSections,
-        createNewChapter
-    } = sectionProps;
-    const allSections = getSections();
-    const { pageIndex } = props;
+    const { pageIndex, pages, page } = props;
+    const allSections = page.child;
     return (
         <PageNavContainer>
             <PageTitleContainer>
-                <div onClick={() => setActivePage()}>
+                <div onClick={() => setActivePage(context, page)}>
                     {page.title}
                 </div>
             </PageTitleContainer>
-            <AddSectionComponent 
-                createNewSection={createNewSection}
-                pageIndex={pageIndex}
-            />
+            <AddChapter pageIndex={pageIndex} page={page} context={context} />
             <SectionsNavContainer>
-                {allSections && allSections.map((section: any, sectionIndex: number) => {
+                {allSections && allSections.map((section: Section, sectionIndex: number) => {
                     return <SectionNavContainer key={sectionIndex}>
                     <SectionTitleContainer>
-                        <div onClick={() => setActiveSection(section)}>
+                        <div onClick={() => setActiveSection(context,section)}>
                             {section.title}
                         </div>
                     </SectionTitleContainer>
                     <AddSectionInnerContainer>
-                        <div className="add-item" onClick={() => createSection(section)}>
+                        <div className="add-item" onClick={() => createNewSection(context, page, section)}>
                             + Add section
                         </div>
                     </AddSectionInnerContainer>
@@ -68,7 +56,7 @@ const PageNavComponent = (props: {
                 })} 
             </SectionsNavContainer>
             <AddChapterUpperContainer>
-                <div className="add-item" onClick={() => createNewChapter()}>
+                <div className="add-item" onClick={() => createNewPage(context, { page, pages })}>
                     + Add chapter
                 </div>
             </AddChapterUpperContainer>
@@ -77,29 +65,15 @@ const PageNavComponent = (props: {
 }
 
 const Main = () => {
-    const { apiData: pages, activePage }: any = useBookContext();
-    
-    if (!activePage) return null;
+    const { apiData: pages }: BookContextType = useBookContext();
+    if (pages === null) return null;
     return (
         <PagesNavContainer>
             {pages.map((page: any, pageIndex: number) => {
-                return <PageNavComponent 
-                    page={page} 
-                    pageIndex={pageIndex} 
-                    key={pageIndex} 
-                    pages={pages}
-                />
+                return <PageNavComponent page={page} pageIndex={pageIndex} key={pageIndex} pages={pages}/>
             })}
         </PagesNavContainer>
     );
 };
 
 export default Main;
-
-const styles = {
-    container: { width: "18%", marginTop: 24, paddingLeft: 8 },
-    chapter: {
-        paddingTop: 5,
-        paddingBottom: 5,
-    }
-}

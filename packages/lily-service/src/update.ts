@@ -296,13 +296,6 @@ export const getPageProps = (props: any, context: BookContextType) => {
                 }
             })
         },
-        setActivePage: () => {
-            const activePage = setActivePageFn({
-                apiData,
-                compareId: page.uniqueId
-            });
-            __set(dispatch, activePage);
-        },
         createSection: (section: Section) => {
             const topUniqueId = section.uniqueId;
             let botUniqueId: any = null;

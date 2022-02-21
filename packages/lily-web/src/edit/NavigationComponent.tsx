@@ -1,4 +1,4 @@
-import { useBookContext, getPageProps, createNewPage, createNewSection } from "lily-service";
+import { useBookContext, getPageProps, createNewPage, createNewSection, setActivePage, setActiveSection } from "lily-service";
 import { BookContextType, Section} from "lily-types";
 import { 
     AddSectionUpperContainer, 
@@ -29,18 +29,13 @@ const PageNavComponent = (props: {
     pages: any
 }) => {
     const context = useBookContext();
-    const sectionProps = getPageProps(props, context);
-    const {
-        setActivePage,
-        setActiveSection,
-        getSections
-    } = sectionProps;
-    const allSections = getSections();
     const { pageIndex, pages, page } = props;
+    const allSections = page.child;
+    
     return (
         <PageNavContainer>
             <PageTitleContainer>
-                <div onClick={() => setActivePage()}>
+                <div onClick={() => setActivePage(context, page)}>
                     {page.title}
                 </div>
             </PageTitleContainer>
@@ -49,7 +44,7 @@ const PageNavComponent = (props: {
                 {allSections && allSections.map((section: Section, sectionIndex: number) => {
                     return <SectionNavContainer key={sectionIndex}>
                     <SectionTitleContainer>
-                        <div onClick={() => setActiveSection(section)}>
+                        <div onClick={() => setActiveSection(context, section)}>
                             {section.title}
                         </div>
                     </SectionTitleContainer>
