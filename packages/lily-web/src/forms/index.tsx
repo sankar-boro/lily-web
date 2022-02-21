@@ -10,43 +10,19 @@ export default function FormComponent() {
     if (!vue.form || !vue.callback) return null;
     if (vue.viewType !== VUE.FORM) return null;
     
-    const { data, method } = vue.form;
+    const { data, method, create, update } = vue.form;
     const { callback } = vue;
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-    const [identity] = useState(data.identity ? data.identity : null);
     
     useEffect(() => {
         setTitle(data.title);
         setBody(data.body);
     }, [data.title, data.body]);
 
-    if (!identity) return null;
-
-    const __submit = async () => {
-        let res: any = await createNode(context, {title, body, identity});
-        let cache: any = {
-            title,
-            body
-        }
-        if (data.topUniqueId) cache['topUniqueId'] = data.topUniqueId;
-        if (data.botUniqueId) cache['botUniqueId'] = data.botUniqueId;
-        callback({
-            res,
-            cache
-        });
-    }
-
-    const createName: any = {
-        "104": "Chapter",
-        "105": "Section",
-        "106": "Sub Section"
-    }
-    let name = createName[identity] ? createName[identity] : 'Book';
-
     return <div>
         <div>
-            <h1>{method} {name}</h1>
+            <h1>{method === 'CREATE' ? create : update}</h1>
         </div>
         <div className="form-section">
             <div className='form-label h4'>Title <span className='required'>required?</span></div>
@@ -74,7 +50,7 @@ export default function FormComponent() {
                 type="submit"
                 name="Submit"
                 className="button"
-                onClick={__submit}
+                onClick={() => {callback({title, body})}}
                 >
                 Submit
             </button>

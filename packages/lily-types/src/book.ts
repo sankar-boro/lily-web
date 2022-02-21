@@ -8,9 +8,10 @@ export type vue = {
     viewType: string,
     document?: any,
     form?: {
-        method: string | null,
+        method: string,
+        create: string,
+        update: string,
         data: any | null,
-        url: string | null,
     },
     callback?: (res: any) => void
 }

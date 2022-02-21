@@ -5,7 +5,6 @@ import { Delete } from "lily-utils";
 export const DeleteComponent = () => {
     const context = useBookContext();
     const { modal, dispatch }: BookContextType = context;
-    console.log(context);
     if (modal === null) return null;
     
     const __delete = async () => {

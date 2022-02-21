@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BOOK_SERVICE, VUE, BookContextType } from "lily-types";
 import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
 import { BookServiceProvider, useBookContext, updatePage, updateNewBook } from 'lily-service';
-import { newBookVueData } from './utils';
+import { createNewBookForm } from './utils';
 
 import Divider from "./Divider";
 import BodyComponent from "./BodyComponent";
@@ -12,17 +12,11 @@ import NavigationComponent from "./NavigationComponent";
 
 const Main = () => {
     const context: BookContextType = useBookContext();
-    const { notifications, vue, dispatcher } = context;
-    const [notif, setNotif] = useState(null);
-    
-    useEffect(() => {
-        dispatcher?.setFrom({vue: newBookVueData});
-    }, []);
+    const { vue } = context;
 
     useEffect(() => {
-        updateNewBook(context);
-        updatePage(context);
-    }, [notifications]);
+        createNewBookForm(context);
+    }, []);
 
     if (vue.viewType === VUE.NONE) return null;
     return <RenderComponent />
