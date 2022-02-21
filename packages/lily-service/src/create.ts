@@ -83,6 +83,7 @@ const updateRawData = async (
     const { title, body } = formResponse;
     const { identity, topUniqueId, botUniqueId } = formData;
     const data = {
+        bookId,
         title,
         body,
         identity,
@@ -165,7 +166,7 @@ export const createNewPage = (
     const formData: any = {
         title: '',
         body: '',
-        identity
+        identity,
     }
 
     if (topUniqueId) {
@@ -197,20 +198,27 @@ export const createNewPage = (
     })
 }
 
-export const createNewSection = (context: BookContextType, section: Section) => {
-    const { activePage, dispatch } = context;
-    if (!activePage) return;
-    const thisActivePage = activePage as Section | Page;
-    const sections = thisActivePage.child;
-
-    const topUniqueId = section.uniqueId;
+export const createNewSection = (context: BookContextType, page: Page, section: Section | null) => {
+    const {  dispatch } = context;
+    const { child: sections } = page; 
+    let topUniqueId: any = null;
     let botUniqueId: any = null;
-    
-    sections.forEach((_section: any, sectionIndex: number) => {
-        if (_section.uniqueId === section.uniqueId && sections[sectionIndex + 1]) {
-            botUniqueId = sections[sectionIndex + 1].uniqueId;
+    if (!section) {
+        topUniqueId = page.uniqueId;
+        if (sections.length > 0) {
+            botUniqueId = sections[0].uniqueId;
         }
-    })
+    } else if (section) {
+        topUniqueId = section.uniqueId;
+        if (sections.length > 0) {
+            for (let i = 0; i < sections.length; i++) {
+                if (sections[i].uniqueId === topUniqueId && sections[i + 1]) {
+                    botUniqueId = sections[i + 1].uniqueId;
+                    break;
+                }
+            }
+        }
+    }
 
     let newFormData = {
         title: '',

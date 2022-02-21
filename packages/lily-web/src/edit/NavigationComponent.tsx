@@ -1,5 +1,5 @@
-import { useBookContext, getPageProps } from "lily-service";
-import { BookContextType} from "lily-types";
+import { useBookContext, getPageProps, createNewPage, createNewSection } from "lily-service";
+import { BookContextType, Section} from "lily-types";
 import { 
     AddSectionUpperContainer, 
     AddSectionInnerContainer,
@@ -13,11 +13,11 @@ import {
 } from "lily-web/components";
 
 const AddChapter = (props: any) => {
-    const { createNewSection, pageIndex } = props;
+    const { pageIndex, page, context } = props;
     if (pageIndex === 0) return null;
 
     return <AddSectionUpperContainer>        
-        <div className="add-item" onClick={() => createNewSection()}>
+        <div className="add-item" onClick={() => createNewSection(context, page, null)}>
             + Add section
         </div>
     </AddSectionUpperContainer>
@@ -31,16 +31,12 @@ const PageNavComponent = (props: {
     const context = useBookContext();
     const sectionProps = getPageProps(props, context);
     const {
-        createNewSection,
         setActivePage,
         setActiveSection,
-        createSection,
-        page,
-        getSections,
-        createNewChapter
+        getSections
     } = sectionProps;
     const allSections = getSections();
-    const { pageIndex } = props;
+    const { pageIndex, pages, page } = props;
     return (
         <PageNavContainer>
             <PageTitleContainer>
@@ -48,12 +44,9 @@ const PageNavComponent = (props: {
                     {page.title}
                 </div>
             </PageTitleContainer>
-            <AddChapter 
-                createNewSection={createNewSection}
-                pageIndex={pageIndex}
-            />
+            <AddChapter pageIndex={pageIndex} page={page} context={context} />
             <SectionsNavContainer>
-                {allSections && allSections.map((section: any, sectionIndex: number) => {
+                {allSections && allSections.map((section: Section, sectionIndex: number) => {
                     return <SectionNavContainer key={sectionIndex}>
                     <SectionTitleContainer>
                         <div onClick={() => setActiveSection(section)}>
@@ -61,7 +54,7 @@ const PageNavComponent = (props: {
                         </div>
                     </SectionTitleContainer>
                     <AddSectionInnerContainer>
-                        <div className="add-item" onClick={() => createSection(section)}>
+                        <div className="add-item" onClick={() => createNewSection(context, page, section)}>
                             + Add section
                         </div>
                     </AddSectionInnerContainer>
@@ -69,7 +62,7 @@ const PageNavComponent = (props: {
                 })} 
             </SectionsNavContainer>
             <AddChapterUpperContainer>
-                <div className="add-item" onClick={() => createNewChapter()}>
+                <div className="add-item" onClick={() => createNewPage(context, { page, pages })}>
                     + Add chapter
                 </div>
             </AddChapterUpperContainer>

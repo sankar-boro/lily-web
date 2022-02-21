@@ -6,9 +6,8 @@ const Divider = () => {
     const context: BookContextType = useBookContext();
     const { activePage: section } = context;
     if (!section) return null;
-    const { identity, child: subSections } = section as Section;    
-    
-    if (identity === 104) return <DividerContainer />;
+    const { identity, child: subSections } = section as Section;
+    if (identity < 105) return <DividerContainer />;
 
     return <DividerContainer>
         <div className="li-item hover">Delete</div>
