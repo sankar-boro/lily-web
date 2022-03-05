@@ -1,7 +1,7 @@
-import { BOOK_SERVICE, VUE } from "lily-types";
+import { BOOK_SERVICE, Chapter, VUE } from "lily-types";
 import { sortAll, setActivePageFn } from "./utils";
-import { CREATE_NEW_BOOK, CREATE_UPDATE_ANY } from "lily-query";
-import { BookContextType, NODE_TYPE, Section, Sections, vue, SubSection, Page, HTTP_METHODS } from "lily-types";
+import { postQuery, UPDATE_BOOK, UPDATE_NODE } from "lily-query";
+import { BookContextType, Section, vue, SubSection, Page, HTTP_METHODS } from "lily-types";
 
 
 export const updateData = (data: any, props: any) => {
@@ -334,12 +334,61 @@ export const getPageProps = (props: any, context: BookContextType) => {
     }
 }
 
+export const editSubSection = (context: BookContextType, subSection: SubSection) => {
+    const { dispatch } = context;
+    let formData = {
+        title: subSection.title,
+        body: subSection.body,
+        identity: subSection.identity
+    }
+    let vue: vue = {
+        viewType: 'FORM',
+        document: {type: null},
+        form: {
+            method: HTTP_METHODS.UPDATE,
+            create: '',
+            update: 'Update Sub Section',
+            data: formData
+        },
+        callback: (formResponse: any) => updateNode(context, subSection, formResponse)
+    }
+    dispatch({
+        type: BOOK_SERVICE.SETTERS,
+        setters: {
+            keys: ['vue'],
+            values: [vue]
+        }
+    })
+}
 
-const updateSubSection = (context: BookContextType, subSection: SubSection, formResponse: any) => {
-    const { rawData, dispatch, activePage } = context;
-    const { uniqueId } = subSection;
+const updateNode = async (context: BookContextType, page: Chapter | Page | Section, formResponse: any) => {
+    const { rawData, dispatch, activePage, bookId } = context;
+    const { uniqueId, identity } = page;
     if (!rawData || !activePage) return;
-    const { title, body } = formResponse.cache;
+    const { title, body } = formResponse;
+    
+    let updated = false;
+    let __URL = null;
+    if (identity === 101) {
+        __URL = UPDATE_BOOK
+    } else {
+        __URL = UPDATE_NODE
+    }
+
+    await postQuery({
+        url: __URL,
+        data: {
+            title,
+            body,
+            bookId,
+            uniqueId
+        }
+    })
+    .then((res) => {
+        updated = true;
+    });
+    
+    if (!updated) return;
 
     const newRawData = rawData.map((page: any) => {
         if (page.uniqueId === uniqueId) {
@@ -364,40 +413,14 @@ const updateSubSection = (context: BookContextType, subSection: SubSection, form
     })
 }
 
-export const editSubSection = (context: BookContextType, subSection: SubSection) => {
-    const { dispatch } = context;
-    let formData = {
-        title: subSection.title,
-        body: subSection.body,
-        identity: subSection.identity
-    }
-    let vue: vue = {
-        viewType: 'FORM',
-        document: {type: null},
-        form: {
-            method: HTTP_METHODS.UPDATE,
-            create: '',
-            update: 'Update Sub Section',
-            data: formData
-        },
-        callback: (formResponse: any) => updateSubSection(context, subSection, formResponse)
-    }
-    dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['vue'],
-            values: [vue]
-        }
-    })
-}
-
-export const editActivePage = (context: BookContextType, page: Page | Section) => {
+export const editActivePage = (context: BookContextType, page: Chapter | Page | Section) => {
     const { dispatch } = context;
     let formData = {
         title: page.title,
         body: page.body,
         identity: page.identity
     }
+
     let vue: vue = {
         viewType: 'FORM',
         document: {type: null},
@@ -407,7 +430,7 @@ export const editActivePage = (context: BookContextType, page: Page | Section) =
             update: 'Update Page',
             data: formData
         },
-        callback: (formResponse: any) => updateSubSection(context, page, formResponse)
+        callback: (formResponse: any) => updateNode(context, page, formResponse)
     }
     dispatch({
         type: BOOK_SERVICE.SETTERS,

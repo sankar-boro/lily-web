@@ -1,4 +1,4 @@
-import { CREATE_NEW_BOOK, CREATE_UPDATE_ANY, postQuery } from "lily-query";
+import { APPEND_NODE, CREATE_NEW_BOOK, MERGE_NODE, postQuery } from "lily-query";
 import { BookContextType, BOOK_SERVICE, HTTP_METHODS, Page, Section, SubSection, vue } from "lily-types";
 
 import { sortAll, setActivePageFn } from './utils';
@@ -17,7 +17,6 @@ const createBook = async (context: BookContextType, formData: any, formResponse:
         url: CREATE_NEW_BOOK,
         data
     });
-    console.log('res', res);
     let newRawData = [res.data];
     const newApiData = sortAll(newRawData, []);
     let newActivePage = setActivePageFn({
@@ -91,7 +90,7 @@ const updateRawData = async (
         botUniqueId,
     }
     let res: any = await postQuery({
-        url: CREATE_UPDATE_ANY,
+        url: botUniqueId ? MERGE_NODE : APPEND_NODE,
         data
     });
     const {

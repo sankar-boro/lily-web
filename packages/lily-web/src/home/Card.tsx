@@ -2,33 +2,33 @@ import { useHomeContext } from "lily-service";
 import { HomeContextType, HOME_SERVICE } from "lily-types";
 import { useHistory } from "react-router";
 
-const Card = (props: { data: any }) => {
+const Card = (props: { book: any }) => {
     const history = useHistory();
     const { dispatch }: HomeContextType = useHomeContext();
-    const { data } = props;
+    const { book } = props;
     return (
         <div
             className="card"
-            key={data.bookId}
+            key={book.bookId}
             onClick={() => {
                 dispatch({
                     type: HOME_SERVICE.SETTERS,
                     setters: {
                         keys: ['title'],
-                        values: [data.title]
+                        values: [book.title]
                     }
                 })
                 history.push({
-                    pathname: `/book/view/${data.bookId}`,
-                    state: data,
+                    pathname: `/book/view/${book.bookId}`,
+                    state: book,
                 });
             }}
             style={{marginRight: 25}}
         >
             <div>
-                <div className="card-title hover"><span>{data.title}</span></div>
+                <div className="card-title hover"><span>{book.title}</span></div>
                 <div className="card-body hover">
-                    {data.body.substr(0, 250)}...
+                    {book.body.substr(0, 250)}...
                 </div>
             </div>
         </div>

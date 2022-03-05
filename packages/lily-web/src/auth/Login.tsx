@@ -17,20 +17,23 @@ const inputs = {
     },
 };
 
-function login(userInfo: any, dispatch: any) {
-    postQuery({ url: LOGIN, data: userInfo})
-    .then((res: any) => {
-        if (res && res.data) {
-            dispatch({
-                type: 'SUCCESS',
-                data: res.data,
-            });
-        }
-    })
-    .catch((err: any) => {
-        dispatch({
-            type: 'ERROR',
-            data: err.response.data.message,
+function login(userInfo: any) {
+    return new Promise((resolve, reject) => {
+        postQuery({ url: LOGIN, data: userInfo})
+        .then((res: any) => {
+            if (res && res.data) {
+                resolve({
+                    type: 'SUCCESS',
+                    data: res.data,
+                });
+            }
+        })
+        .catch((err: any) => {
+            let _err = JSON.parse(JSON.stringify(err));
+            reject({
+                type: 'ERROR',
+                data: _err,
+            })
         })
     })
 };
@@ -42,21 +45,27 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
 
-    const loginDispatch = (loginData: any) => {
-        if (loginData.type === 'ERROR') {
-            setError(loginData.data);
-        }
-        if (loginData.type === 'SUCCESS') {
-            localStorage.setItem('auth', loginData.data);
-            dispatch({
-                type: AUTH_SERVICE.SETTERS,
-                setters: {
-                    keys: ['auth', 'authUserData'],
-                    values: ['true', loginData.data]
-                }
-            })
-        }
+    const loginDispatch = (e: any) => {
+        e.preventDefault();
+        login({
+            email, 
+            password
+        }).then((res: any) => {
+            if (res.type === 'SUCCESS') {
+                localStorage.setItem('auth', res.data);
+                dispatch({
+                    type: AUTH_SERVICE.SETTERS,
+                    setters: {
+                        keys: ['auth', 'authUserData'],
+                        values: ['true', res.data]
+                    }
+                })
+            }
+        }).catch((err) => {
+            setError(err.data.message);
+        })
     }
+
     return (
         <div className="container container-center">
             <div className="container-login">
@@ -98,10 +107,7 @@ const Login = () => {
                                     type="submit"
                                     name="Submit"
                                     className="button"
-                                    onClick={(e: any) => {
-                                        e.preventDefault()
-                                        login({email, password}, loginDispatch);
-                                    }}
+                                    onClick={loginDispatch}
                                     >
                                     Submit
                                 </button>

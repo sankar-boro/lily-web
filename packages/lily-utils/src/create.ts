@@ -1,4 +1,4 @@
-import { CREATE_UPDATE_ANY, postQuery } from "lily-query";
+import { APPEND_NODE, postQuery, MERGE_NODE } from "lily-query";
 
 const log = false;
 
@@ -21,7 +21,7 @@ export const createNode = async (context: any, formData: any) => {
         return null;
     }
 
-    let url = CREATE_UPDATE_ANY;
+    let url = botUniqueId ? MERGE_NODE : APPEND_NODE;
     if (!activePage) url = formData.url;
     return await postQuery({
         url,

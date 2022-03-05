@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { } from "lily-types";
-
+import { DELETE_NODE, DELETE_AND_UPDATE_NODE } from './url';
 export * from './url';
-import { UPDATE_OR_DELETE } from './url';
 
-const log = false;
+const log = true;
 const authCreds = {
   withCredentials: true,
 }
-const notAuthCreds = {}
 
 export const updateOrDelete = async (
     data: {
@@ -18,13 +14,13 @@ export const updateOrDelete = async (
     }, 
     bookId: string
 ) => {
-  
+    let __URL = data.updateData === null ? DELETE_NODE : DELETE_AND_UPDATE_NODE; 
     if (log) {
       console.log(data);
+      console.log(__URL);
       return;
     }
-  
-    await axios.post(UPDATE_OR_DELETE, {
+    await axios.post(__URL, {
       bookId,
       json: JSON.stringify(data),
     }, {

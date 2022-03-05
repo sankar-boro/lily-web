@@ -39,7 +39,6 @@ const reducer = (state: HomeContextType, action: HomeActionType) => {
 
 export const HomeServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, homeState);
-    const { dispatch: authDispatch } = useAuthContext();
     useEffect(() => {
         getQueryAuth({ url: GET_BOOK_ALL})
         .then((res: any) => {
@@ -58,13 +57,6 @@ export const HomeServiceProvider = (props: { children: object }) => {
             }
         })
         .catch((err) => {
-            authDispatch({
-                type: AUTH_SERVICE.SETTERS,
-                setters: {
-                    keys: ['auth', 'authUserData'],
-                    values: ['false', null]
-                }
-            })
         });
     },[]);
 

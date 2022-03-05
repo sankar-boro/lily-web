@@ -28,9 +28,8 @@ const Home = () => {
     return (
         <div className="container-sm flex">
             {books
-                .filter((a: any) => a.identity === 101)
-                .map((data: any) => {
-                    return <Card data={data} key={data.uniqueId} />;
+                .map((book: any) => {
+                    return <Card book={book} key={book.bookId} />;
                 })}
         </div>
     );
