@@ -1,33 +1,15 @@
 import { sortAll } from "lily-service";
-import { BOOK_SERVICE, Page, Common, ApiData, Section, RawData, SubSection, BookContextType, ActivePage } from "lily-types";
+import { BOOK_SERVICE, Page, Common, ApiData, Section, RawData, SubSection, BookContextType, ActivePage, Chapter } from "lily-types";
 import { updateOrDelete } from "lily-query";
 
-type ActivePageInfo = {
-	activePageIdentity: number;
-	activePageUId: string, // activePageUniqueId
-	activePageNodes: any[], // activePageChildNodes
-	activePageNodesLen: number, // activePageChildNodesLen
-	parentData: any, // parentData
-};
 type Keys = string[];
-type Values = [RawData, ApiData, ActivePage, any, any];
+type Values = [RawData, ApiData, ActivePage, any];
 
 const __dispatch = (fn: any, keys: Keys, values: Values) => {
 	fn({
 		type: BOOK_SERVICE.SETTERS,
 		setters: { keys, values }
 	})
-}
-
-const __activePageInfo = (activePage: Section | Page): ActivePageInfo => {
-	const { child, identity, ...parentData } = activePage;
-	return {
-		activePageIdentity: identity,
-		activePageUId: activePage.uniqueId,
-		activePageNodes: activePage.child,
-		activePageNodesLen: activePage.child.length,
-		parentData
-	}
 }
 
 const __sectionChildIds = (section: Section): string[] => {
@@ -155,83 +137,70 @@ const getActivePage = (apiData: ApiData, compareId: string) => {
 	return newActivePage;
 }
 
-const __init = (context: BookContextType) => {
-	const { activePage, bookId, rawData, dispatch, apiData } = context;
-	const activePageInfo: ActivePageInfo = __activePageInfo(activePage as Page | Section);
-	const { activePageUId } = activePageInfo;
-	return {
-		dispatch: (k: Keys, v: Values) => __dispatch(dispatch, k, v),
-		rawData,
-		bookId,
-		activePage,
-		activePageUId,
-		activePageInfo,
-		deletePageData: () => [activePageUId, ...__pageChildIds(activePage as Page)],
-		deleteSectionData: () => [activePageUId, ...__sectionChildIds(activePage as Section)],
-		updatePageData: () => TopBotId().page(apiData as ApiData, activePage as Page),
-		updateSectionData: () => TopBotId().section(apiData as ApiData, activePage as Page),
-		updateSubSectionData: (id: string) => TopBotId().subSection(activePage as Section, id)
-	}
-}
-
 type DeleteParams = {
 	context: BookContextType,
 	event: any,
+}
+
+const Run = (context: BookContextType, deleteData: string[], updateData: TopBotUIdType | null) => {
+	const { rawData, bookId, dispatch, activePage } = context;
+	const { uniqueId } = activePage as Page | Chapter | Section | SubSection;
+	let _rawData: RawData = removeNodes(rawData as RawData, deleteData);
+	if (updateData) _rawData = updateRawDataNodes(_rawData, updateData)
+	const _apiData = sortAll(_rawData, deleteData);
+	let _activePage: ActivePage | null = getActivePage(_apiData, deleteData.includes(uniqueId) ? bookId as string : uniqueId as string);
+	const keys: Keys = ['rawData', 'apiData', 'activePage', 'modal'];
+	const values: Values = [_rawData, _apiData, _activePage as Page, null]
+	__dispatch(dispatch, keys, values);
+}
+
+const DeletePage = async (
+	context: BookContextType
+) => {
+	const { activePage, apiData, bookId } = context;
+	if (!activePage || !apiData) return;
+	const deleteData: string[] = [activePage.uniqueId, ...__pageChildIds(activePage as Page)];
+	const updateData = TopBotId().page(apiData as ApiData, activePage as Page);
+	await updateOrDelete({updateData, deleteData}, bookId as string);
+	Run(context, deleteData, updateData);
+}
+
+const DeleteSection = async (
+	context: BookContextType
+) => {
+	const { activePage, apiData, bookId } = context;
+	if (!activePage || !apiData) return;
+	const { uniqueId } = activePage;
+	const deleteData = [uniqueId, ...__sectionChildIds(activePage as Section)];
+	let updateData = TopBotId().section(apiData as ApiData, activePage as Page);			
+	await updateOrDelete({updateData, deleteData}, bookId as string);
+	Run(context, deleteData, updateData);
+}
+
+const DeleteSubSection = async (
+	context: BookContextType,
+	event: any
+) => {
+	const { activePage, bookId } = context;
+	const { deleteId } = event;
+	if (!deleteId) return;
+	let deleteData = [deleteId];
+	let updateData = TopBotId().subSection(activePage as Section, deleteId);
+	await updateOrDelete({updateData, deleteData}, bookId as string);
+	Run(context, deleteData, updateData);
 }
 
 export const Delete = async ({
 	context,
 	event
 }: DeleteParams) => {
-	const { nodeType, deleteId } = event;
-	const {
-		bookId, 
-		rawData, 
-		dispatch, 
-		updateSubSectionData, 
-		deletePageData,
-		updatePageData,
-		deleteSectionData,
-		updateSectionData,
-		activePageUId
-	} = __init(context);
-	
-	const run = (deleteData: string[], updateData: TopBotUIdType | null) => {
-		let _rawData: RawData = removeNodes(rawData as RawData, deleteData);
-		if (updateData) _rawData = updateRawDataNodes(_rawData, updateData)
-		const _apiData = sortAll(_rawData, deleteData);
-		let _activePage: ActivePage | null = getActivePage(_apiData, deleteData.includes(activePageUId) ? bookId as string : activePageUId as string);
-		const keys: Keys = ['rawData', 'apiData', 'activePage', 'modal', 'activity'];
-		const values: Values = [_rawData, _apiData, _activePage as Page, null, null]
-		dispatch(keys, values);
-	}
-	const activity = {
-		deletePage: async () => {
-			const deleteData: string[] = deletePageData();
-			const updateData = updatePageData();
-			await updateOrDelete({updateData, deleteData}, bookId as string);
-			run(deleteData, updateData);
-		},
-		deleteSection: async () => {
-			const deleteData = deleteSectionData();
-			let updateData = updateSectionData();			
-			await updateOrDelete({updateData, deleteData}, bookId as string);
-			run(deleteData, updateData);
-		},
-		deleteSubSection: async () => {
-			if (!deleteId) return;
-			let deleteData = [deleteId];
-			let updateData = updateSubSectionData(deleteId);
-			await updateOrDelete({updateData, deleteData}, bookId as string);
-			run(deleteData, updateData);
-		}
-	}
+	const { nodeType } = event;
 
 	if (nodeType === 'PAGE') {
-		await activity.deletePage();
+		await DeletePage(context);
 	} else if (nodeType === 'SECTION') {
-		await activity.deleteSection();
+		await DeleteSection(context);
 	} else if (nodeType === 'SUB_SECTION') {
-		await activity.deleteSubSection();
+		await DeleteSubSection(context, event);
 	}
 }

@@ -29,10 +29,6 @@ export type BookContextType = {
     notifications: null,
     dispatch: (res: any) => void,
     modal: any,
-    activity: null | {
-        type: string,
-        data: any,
-    },
     dispatcher: null | Dispatcher
 }
 
