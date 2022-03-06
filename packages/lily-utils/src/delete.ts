@@ -10,7 +10,7 @@ type ActivePageInfo = {
 	parentData: any, // parentData
 };
 type Keys = string[];
-type Values = [RawData, ApiData, ActivePage];
+type Values = [RawData, ApiData, ActivePage, any, any];
 
 const __dispatch = (fn: any, keys: Keys, values: Values) => {
 	fn({
@@ -176,17 +176,14 @@ const __init = (context: BookContextType) => {
 
 type DeleteParams = {
 	context: BookContextType,
-	type: string,
-	deleteProps?: {
-		deleteId: string,
-	}
+	event: any,
 }
 
 export const Delete = async ({
 	context,
-	type,
-	deleteProps
+	event
 }: DeleteParams) => {
+	const { nodeType, deleteId } = event;
 	const {
 		bookId, 
 		rawData, 
@@ -204,8 +201,8 @@ export const Delete = async ({
 		if (updateData) _rawData = updateRawDataNodes(_rawData, updateData)
 		const _apiData = sortAll(_rawData, deleteData);
 		let _activePage: ActivePage | null = getActivePage(_apiData, deleteData.includes(activePageUId) ? bookId as string : activePageUId as string);
-		const keys: Keys = ['rawData', 'apiData', 'activePage'];
-		const values: Values = [_rawData, _apiData, _activePage as Page]
+		const keys: Keys = ['rawData', 'apiData', 'activePage', 'modal', 'activity'];
+		const values: Values = [_rawData, _apiData, _activePage as Page, null, null]
 		dispatch(keys, values);
 	}
 	const activity = {
@@ -222,19 +219,19 @@ export const Delete = async ({
 			run(deleteData, updateData);
 		},
 		deleteSubSection: async () => {
-			if (!deleteProps) return;
-			let deleteData = [deleteProps.deleteId];
-			let updateData = updateSubSectionData(deleteProps.deleteId);
+			if (!deleteId) return;
+			let deleteData = [deleteId];
+			let updateData = updateSubSectionData(deleteId);
 			await updateOrDelete({updateData, deleteData}, bookId as string);
 			run(deleteData, updateData);
 		}
 	}
 
-	if (type === 'PAGE') {
+	if (nodeType === 'PAGE') {
 		await activity.deletePage();
-	} else if (type === 'SECTION') {
+	} else if (nodeType === 'SECTION') {
 		await activity.deleteSection();
-	} else if (type === 'SUB_SECTION') {
+	} else if (nodeType === 'SUB_SECTION') {
 		await activity.deleteSubSection();
 	}
 }

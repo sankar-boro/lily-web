@@ -76,7 +76,7 @@ const RenderModal = () => {
     return null;
 }
 
-const RenderComponent = () => {
+export const RenderComponent = () => {
     return <MainContainer>
         <NavigationContainer>
             <NavigationComponent />

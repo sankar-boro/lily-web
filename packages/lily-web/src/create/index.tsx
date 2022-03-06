@@ -1,13 +1,7 @@
-import { useEffect, useState } from "react";
-import { BOOK_SERVICE, VUE, BookContextType } from "lily-types";
-import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
-import { BookServiceProvider, useBookContext, updatePage, updateNewBook, createNewBookForm } from 'lily-service';
-
-import Divider from "./Divider";
-import BodyComponent from "./BodyComponent";
-import { DeleteComponent } from "./ModalComponents";
-import NavigationComponent from "./NavigationComponent";
-
+import { useEffect } from "react";
+import { RenderComponent } from "../edit/index";
+import { VUE, BookContextType } from "lily-types";
+import { BookServiceProvider, useBookContext, createNewBookForm } from 'lily-service';
 
 const Main = () => {
     const context: BookContextType = useBookContext();
@@ -20,44 +14,10 @@ const Main = () => {
     }, []);
 
     if (vue.viewType === VUE.NONE) return null;
+    console.log(context);
     return <RenderComponent />
 }
 
-const RenderDeleteComponent = ({
-    modal
-}: any) => {
-    if (modal && modal.type === 'DELETE') return <DeleteComponent />
-    return null;
-}
-
-const RenderModal = () => {
-    const { modal }: BookContextType = useBookContext();
-    if (modal) {
-        return <div className="modal">
-            <div className="modal-container">
-                <div className="modal-body">
-                    <RenderDeleteComponent 
-                        modal={modal}
-                    />
-                </div>
-            </div>
-        </div>
-    }
-    return null;
-}
-
-const RenderComponent = () => {
-    return <MainContainer>
-        <NavigationContainer>
-            <NavigationComponent />
-        </NavigationContainer>
-        <BodyContainer>
-            <RenderModal />
-            <BodyComponent />  
-        </BodyContainer>
-        <Divider />
-    </MainContainer>  
-}
 
 export default function CreateBookComponent(){
     return <BookServiceProvider>

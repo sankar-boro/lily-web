@@ -135,8 +135,9 @@ const BodyComponent = () => {
     const { activePage, vue } = context;
     const { __editPage, __deletePage, __deleteSection } = bodyComponentHandler(context);
 
-    if (!activePage) return null;
     if (vue.viewType === VUE.FORM) return <FormComponent vue={vue} />
+    
+    if (!activePage) return null;
 
     return <BodyViewContainer>
         <SearchInputComponent />

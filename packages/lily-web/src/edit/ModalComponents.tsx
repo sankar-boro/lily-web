@@ -14,25 +14,15 @@ export const DeleteComponent = () => {
         }
         await Delete({
             context,
-            type: modal.event.nodeType,
-            deleteProps: {
-                deleteId: modal.event.deleteId,
-            }
-        })
-        dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: {
-                keys: ['modal', 'activity'],
-                values: [null, null]
-            }
+            event: modal.event
         })
     }
     const __cancel = () => {
         dispatch({
             type: BOOK_SERVICE.SETTERS,
             setters: {
-                keys: ['modal', 'activity'],
-                values: [null, null]
+                keys: ['modal'],
+                values: [null]
             }
         })
     }
