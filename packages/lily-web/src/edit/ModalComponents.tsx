@@ -8,15 +8,15 @@ export const DeleteComponent = () => {
     if (modal === null) return null;
     
     const __delete = async () => {
-        if(!modal.data && !modal.data.nodeType && !modal.data.deleteId) {
+        if(!modal.event && !modal.event.nodeType && !modal.event.deleteId) {
             console.log('Delete SubSection failed');
             return;
         }
         await Delete({
             context,
-            type: modal.data.nodeType,
+            type: modal.event.nodeType,
             deleteProps: {
-                deleteId: modal.data.deleteId,
+                deleteId: modal.event.deleteId,
             }
         })
         dispatch({
@@ -39,7 +39,7 @@ export const DeleteComponent = () => {
 
     return <div>
         <div>
-            Are your sure you want to delete {modal.data.nodeType}?
+            Are your sure you want to delete {modal.event.nodeType}?
         </div>
         <div className="margin-top-50"/>
         <div>

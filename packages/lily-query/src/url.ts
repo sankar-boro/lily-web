@@ -5,7 +5,7 @@ export const CREATE_NEW_BOOK = `${http}/book/create`;
 export const UPDATE_BOOK = `${http}/book/update`;
 
 export const DELETE_NODE = `${http}/node/delete`;
-export const DELETE_AND_UPDATE_NODE = `${http}/node/deleteAndUpdate`;
+export const DELETE_AND_UPDATE_NODE = `${http}/node/delete/update`;
 export const MERGE_NODE = `${http}/node/merge`;
 export const APPEND_NODE = `${http}/node/create`;
 export const UPDATE_NODE = `${http}/node/update`;

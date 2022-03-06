@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { DELETE_NODE, DELETE_AND_UPDATE_NODE } from './url';
 export * from './url';
 
-const log = true;
+const log = false;
 const authCreds = {
   withCredentials: true,
 }
@@ -22,7 +22,7 @@ export const updateOrDelete = async (
     }
     await axios.post(__URL, {
       bookId,
-      json: JSON.stringify(data),
+      ...data,
     }, {
       withCredentials: true,
     })

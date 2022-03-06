@@ -56,7 +56,6 @@ const Main = () => {
 const RenderDeleteComponent = ({
     modal
 }: any) => {
-    console.log('modal', modal);
     if (modal && modal.show) return <DeleteComponent />
     return null;
 }

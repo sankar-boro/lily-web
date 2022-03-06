@@ -35,8 +35,8 @@ const subSectionHandlers = (context: BookContextType, subSection: SubSection) =>
             e.preventDefault();   
             dispatcher?.setModal({
                 show: true,
-                action: 'delete',
-                data: {
+                event: {
+                    action: 'delete',
                     deleteId: subSection.uniqueId,
                     nodeType: NODE_TYPE.SUB_SECTION
                 }
@@ -99,8 +99,9 @@ const bodyComponentHandler = (context: BookContextType) => {
         __deletePage: () => {
             dispatcher?.setModal({
                 show: true,
-                action: 'delete',
-                data: {
+                event: {
+                    action: 'delete',
+                    deleteId: activePage?.uniqueId,
                     nodeType: NODE_TYPE.PAGE
                 }
             })
@@ -108,8 +109,9 @@ const bodyComponentHandler = (context: BookContextType) => {
         __deleteSection: () => {
             dispatcher?.setModal({
                 show: true,
-                action: 'delete',
-                data: {
+                event: {
+                    action: 'delete',
+                    deleteId: activePage?.uniqueId,
                     nodeType: NODE_TYPE.SECTION
                 }
             })
