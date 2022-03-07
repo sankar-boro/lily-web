@@ -7,6 +7,8 @@ export default function FormComponent() {
     const context: BookContextType = useBookContext();
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
+    const [required, setRequired] = useState('');
+    const [requiredBody, setRequiredBody] = useState('');
     const { vue } = context;
     
     if (!vue.form || !vue.callback) return null;
@@ -19,6 +21,20 @@ export default function FormComponent() {
         setTitle(data.title);
         setBody(data.body);
     }, [data.title, data.body]);
+
+    const __submit = () => {
+        if (!title) {
+            setRequired('required-imp');
+            return
+        };
+        if (!body) {
+            setRequiredBody('required-imp');
+            return;
+        }
+        setRequired('');
+        setRequiredBody('');
+        callback({title, body});
+    }
 
     return <div>
         <div>
@@ -36,13 +52,16 @@ export default function FormComponent() {
                     setTitle(e.target.value);
                 }}
                 value={title}
-                className="form-input"
+                className={`form-input ${required}`}
+                onMouseDown={() => {
+                    setRequired('')
+                }}
             />
         </div>
         <div className="form-section">
             <div className='form-label h4'>Body <span className='required'>required?</span></div>
             <div>
-                <MarkDownForm body={body} setBody={setBody} />
+                <MarkDownForm body={body} setBody={setBody} setRequiredBody={setRequiredBody} requiredBody={requiredBody}/>
             </div>
         </div>
         <div>
@@ -50,7 +69,7 @@ export default function FormComponent() {
                 type="submit"
                 name="Submit"
                 className="button"
-                onClick={() => {callback({title, body})}}
+                onClick={__submit}
                 >
                 Submit
             </button>

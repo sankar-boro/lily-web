@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import BodyComponent from "./BodyComponent";
 import NavigationComponent from "./NavigationComponent";
 import { BookHandler } from "lily-service/BookService";
-import { useBookContext, BookServiceProvider, FormServiceProvider, useHomeContext, updatePage } from "lily-service";
-import { BOOK_SERVICE, HOME_SERVICE, VUE } from "lily-types";
+import { useBookContext, BookServiceProvider, FormServiceProvider, useHomeContext, updatePage, useAuthContext } from "lily-service";
+import { AUTH_SERVICE, BookContextType, BOOK_SERVICE, HOME_SERVICE, VUE } from "lily-types";
 import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
 import Divider from "./Divider";
 
@@ -21,6 +21,7 @@ const RenderComponent = () => {
 
 const useBookFetch = (bookId: string | null) => {
     const [data, setData] = useState<any>(null);
+    const [err, setErr] = useState(false);
     useEffect(() => {
         if (!bookId) return;
         const service = new BookHandler();
@@ -32,20 +33,35 @@ const useBookFetch = (bookId: string | null) => {
                 rawData, apiData, activePage
             })
         })
+        .catch((err: any) => {
+            setErr(true);
+            console.log(JSON.parse(JSON.stringify(err)))
+        })
     }, [bookId]);
-    return [data];
+    return [data, err];
 }
 
 const Main = () => {
-    const context = useBookContext();
+    const context: BookContextType = useBookContext();
     const { vue, bookId, notifications, dispatcher } = context;
-    const [bookData] = useBookFetch(bookId);
+    const [bookData, err] = useBookFetch(bookId);
     const { dispatch: homeDispatch } = useHomeContext();
-    const [notif, setNotif] = useState(null);
+    const { dispatch: authDispatch } = useAuthContext();
     useEffect(() => {
+        console.log(err)
+        if (err) {
+            console.log('authErr')
+            authDispatch({
+                type: AUTH_SERVICE.SETTERS,
+                setters: {
+                    keys: ['auth', 'authUserData'],
+                    values: ['false', null]
+                }
+            })
+        }
         if (!bookData) return;
-        dispatcher.setFrom(bookData);
-        dispatcher.setFrom({
+        dispatcher?.setFrom(bookData);
+        dispatcher?.setFrom({
             bookId,
             vue: VUE.DOCUMENT
         })
@@ -56,7 +72,7 @@ const Main = () => {
                 values: [bookData?.activePage?.title]
             }
         })
-    }, [bookData]);
+    }, [bookData, err]);
 
     useEffect(() => {
         updatePage(context);

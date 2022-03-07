@@ -33,7 +33,7 @@ class BookHandler implements BookService {
             })
             .catch((err) => {
                 this.err = err;
-                reject(this);
+                reject(this.err);
             });
         });
     }

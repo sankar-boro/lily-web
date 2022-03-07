@@ -19,7 +19,7 @@ const title3: ICommand = {
 };
 
 export default function MarkDownForm(props: any) {
-    const { body, setBody } = props;
+    const { body, setBody, setRequiredBody, requiredBody } = props;
     return <MDEditor
         value={body}
         onChange={(val) => {
@@ -60,5 +60,9 @@ export default function MarkDownForm(props: any) {
         }),
         ]}
         height={500}
+        className={`${requiredBody}`}
+        onMouseDown={() => {
+          setRequiredBody('')
+        }}
     />;
 };
