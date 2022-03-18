@@ -1,5 +1,5 @@
 import { BOOK_SERVICE, Chapter, VUE } from "lily-types";
-import { sortAll, setActivePageFn } from "./utils";
+import { sortAll, setActivePageFn } from "lily-utils";
 import { postQuery, UPDATE_BOOK, UPDATE_NODE } from "lily-query";
 import { BookContextType, Section, vue, SubSection, Page, HTTP_METHODS } from "lily-types";
 

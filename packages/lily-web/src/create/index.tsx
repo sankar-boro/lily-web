@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { RenderComponent } from "../edit/index";
 import { VUE, BookContextType } from "lily-types";
-import { BookServiceProvider, useBookContext, createNewBookForm } from 'lily-service';
+import { BookServiceProvider, useBookContext } from 'lily-service';
+import { createNewBookForm } from 'lily-utils';
 
 const Main = () => {
     const context: BookContextType = useBookContext();

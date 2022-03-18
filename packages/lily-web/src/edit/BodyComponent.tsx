@@ -1,4 +1,6 @@
-import { useBookContext, editActivePage, editSubSection } from "lily-service";
+import { useBookContext } from "lily-service";
+import { editActivePage, editSubSection } from "lily-utils";
+
 import {
     VUE,
     Section,

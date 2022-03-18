@@ -1,4 +1,6 @@
-import { createSubSection, useBookContext } from "lily-service";
+import { useBookContext } from "lily-service";
+import { createSubSection } from "lily-utils";
+
 import { BookContextType, Section, SubSection } from "lily-types";
 import { DividerContainer } from "lily-web/components";
 

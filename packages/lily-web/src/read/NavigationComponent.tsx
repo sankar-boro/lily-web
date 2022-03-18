@@ -1,4 +1,6 @@
-import { useBookContext, setActivePage, setActiveSection } from "lily-service";
+import { useBookContext } from "lily-service";
+import { setActivePage, setActiveSection } from "lily-utils";
+
 import { BookContextType } from "lily-types";
 import {
     PageNavContainer, 

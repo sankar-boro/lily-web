@@ -1,4 +1,4 @@
-import { sortAll } from "lily-service";
+import { sortAll } from "lily-utils";
 import { BOOK_SERVICE, Page, Common, ApiData, Section, RawData, SubSection, BookContextType, ActivePage, Chapter } from "lily-types";
 import { updateOrDelete } from "lily-query";
 

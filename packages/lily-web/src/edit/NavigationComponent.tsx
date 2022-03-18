@@ -1,4 +1,6 @@
-import { useBookContext, getPageProps, createNewPage, createNewSection, setActivePage, setActiveSection } from "lily-service";
+import { useBookContext } from "lily-service";
+import { getPageProps, createNewPage, createNewSection, setActivePage, setActiveSection } from "lily-utils";
+
 import { BookContextType, Section} from "lily-types";
 import { 
     AddSectionUpperContainer, 
