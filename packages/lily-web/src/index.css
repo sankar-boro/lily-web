@@ -506,10 +506,13 @@ input:focus, textarea:focus, select:focus {
     display: flex;
 }
 .edit-title {
-    width: 95%;
+    width: 85%;
 }
 .edit-title-icons {
-    width: 5%;
+    width: 15%;
+    flex-direction: row;
+    justify-content: right;
+    display: flex;
 }
 .modal-container {
     padding: 5%;

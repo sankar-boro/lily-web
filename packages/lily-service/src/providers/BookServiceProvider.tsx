@@ -87,8 +87,8 @@ const getBookId = (dispatch: any, location: any) => {
 }
 
 export type SetModalData = {
-    show: boolean,
-    [key: string]: any
+    title: string,
+    delete: any,
 }
 
 export interface Dispatcher {

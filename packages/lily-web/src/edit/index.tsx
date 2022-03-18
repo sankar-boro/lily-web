@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import BodyComponent from "./BodyComponent";
 import NavigationComponent from "./NavigationComponent";
-import { BookContextType, BOOK_SERVICE, VUE } from "lily-types";
+import { BookContextType, VUE } from "lily-types";
 import { useBookContext, BookServiceProvider } from 'lily-service';
 import { updatePage } from 'lily-utils';
 import { BookHandler } from "lily-service/BookService";
@@ -11,7 +11,6 @@ import Divider from "./Divider";
 
 const Main = () => {
     const context: BookContextType = useBookContext();
-    const [notif, setNotif] = useState(null);
     const { dispatch, notifications, vue, bookId }: BookContextType = context;
 
     useEffect(() => {
@@ -34,7 +33,7 @@ const Main = () => {
                 }
             })
             .catch((err) => {
-                setNotif(err);
+                //
             });
         }
     }, [bookId]);
@@ -48,22 +47,13 @@ const Main = () => {
     return <RenderComponent />;
 }
 
-const RenderDeleteComponent = ({
-    modal
-}: any) => {
-    if (modal && modal.show) return <DeleteComponent />
-    return null;
-}
-
 const RenderModal = () => {
     const { modal }: BookContextType = useBookContext();
     if (modal) {
         return <div className="modal">
             <div className="modal-container">
                 <div className="modal-body">
-                    <RenderDeleteComponent 
-                        modal={modal}
-                    />
+                    <DeleteComponent />
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 import { useBookContext } from "lily-service";
+import { Delete } from "lily-utils";
 import { editActivePage, editSubSection } from "lily-utils";
 
 import {
@@ -36,11 +37,16 @@ const subSectionHandlers = (context: BookContextType, subSection: SubSection) =>
         __delete: async (e: any) => {
             e.preventDefault();   
             dispatcher?.setModal({
-                show: true,
-                event: {
-                    action: 'delete',
-                    deleteId: subSection.uniqueId,
-                    nodeType: NODE_TYPE.SUB_SECTION
+                title: NODE_TYPE.SUB_SECTION,
+                delete: async () => {
+                    await Delete({
+                        context,
+                        event: {
+                            action: 'delete',
+                            deleteId: subSection.uniqueId,
+                            nodeType: NODE_TYPE.SUB_SECTION
+                        }
+                    })
                 }
             })
         },
@@ -70,10 +76,20 @@ const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
     </SubSectionViewContainer>
 }
 
-const DeleteActivePageComponent = ({deletePage, deleteSection, identity}: any) => {
-    if (identity === 104) return <span className="delete-click hover" onClick={deletePage}>Delete</span>
-    if (identity === 105) return <span className="delete-click hover" onClick={deleteSection}>Delete</span>
+const DeleteActivePageComponent = ({ context }: { context: BookContextType }) => {
+    const { activePage } = context;
+    if (!activePage) return null;
+    const { identity } = activePage;
+    const { __deletePage, __deleteSection } = bodyComponentHandler(context);
+
+    if (identity === 101) return <span className="delete-click hover" onClick={__deletePage}>Delete Book</span>
+    if (identity === 104) return <span className="delete-click hover" onClick={__deletePage}>Delete</span>
+    if (identity === 105) return <span className="delete-click hover" onClick={__deleteSection}>Delete</span>
     return null;
+}
+
+const EditActivePageComponent = ({ context, activePage }: { context: BookContextType, activePage: Page | Section}) => {
+    return <span className="edit-click hover" onClick={() => editActivePage(context, activePage)}>Edit</span>
 }
 
 const ActivePageChildComponents = ({activePage}: {activePage: Page | Section }) => {
@@ -95,26 +111,33 @@ const SearchInputComponent = () => {
 const bodyComponentHandler = (context: BookContextType) => {
     const { activePage, dispatcher } = context;
     return {
-        __editPage: () => {
-            editActivePage(context, activePage as Page | Section)
-        },
         __deletePage: () => {
             dispatcher?.setModal({
-                show: true,
-                event: {
-                    action: 'delete',
-                    deleteId: activePage?.uniqueId,
-                    nodeType: NODE_TYPE.PAGE
+                title: NODE_TYPE.PAGE,
+                delete: async () => {
+                    await Delete({
+                        context,
+                        event: {
+                            action: 'delete',
+                            deleteId: activePage?.uniqueId,
+                            nodeType: NODE_TYPE.PAGE
+                        }
+                    })
                 }
             })
         },
         __deleteSection: () => {
             dispatcher?.setModal({
-                show: true,
-                event: {
-                    action: 'delete',
-                    deleteId: activePage?.uniqueId,
-                    nodeType: NODE_TYPE.SECTION
+                title: NODE_TYPE.SECTION,
+                delete: async () => {
+                    await Delete({
+                        context,
+                        event: {
+                            action: 'delete',
+                            deleteId: activePage?.uniqueId,
+                            nodeType: NODE_TYPE.SECTION
+                        }
+                    })
                 }
             })
         },
@@ -135,7 +158,6 @@ const FormComponent = (vue: any) => {
 const BodyComponent = () => {
     const context: BookContextType = useBookContext();
     const { activePage, vue } = context;
-    const { __editPage, __deletePage, __deleteSection } = bodyComponentHandler(context);
 
     if (vue.viewType === VUE.FORM) return <FormComponent vue={vue} />
     
@@ -149,12 +171,8 @@ const BodyComponent = () => {
                     <h2 className="h3">{activePage.title}</h2>
                 </EditTitleContainer>
                 <EditTitleIcons>
-                    <span className="edit-click hover" onClick={__editPage}>Edit</span>
-                    <DeleteActivePageComponent
-                        deletePage={__deletePage}
-                        deleteSection={__deleteSection}
-                        identity={activePage.identity}
-                    />
+                    <EditActivePageComponent context={context} activePage={activePage as Page | Section} />
+                    <DeleteActivePageComponent context={context} />
                 </EditTitleIcons>
             </EditTitleContainer>
             <div className="description">
