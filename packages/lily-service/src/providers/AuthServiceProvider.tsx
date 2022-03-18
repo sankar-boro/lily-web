@@ -50,21 +50,15 @@ const useAuthDispatch = (authOk: any, authErr: any, dispatch: any) => {
     useEffect(() => {
         if (authOk && authOk.auth) {
             dispatch({
-                type: AUTH_SERVICE.SETTERS,
-                setters: {
-                    keys: ['auth', 'authUserData'],
-                    values: ['true', authOk.data]
-                }
+                keys: ['auth', 'authUserData'],
+                values: ['true', authOk.data]
             })
             setAuth('true');
         }
         if (authErr) {
             dispatch({
-                type: AUTH_SERVICE.SETTERS,
-                setters: {
-                    keys: ['auth'],
-                    values: ['false']
-                }
+                keys: ['auth'],
+                values: ['false']
             })
             setAuth('false');
         }

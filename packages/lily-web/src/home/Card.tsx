@@ -12,11 +12,8 @@ const Card = (props: { book: any }) => {
             key={book.bookId}
             onClick={() => {
                 dispatch({
-                    type: HOME_SERVICE.SETTERS,
-                    setters: {
-                        keys: ['title'],
-                        values: [book.title]
-                    }
+                    keys: ['title'],
+                    values: [book.title]
                 })
                 history.push({
                     pathname: `/book/view/${book.bookId}`,

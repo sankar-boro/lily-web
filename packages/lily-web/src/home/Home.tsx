@@ -9,19 +9,13 @@ const Home = () => {
     useEffect(() => { 
         if (!localStorage.getItem('auth')) {
             authDispatch({
-                type: AUTH_SERVICE.SETTERS,
-                setters: {
-                    keys: ['auth', 'authUserData'],
-                    values: ['false', null]
-                }
+                keys: ['auth', 'authUserData'],
+                values: ['false', null]
             })
         }   
         dispatch({
-            type: HOME_SERVICE.SETTERS,
-            setters: {
-                keys: ['title'],
-                values: [null]
-            }
+            keys: ['title'],
+            values: [null]
         })
     }, []);
 

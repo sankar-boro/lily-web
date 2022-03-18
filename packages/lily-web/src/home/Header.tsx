@@ -29,11 +29,8 @@ const Header = () => {
         localStorage.removeItem('auth');
         localStorage.clear();
         dispatch({
-            type: AUTH_SERVICE.SETTERS,
-            setters: {
-                keys: ['auth', 'authUserData'],
-                values: ['false', null]
-            }
+            keys: ['auth', 'authUserData'],
+            values: ['false', null]
         })
     }
     return (

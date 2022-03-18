@@ -6,10 +6,7 @@ type Keys = string[];
 type Values = [RawData, ApiData, ActivePage, any];
 
 const __dispatch = (fn: any, keys: Keys, values: Values) => {
-	fn({
-		type: BOOK_SERVICE.SETTERS,
-		setters: { keys, values }
-	})
+	fn({ keys, values })
 }
 
 const __sectionChildIds = (section: Section): string[] => {

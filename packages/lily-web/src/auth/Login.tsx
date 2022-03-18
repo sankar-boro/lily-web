@@ -54,11 +54,8 @@ const Login = () => {
             if (res.type === 'SUCCESS') {
                 localStorage.setItem('auth', res.data);
                 dispatch({
-                    type: AUTH_SERVICE.SETTERS,
-                    setters: {
-                        keys: ['auth', 'authUserData'],
-                        values: ['true', res.data]
-                    }
+                    keys: ['auth', 'authUserData'],
+                    values: ['true', res.data]
                 })
             }
         }).catch((err) => {

@@ -44,11 +44,8 @@ export const updateData = (data: any, props: any) => {
     });
 
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['rawData', 'apiData', 'activePage', 'vue'],
-            values: [newRawData, newApiData, newActivePage, 'NONE']
-        }    
+        keys: ['rawData', 'apiData', 'activePage', 'vue'],
+        values: [newRawData, newApiData, newActivePage, 'NONE']
     })
 }
 
@@ -106,11 +103,8 @@ export const updatePage = (context: any) => {
                     form: {},
                 }
                 dispatch({
-                    type: BOOK_SERVICE.SETTERS,
-                    setters: {
-                        keys: ['rawData', 'apiData', 'activePage', 'notifications', 'formData', 'vue'],
-                        values: [newRawData, newApiData, newActivePage, null, null, vue]
-                    }
+                    keys: ['rawData', 'apiData', 'activePage', 'notifications', 'formData', 'vue'],
+                    values: [newRawData, newApiData, newActivePage, null, null, vue]
                 })
             }
         }
@@ -135,11 +129,8 @@ export const updateNewBook = (context: any) => {
                 compareId: bookId
             });
             dispatch({
-                type: BOOK_SERVICE.SETTERS,
-                setters: {
-                    keys: ['rawData', 'apiData', 'activePage', 'bookId', 'notifications', 'formData', 'vue'],
-                    values: [newRawData, newApiData, newActivePage, bookId, null, null, VUE.DOCUMENT],
-                }
+                keys: ['rawData', 'apiData', 'activePage', 'bookId', 'notifications', 'formData', 'vue'],
+                values: [newRawData, newApiData, newActivePage, bookId, null, null, VUE.DOCUMENT],
             })
         }
     }
@@ -147,11 +138,8 @@ export const updateNewBook = (context: any) => {
 
 const __set = (dispatch: any, activePage: any) => {
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['vue', 'activePage'],
-            values: [VUE.DOCUMENT, activePage]
-        }
+        keys: ['vue', 'activePage'],
+        values: [VUE.DOCUMENT, activePage]
     })
 }
 
@@ -199,11 +187,8 @@ const updateRawData = (context: BookContextType, newFormData: any, formResponse:
         viewType: "DOCUMENT"
     }
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['rawData', 'apiData', 'activePage', 'vue'],
-            values: [newRawData, newApiData, newActivePage, vue]
-        }
+        keys: ['rawData', 'apiData', 'activePage', 'vue'],
+        values: [newRawData, newApiData, newActivePage, vue]
     })
 }
 
@@ -255,11 +240,8 @@ export const getPageProps = (props: any, context: BookContextType) => {
                 callback: (formResponse: any) => updateRawData(context, newFormData, formResponse)
             }
             dispatch({
-                type: BOOK_SERVICE.SETTERS,
-                setters: {
-                    keys: ['vue'],
-                    values: [vue]
-                }
+                keys: ['vue'],
+                values: [vue]
             })
         },
         createNewChapter: () => {
@@ -289,11 +271,8 @@ export const getPageProps = (props: any, context: BookContextType) => {
                 callback: (formResponse: any) => updateRawData(context, newFormData, formResponse)
             }
             dispatch({
-                type: BOOK_SERVICE.SETTERS,
-                setters: {
-                    keys: ['vue'],
-                    values: [vue]
-                }
+                keys: ['vue'],
+                values: [vue]
             })
         },
         createSection: (section: Section) => {
@@ -324,11 +303,8 @@ export const getPageProps = (props: any, context: BookContextType) => {
                 callback: (formResponse: any) => updateRawData(context, newFormData, formResponse)
             }
             dispatch({
-                type: BOOK_SERVICE.SETTERS,
-                setters: {
-                    keys: ['vue'],
-                    values: [vue]
-                }
+                keys: ['vue'],
+                values: [vue]
             })
         }
     }
@@ -353,11 +329,8 @@ export const editSubSection = (context: BookContextType, subSection: SubSection)
         callback: (formResponse: any) => updateNode(context, subSection, formResponse)
     }
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['vue'],
-            values: [vue]
-        }
+        keys: ['vue'],
+        values: [vue]
     })
 }
 
@@ -405,11 +378,8 @@ const updateNode = async (context: BookContextType, page: Chapter | Page | Secti
         viewType: "DOCUMENT"
     }
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['rawData', 'apiData', 'activePage', 'vue'],
-            values: [newRawData, newApiData, newActivePage, vue]
-        }
+        keys: ['rawData', 'apiData', 'activePage', 'vue'],
+        values: [newRawData, newApiData, newActivePage, vue]
     })
 }
 
@@ -433,11 +403,8 @@ export const editActivePage = (context: BookContextType, page: Chapter | Page | 
         callback: (formResponse: any) => updateNode(context, page, formResponse)
     }
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['vue'],
-            values: [vue]
-        }
+        keys: ['vue'],
+        values: [vue]
     })
 }
 

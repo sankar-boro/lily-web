@@ -1,34 +1,18 @@
 import { AuthActionType } from "lily-types";
 
-const updateState = ({
-    state,
-    setters
-}: 
-{ 
-    state: any, 
-    setters: { keys: any[], values: any[] } 
-}) => {
-    const { keys, values } = setters;
-    const updateData: any = {};
-    keys.forEach((keyName: string, keyIndex: any) => {
-        if (state.hasOwnProperty(keyName)) {
-            updateData[keyName] = values[keyIndex];
-        }
-    })
-    return updateData;
-}
-
 export const setters = (state: any, action: AuthActionType) => {
-    const { setters } = action;
-    if (setters) {
-        const { keys, values } = setters;
+    const { keys, values } = action;
+    if (keys && values && keys.length === values.length) {
         if (keys.length === values.length) {
-            return { 
-                ...state, 
-                ...updateState({
-                    state,
-                    setters
-                }) 
+            const updateData: any = {};
+            keys.forEach((keyName: string, keyIndex: any) => {
+                if (state.hasOwnProperty(keyName)) {
+                    updateData[keyName] = values[keyIndex];
+                }
+            })
+            return {
+                ...state,
+                ...updateData
             };
         }
     }

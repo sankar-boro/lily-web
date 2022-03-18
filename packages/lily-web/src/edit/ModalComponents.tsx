@@ -19,11 +19,8 @@ export const DeleteComponent = () => {
     }
     const __cancel = () => {
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            setters: {
-                keys: ['modal'],
-                values: [null]
-            }
+            keys: ['modal'],
+            values: [null]
         })
     }
 

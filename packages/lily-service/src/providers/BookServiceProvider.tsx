@@ -70,13 +70,7 @@ export const BookContext = React.createContext<BookContextType>({
 export const useBookContext = () => useContext(BookContext);
 
 const reducer = (state: BookContextType, action: BookActionType) => {
-    const { type } = action;
-    switch (type) {
-        case BOOK_SERVICE.SETTERS:
-            return setters(state, action);
-        default:
-            throw new Error(`Unknown type: ${action.type}`);
-    }
+    return setters(state, action);
 }
 
 const getBookId = (dispatch: any, location: any) => {
@@ -114,11 +108,8 @@ class DispatcherImpl implements Dispatcher {
 
     __dispatch(keys: any, values: any) {
         this.dispatch({
-            type: 'SETTERS',
-            setters: {
-                keys,
-                values
-            }
+            keys,
+            values
         })
     }
 

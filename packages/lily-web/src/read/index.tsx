@@ -52,11 +52,8 @@ const Main = () => {
         if (err) {
             console.log('authErr')
             authDispatch({
-                type: AUTH_SERVICE.SETTERS,
-                setters: {
-                    keys: ['auth', 'authUserData'],
-                    values: ['false', null]
-                }
+                keys: ['auth', 'authUserData'],
+                values: ['false', null]
             })
         }
         if (!bookData) return;
@@ -66,11 +63,8 @@ const Main = () => {
             vue: VUE.DOCUMENT
         })
         homeDispatch({
-            type: HOME_SERVICE.SETTERS,
-            setters: {
-                keys: ['title'],
-                values: [bookData?.activePage?.title]
-            }
+            keys: ['title'],
+            values: [bookData?.activePage?.title]
         })
     }, [bookData, err]);
 

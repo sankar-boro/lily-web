@@ -9,11 +9,8 @@ export const setActivePage = (context: BookContextType, page: Page) => {
     });
     let vue = { vue: 'DOCUMENT'}
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['activePage', 'vue'],
-            values: [newActivePage, vue],
-        }
+        keys: ['activePage', 'vue'],
+        values: [newActivePage, vue]
     })
 }
 
@@ -25,10 +22,7 @@ export const setActiveSection = (context: BookContextType, section: Section) => 
     });
     let vue = { vue: 'DOCUMENT'}
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['activePage', 'vue'],
-            values: [newActivePage, vue],
-        }
+        keys: ['activePage', 'vue'],
+        values: [newActivePage, vue]
     })
 }

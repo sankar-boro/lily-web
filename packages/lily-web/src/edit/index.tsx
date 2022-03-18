@@ -22,19 +22,13 @@ const Main = () => {
                 const { rawData, apiData, activePage } = res;
                 if (rawData && apiData && activePage) {
                     dispatch({
-                        type: BOOK_SERVICE.SETTERS,
-                        setters: {
-                            keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
-                            values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
-                        }
+                        keys: ['rawData', 'apiData', 'activePage', 'bookId', 'vue'],
+                        values: [rawData, apiData, activePage, bookId, VUE.DOCUMENT]
                     })
                 } else {
                     dispatch({
-                        type: BOOK_SERVICE.SETTERS,
-                        setters: {
-                            keys: ['vue'],
-                            values: [VUE.NONE]
-                        }
+                        keys: ['vue'],
+                        values: [VUE.NONE]
                     })
                 }
             })

@@ -29,11 +29,8 @@ const createBook = async (context: BookContextType, formData: any, formResponse:
         form: {},
     }
     dispatch({
-        type: 'SETTERS',
-        setters: {
-            keys: ['rawData', 'apiData', 'activePage', 'vue', 'bookId'],
-            values: [newRawData, newApiData, newActivePage, vue, res.data.uniqueId]
-        }
+        keys: ['rawData', 'apiData', 'activePage', 'vue', 'bookId'],
+        values: [newRawData, newApiData, newActivePage, vue, res.data.uniqueId]
     })
 }
 
@@ -58,11 +55,8 @@ export const createNewBookForm = (context: BookContextType) => {
     }
 
     dispatch({
-        type: 'SETTERS',
-        setters: {
-            keys: ['vue'],
-            values: [newBookVueData]
-        }
+        keys: ['vue'],
+        values: [newBookVueData]
     })
 }
 
@@ -136,11 +130,8 @@ const updateRawData = async (
         viewType: "DOCUMENT",
     }
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['rawData', 'apiData', 'activePage', 'vue'],
-            values: [newRawData, newApiData, newActivePage, vue]
-        }
+        keys: ['rawData', 'apiData', 'activePage', 'vue'],
+        values: [newRawData, newApiData, newActivePage, vue]
     })
 }
 
@@ -189,11 +180,8 @@ export const createNewPage = (
     }
 
     dispatch({
-        type: 'SETTERS',
-        setters: {
-            keys: ['vue'],
-            values: [newBookVueData]
-        }
+        keys: ['vue'],
+        values: [newBookVueData]
     })
 }
 
@@ -243,11 +231,8 @@ export const createNewSection = (context: BookContextType, page: Page, section: 
         ) => updateRawData(context, newFormData, formResponse)
     }
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['vue'],
-            values: [vue]
-        }
+        keys: ['vue'],
+        values: [vue]
     })
 }
 
@@ -299,10 +284,7 @@ export const createSubSection = (context: BookContextType, subSection: SubSectio
         ) => updateRawData(context, newFormData, formResponse)
     }
     dispatch({
-        type: BOOK_SERVICE.SETTERS,
-        setters: {
-            keys: ['vue'],
-            values: [vue]
-        }
+        keys: ['vue'],
+        values: [vue]
     })
 }

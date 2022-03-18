@@ -29,14 +29,7 @@ const setters = (state: any, action: any) => {
 }
 
 const reducer = (state: any, action: any) => {
-    const { type } = action;
-    
-    switch (type) { 
-        case BOOK_SERVICE.SETTERS:
-            return setters(state, action);
-        default:
-            throw new Error(`Unknown type: ${action.type}`);
-    }
+    return setters(state, action);
 }
 
 export const FormServiceProvider = (props: { children: object }) => {

@@ -54,11 +54,8 @@ export type ActivePage = Common | Page | Section;
 export const textareaRows = 10;
 export const textareaCols = 50;
 export type DefaultActionType = {
-    type: string,
-    setters?: {
-        keys: any[],
-        values: any[],
-    }
+    keys: any[],
+    values: any[],
 }
 export enum NODE_TYPE {
     FRONT_COVER = "FRONT_COVER",

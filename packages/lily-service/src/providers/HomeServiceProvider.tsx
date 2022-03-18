@@ -27,14 +27,7 @@ export const useHomeContext = () => useContext(HomeContext);
 
 
 const reducer = (state: HomeContextType, action: HomeActionType) => {
-    const { type } = action;
-    
-    switch (type) {
-        case HOME_SERVICE.SETTERS:
-            return setters(state, action);
-        default:
-            throw new Error(`Unknown type: ${action.type}`);
-    }
+    return setters(state, action);
 }
 
 export const HomeServiceProvider = (props: { children: object }) => {
@@ -48,11 +41,8 @@ export const HomeServiceProvider = (props: { children: object }) => {
                 res.status === 200
             ) {
                 dispatch({
-                    type: HOME_SERVICE.SETTERS,
-                    setters: {
-                        keys: ['books'],
-                        values: [res.data]
-                    }
+                    keys: ['books'],
+                    values: [res.data]
                 })
             }
         })
