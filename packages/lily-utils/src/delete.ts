@@ -1,6 +1,6 @@
 import { sortAll } from "lily-utils";
-import { BOOK_SERVICE, Page, Common, ApiData, Section, RawData, SubSection, BookContextType, ActivePage, Chapter } from "lily-types";
-import { updateOrDelete } from "lily-query";
+import { Page, Common, ApiData, Section, RawData, SubSection, BookContextType, ActivePage, Chapter } from "lily-types";
+import { DELETE_BOOK, updateOrDelete, postNoDataQuery } from "lily-query";
 
 type Keys = string[];
 type Values = [RawData, ApiData, ActivePage, any];
@@ -136,7 +136,8 @@ const getActivePage = (apiData: ApiData, compareId: string) => {
 
 type DeleteParams = {
 	context: BookContextType,
-	event: any,
+	data: any,
+	history: any,
 }
 
 const Run = (context: BookContextType, deleteData: string[], updateData: TopBotUIdType | null) => {
@@ -187,17 +188,26 @@ const DeleteSubSection = async (
 	Run(context, deleteData, updateData);
 }
 
+const DeleteBook = async (context: BookContextType, deleteId: string) => {
+	const url = DELETE_BOOK(deleteId);
+	await postNoDataQuery({url});
+}
+
 export const Delete = async ({
 	context,
-	event
+	data,
+	history
 }: DeleteParams) => {
-	const { nodeType } = event;
-
-	if (nodeType === 'PAGE') {
+	console.log(data, 'data');
+	const { uniqueId, identity } = data;
+	if (identity === 101) {
+		await DeleteBook(context, uniqueId);
+		history.push("/");
+	} else if (identity === 'PAGE') {
 		await DeletePage(context);
-	} else if (nodeType === 'SECTION') {
+	} else if (identity === 'SECTION') {
 		await DeleteSection(context);
-	} else if (nodeType === 'SUB_SECTION') {
-		await DeleteSubSection(context, event);
+	} else if (identity === 'SUB_SECTION') {
+		await DeleteSubSection(context, uniqueId);
 	}
 }

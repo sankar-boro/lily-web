@@ -501,6 +501,11 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
+.delete-view-container {
+    /* border: 1px solid red; */
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+}
 .edit-title-container {
     width: 100%;
     display: flex;

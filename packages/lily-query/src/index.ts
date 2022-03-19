@@ -55,6 +55,20 @@ export const postQuery = (postQueryData: PostQueryData) => {
   });
 }
 
+export const postNoDataQuery = (postNoQueryData: any) => {
+  const { url } = postNoQueryData;
+  return new Promise((resolve, reject) => {
+    axios.post(url,{}, authCreds)
+    .then((res: AxiosResponse<any>) => {
+        console.log('res', res)
+        resolve(res);
+    })
+    .catch((err: AxiosError<any>) => {
+      reject(err);
+    })
+  });
+}
+
 export const getQueryAuth = async (getQueryData: GetQueryData) => {
   const { url } = getQueryData;
   return new Promise((resolve, reject) => {

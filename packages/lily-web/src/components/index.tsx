@@ -64,6 +64,30 @@ export const DocumentViewContainer = (props: any) => {
     </div>
 }
 
+export const EditContainer = (props: any) => {
+    const { deleteItem, deleteEvent, setDeleteItem } = props;
+    const deleteButtons = () => {
+        return <div>
+            <button onClick={() => {
+                deleteEvent();
+            }}>
+                Delete
+            </button>
+            <button onClick={() => {
+                setDeleteItem({
+                    deleteId: null
+                })
+            }}>
+                Cancel
+            </button>
+        </div>
+    }
+    return <div className={`edit-view-container ${deleteItem.deleteId ? 'delete-view-container' : null}`}>
+        {props.children}
+        {deleteItem.deleteId ? deleteButtons() : null}
+    </div>
+}
+
 export const SubSectionsViewContainer = (props: any) => {
     return <div>
         {props.children}

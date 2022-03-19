@@ -16,11 +16,14 @@ import {
     DocumentViewContainer,
     EditTitle,
     EditTitleContainer,
+    EditContainer,
     EditTitleIcons,
     SubSectionsViewContainer,
     SubSectionViewContainer 
 } from "lily-web/components";
 import MarkdownPreview from '@uiw/react-md-editor';
+import { useState } from "react";
+import { useHistory } from "react-router";
 
 
 const FormView = (props: any) => {
@@ -31,61 +34,47 @@ const FormView = (props: any) => {
     return null;
 };
 
-const subSectionHandlers = (context: BookContextType, subSection: SubSection) => {
-    const { dispatcher } = context;
-    return {
-        __delete: async (e: any) => {
-            e.preventDefault();   
-            dispatcher?.setModal({
-                title: NODE_TYPE.SUB_SECTION,
-                delete: async () => {
-                    await Delete({
-                        context,
-                        event: {
-                            action: 'delete',
-                            deleteId: subSection.uniqueId,
-                            nodeType: NODE_TYPE.SUB_SECTION
-                        }
-                    })
-                }
-            })
-        },
-        __edit: () => {
-            editSubSection(context, subSection);
-        }
-    }
-}
 
 const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
     const context: BookContextType = useBookContext();
-    const { __delete, __edit } = subSectionHandlers(context, subSection);
+    const history = useHistory();
+    const [deleteItem, setDeleteItem] = useState<any>({ deleteId: null });
 
-    return <SubSectionViewContainer>
-        <EditTitleContainer>
-            <EditTitle>
-                <h3>{subSection.title}</h3>
-            </EditTitle>
-            <EditTitleIcons>
-                <span className="edit-click hover" onClick={__edit}>Edit</span>
-                <span className="delete-click hover" onClick={__delete}>Delete</span>
-            </EditTitleIcons>
-        </EditTitleContainer>
-        <div className="description">
-            <MarkdownPreview.Markdown source={subSection.body} />
-        </div>
-    </SubSectionViewContainer>
+    return <EditContainer 
+            deleteItem={deleteItem} 
+            setDeleteItem={setDeleteItem}
+            deleteEvent={async () => {
+                await Delete({
+                    context,
+                    data: subSection,
+                    history,
+                })
+            }}
+        >
+        <SubSectionViewContainer>
+            <EditTitleContainer>
+                <EditTitle>
+                    <h3>{subSection.title}</h3>
+                </EditTitle>
+                <EditTitleIcons>
+                    <span className="edit-click hover" onClick={() => {
+                        editSubSection(context, subSection)
+                    }}>Edit</span>
+                    <span className="delete-click hover" onClick={() => { setDeleteItem({deleteId: subSection.uniqueId})}}>Delete</span>
+                </EditTitleIcons>
+            </EditTitleContainer>
+            <div className="description">
+                <MarkdownPreview.Markdown source={subSection.body} />
+            </div>
+        </SubSectionViewContainer>
+    </EditContainer>
 }
 
-const DeleteActivePageComponent = ({ context }: { context: BookContextType }) => {
+const DeleteActivePageComponent = ({ context, setDeleteItem }: { context: BookContextType, setDeleteItem: any }) => {
     const { activePage } = context;
     if (!activePage) return null;
-    const { identity } = activePage;
-    const { __deletePage, __deleteSection } = bodyComponentHandler(context);
 
-    if (identity === 101) return <span className="delete-click hover" onClick={__deletePage}>Delete Book</span>
-    if (identity === 104) return <span className="delete-click hover" onClick={__deletePage}>Delete</span>
-    if (identity === 105) return <span className="delete-click hover" onClick={__deleteSection}>Delete</span>
-    return null;
+    return <span className="delete-click hover" onClick={() => {setDeleteItem({deleteId: activePage.uniqueId})}}>Delete</span>
 }
 
 const EditActivePageComponent = ({ context, activePage }: { context: BookContextType, activePage: Page | Section}) => {
@@ -108,42 +97,6 @@ const SearchInputComponent = () => {
     </div>
 }
 
-const bodyComponentHandler = (context: BookContextType) => {
-    const { activePage, dispatcher } = context;
-    return {
-        __deletePage: () => {
-            dispatcher?.setModal({
-                title: NODE_TYPE.PAGE,
-                delete: async () => {
-                    await Delete({
-                        context,
-                        event: {
-                            action: 'delete',
-                            deleteId: activePage?.uniqueId,
-                            nodeType: NODE_TYPE.PAGE
-                        }
-                    })
-                }
-            })
-        },
-        __deleteSection: () => {
-            dispatcher?.setModal({
-                title: NODE_TYPE.SECTION,
-                delete: async () => {
-                    await Delete({
-                        context,
-                        event: {
-                            action: 'delete',
-                            deleteId: activePage?.uniqueId,
-                            nodeType: NODE_TYPE.SECTION
-                        }
-                    })
-                }
-            })
-        },
-    }
-}
-
 const FormComponent = (vue: any) => {
     return (
         <BodyViewContainer>
@@ -157,28 +110,42 @@ const FormComponent = (vue: any) => {
 
 const BodyComponent = () => {
     const context: BookContextType = useBookContext();
+    const history = useHistory();
     const { activePage, vue } = context;
+    const [deleteItem, setDeleteItem] = useState({ deleteId: null });
 
     if (vue.viewType === VUE.FORM) return <FormComponent vue={vue} />
-    
     if (!activePage) return null;
 
     return <BodyViewContainer>
         <SearchInputComponent />
         <DocumentViewContainer>
-            <EditTitleContainer>
+            <EditContainer 
+                deleteItem={deleteItem} 
+                setDeleteItem={setDeleteItem}
+                deleteEvent={async () => {
+                    console.log('called');
+                    await Delete({
+                        context,
+                        data: activePage,
+                        history
+                    })
+                }}
+            >
                 <EditTitleContainer>
-                    <h2 className="h3">{activePage.title}</h2>
+                    <EditTitleContainer>
+                        <h2 className="h3">{activePage.title}</h2>
+                    </EditTitleContainer>
+                    <EditTitleIcons>
+                        <EditActivePageComponent context={context} activePage={activePage as Page | Section} />
+                        <DeleteActivePageComponent context={context} setDeleteItem={setDeleteItem} />
+                    </EditTitleIcons>
                 </EditTitleContainer>
-                <EditTitleIcons>
-                    <EditActivePageComponent context={context} activePage={activePage as Page | Section} />
-                    <DeleteActivePageComponent context={context} />
-                </EditTitleIcons>
-            </EditTitleContainer>
-            <div className="description">
-                <MarkdownPreview.Markdown source={activePage.body} />
-            </div>
-            <ActivePageChildComponents activePage={activePage as Page | Section} />
+                <div className="description">
+                    <MarkdownPreview.Markdown source={activePage.body} />
+                </div>
+                <ActivePageChildComponents activePage={activePage as Page | Section} />
+            </EditContainer>
         </DocumentViewContainer>
     </BodyViewContainer>
 }
