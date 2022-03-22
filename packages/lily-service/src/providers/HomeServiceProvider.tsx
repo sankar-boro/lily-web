@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useReducer } from "react";
-import { HomeContextType, HomeActionType, HOME_SERVICE, AUTH_SERVICE } from "lily-types";
-import { GET_BOOK_ALL, getQueryAuth } from "lily-query";
+import React, { useContext, useReducer } from "react";
+import { HomeContextType, HomeActionType } from "lily-types";
 
 import { setters } from './ProvidersCommon';
-import { useAuthContext } from "./AuthServiceProvider";
 
 export type HomeState = {
     books: Node[],
@@ -32,23 +30,6 @@ const reducer = (state: HomeContextType, action: HomeActionType) => {
 
 export const HomeServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, homeState);
-    useEffect(() => {
-        getQueryAuth({ url: GET_BOOK_ALL})
-        .then((res: any) => {
-            if (
-                res.status &&
-                typeof res.status === "number" &&
-                res.status === 200
-            ) {
-                dispatch({
-                    keys: ['books'],
-                    values: [res.data]
-                })
-            }
-        })
-        .catch((err) => {
-        });
-    },[]);
 
     return (
         <HomeContext.Provider

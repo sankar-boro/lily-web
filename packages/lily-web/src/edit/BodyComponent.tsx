@@ -124,7 +124,6 @@ const BodyComponent = () => {
                 deleteItem={deleteItem} 
                 setDeleteItem={setDeleteItem}
                 deleteEvent={async () => {
-                    console.log('called');
                     await Delete({
                         context,
                         data: activePage,

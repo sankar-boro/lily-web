@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Card from "./Card";
 import { useHomeContext, useAuthContext } from "lily-service";
-import { HOME_SERVICE, AUTH_SERVICE } from "lily-types";
+import { GET_BOOK_ALL, getQueryAuth } from "lily-query";
 
 const Home = () => {
     const { books, dispatch } = useHomeContext();
@@ -18,6 +18,26 @@ const Home = () => {
             values: [null]
         })
     }, []);
+
+    useEffect(() => {
+        getQueryAuth({ url: GET_BOOK_ALL})
+        .then((res: any) => {
+            if (
+                res.status &&
+                typeof res.status === "number" &&
+                res.status === 200
+            ) {
+                dispatch({
+                    keys: ['books'],
+                    values: [res.data]
+                })
+            }
+        })
+        .catch((err) => {
+        });
+    }, []);
+
+    if (books.length === 0) return null;
 
     return (
         <div className="container-sm flex">
