@@ -374,10 +374,12 @@ input:focus, textarea:focus, select:focus {
     font-size: 17px;
     line-height: 1.45em;
 }
+.divider-settings {
+    margin-bottom: 20px;
+}
 .li-item {
-
     color: #4d4d4d;
-    padding: 15px 0px;
+    padding: 10px 0px;
 }
 .li-item a {
     text-decoration: none;
@@ -481,8 +483,23 @@ input:focus, textarea:focus, select:focus {
 .divider-container {
     width: 20%;
     height: 100%;
-    padding: 15px 10px 0px 10px;
-    /* background-color: rgb(209, 252, 204); */
+    border-left: 1px solid rgb(231, 231, 231);
+    background-color: #fafafa;
+}
+.divider-settings {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid rgb(243, 243, 243);
+}
+.settings-item {
+    padding: 5px 10px;
+    color: #4d4d4d;
+}
+.brd-left {
+    border-left: 1px solid rgb(231, 231, 231);
+}
+.divider-content {
+    padding-left: 15px;
 }
 .document-view-container {
     margin-top: 20px;

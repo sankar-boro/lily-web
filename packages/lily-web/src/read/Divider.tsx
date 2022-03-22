@@ -10,17 +10,24 @@ const Divider = () => {
     const section = activePage as Section;
     const { identity, child: subSections } = section;
 
-    const editNavigate = (e: any) => {
-        e.preventDefault();
+    const onClickEdit = () => {
         history.push({
             pathname: `/book/edit/${bookId}`,
             state: history.location.state,
         });
     }
+
+    const onClickBack = (e: any) => {
+        e.preventDefault();
+        history.goBack();
+    }
+
     return <DividerContainer>
-        <div className="li-item hover" onClick={editNavigate}>Edit</div>
-        <div className="li-item hover">Delete</div>
-        <div>
+        <div className="divider-settings">
+            <div className="hover settings-item" onClick={onClickBack}>&#x2190;</div>
+            <div className="hover settings-item brd-left" onClick={onClickEdit}>Edit</div>
+        </div>
+        <div className="divider-content">
             {identity === 105 && subSections.map((x: SubSection, subSectionIndex: number) => {
                 return <div className="li-item hover" key={subSectionIndex}>
                     <a href={`#${x.uniqueId}`}>    
