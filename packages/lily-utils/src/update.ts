@@ -237,7 +237,13 @@ export const getPageProps = (props: any, context: BookContextType) => {
                     update: '', 
                     data: newFormData,
                 },
-                callback: (formResponse: any) => updateRawData(context, newFormData, formResponse)
+                callback: (formResponse: any) => updateRawData(context, newFormData, formResponse),
+                cancel: () => {
+                    dispatch({
+                        keys: ['vue'],
+                        values: [{viewType: 'DOCUMENT'}]
+                    })
+                }
             }
             dispatch({
                 keys: ['vue'],
@@ -268,7 +274,13 @@ export const getPageProps = (props: any, context: BookContextType) => {
                     update: '',
                     data: newFormData 
                 },
-                callback: (formResponse: any) => updateRawData(context, newFormData, formResponse)
+                callback: (formResponse: any) => updateRawData(context, newFormData, formResponse),
+                cancel: () => {
+                    dispatch({
+                        keys: ['vue'],
+                        values: [{viewType: 'DOCUMENT'}]
+                    })
+                }
             }
             dispatch({
                 keys: ['vue'],
@@ -300,7 +312,13 @@ export const getPageProps = (props: any, context: BookContextType) => {
                     update: '', 
                     data: newFormData
                 },
-                callback: (formResponse: any) => updateRawData(context, newFormData, formResponse)
+                callback: (formResponse: any) => updateRawData(context, newFormData, formResponse),
+                cancel: () => {
+                    dispatch({
+                        keys: ['vue'],
+                        values: [{viewType: 'DOCUMENT'}]
+                    })
+                }
             }
             dispatch({
                 keys: ['vue'],
@@ -326,7 +344,13 @@ export const editSubSection = (context: BookContextType, subSection: SubSection)
             update: 'Update Sub Section',
             data: formData
         },
-        callback: (formResponse: any) => updateNode(context, subSection, formResponse)
+        callback: (formResponse: any) => updateNode(context, subSection, formResponse),
+        cancel: () => {
+            dispatch({
+                keys: ['vue'],
+                values: [{viewType: 'DOCUMENT'}]
+            })
+        }
     }
     dispatch({
         keys: ['vue'],
@@ -400,7 +424,13 @@ export const editActivePage = (context: BookContextType, page: Chapter | Page | 
             update: 'Update Page',
             data: formData
         },
-        callback: (formResponse: any) => updateNode(context, page, formResponse)
+        callback: (formResponse: any) => updateNode(context, page, formResponse),
+        cancel: () => {
+            dispatch({
+                keys: ['vue'],
+                values: [{viewType: 'DOCUMENT'}]
+            })
+        }
     }
     dispatch({
         keys: ['vue'],

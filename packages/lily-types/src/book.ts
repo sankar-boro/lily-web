@@ -13,7 +13,8 @@ export type vue = {
         update: string,
         data: any | null,
     },
-    callback?: (res: any) => void
+    callback?: (res: any) => void,
+    cancel?: () => void,
 }
 export type BookContextType = {
     rawData: null | RawData,

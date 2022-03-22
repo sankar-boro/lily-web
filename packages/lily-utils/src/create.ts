@@ -80,7 +80,13 @@ export const createNewBookForm = (context: BookContextType) => {
             identity: 101,
             data: formData
         },
-        callback: (formRes: {title: string, body: string}) => createBook(context, formData, formRes)
+        callback: (formRes: {title: string, body: string}) => createBook(context, formData, formRes),
+        cancel: () => {
+            dispatch({
+                keys: ['vue'],
+                values: [{viewType: 'DOCUMENT'}]
+            })
+        }
     }
 
     dispatch({
@@ -205,7 +211,13 @@ export const createNewPage = (
             identity,
             data: formData
         },
-        callback: (formRes: {title: string, body: string}) => updateRawData(context, formData, formRes)
+        callback: (formRes: {title: string, body: string}) => updateRawData(context, formData, formRes),
+        cancel: () => {
+            dispatch({
+                keys: ['vue'],
+                values: [{viewType: 'DOCUMENT'}]
+            })
+        }
     }
 
     dispatch({
@@ -257,7 +269,13 @@ export const createNewSection = (context: BookContextType, page: Page, section: 
                 title: string, 
                 body: string
             }
-        ) => updateRawData(context, newFormData, formResponse)
+        ) => updateRawData(context, newFormData, formResponse),
+        cancel: () => {
+            dispatch({
+                keys: ['vue'],
+                values: [{viewType: 'DOCUMENT'}]
+            })
+        }
     }
     dispatch({
         keys: ['vue'],
@@ -310,7 +328,13 @@ export const createSubSection = (context: BookContextType, subSection: SubSectio
                 title: string, 
                 body: string
             }
-        ) => updateRawData(context, newFormData, formResponse)
+        ) => updateRawData(context, newFormData, formResponse),
+        cancel: () => {
+            dispatch({
+                keys: ['vue'],
+                values: [{viewType: 'DOCUMENT'}]
+            })
+        }
     }
     dispatch({
         keys: ['vue'],

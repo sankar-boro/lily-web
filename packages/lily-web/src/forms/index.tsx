@@ -15,7 +15,7 @@ export default function FormComponent() {
     if (vue.viewType !== VUE.FORM) return null;
 
     const { data, method, create, update } = vue.form;
-    const { callback } = vue;
+    const { callback, cancel } = vue;
     
     useEffect(() => {
         setTitle(data.title);
@@ -34,6 +34,10 @@ export default function FormComponent() {
         setRequired('');
         setRequiredBody('');
         callback({title, body});
+    }
+
+    const __cancel = () => {
+        if (cancel) cancel();
     }
 
     return <div>
@@ -72,6 +76,14 @@ export default function FormComponent() {
                 onClick={__submit}
                 >
                 Submit
+            </button>
+            <button
+                type="button"
+                name="Submit"
+                className="button"
+                onClick={__cancel}
+                >
+                Cancel
             </button>
         </div>
     </div>
