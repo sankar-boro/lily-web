@@ -23,25 +23,6 @@ const Divider = () => {
         <div className="divider-settings">
             <div className="hover settings-item" onClick={goBack}>&#x2190;</div>
         </div>
-        <div className="divider-content">
-            <div 
-                className="add-item li-item hover"
-                onClick={() => createSubSection(context, undefined)}
-            >
-                + Sub-section
-            </div>
-            {identity === 105 && subSections.map((subSection: SubSection) => {
-                return <div key={subSection.uniqueId}>
-                    {subSection.title}
-                    <div 
-                        className="add-item li-item hover"
-                        onClick={() => createSubSection(context, subSection)}
-                    >
-                        + Sub-section
-                    </div>
-                </div>;
-            })}
-        </div>
     </DividerContainer>
 }
 

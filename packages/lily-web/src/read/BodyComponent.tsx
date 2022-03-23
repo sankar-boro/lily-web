@@ -31,6 +31,14 @@ const SearchInputComponent = () => {
     </div>
 }
 
+const Title = (props: { activePage: any }) => {
+    const { activePage } = props;
+    if (activePage.identity === 101) {
+        return <h1 className="book-title">{activePage.title}</h1>
+    }
+    return <h1>{activePage.title}</h1>
+}
+
 const BodyComponent = () => {
     const context: any = useBookContext();
     const { activePage } = context;
@@ -40,7 +48,7 @@ const BodyComponent = () => {
         <SearchInputComponent />
         <DocumentViewContainer>
             <div>
-                <h1 className="h2" id={activePage.uniqueId}>{activePage.title}</h1>
+                <Title activePage={activePage} />
                 <div className="description">
                     <MarkdownPreview.Markdown source={activePage.body} />
                 </div>

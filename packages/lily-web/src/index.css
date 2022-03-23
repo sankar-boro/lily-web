@@ -591,3 +591,8 @@ input:focus, textarea:focus, select:focus {
 .required-imp {
     border: 1px solid red;
 }
+.book-title {
+    font-family: "SSP-SB";
+    font-size: 4em;
+    font-weight: bold;
+}

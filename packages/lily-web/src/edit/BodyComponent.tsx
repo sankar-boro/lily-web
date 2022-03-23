@@ -1,14 +1,12 @@
 import { useBookContext } from "lily-service";
 import { Delete } from "lily-utils";
 import { editActivePage, editSubSection } from "lily-utils";
-
 import {
     VUE,
     Section,
     SubSection,
     BookContextType,
     Page,
-    NODE_TYPE
 } from "lily-types";
 import MarkDownForm from "lily-web/forms";
 import { 
@@ -24,7 +22,7 @@ import {
 import MarkdownPreview from '@uiw/react-md-editor';
 import { useState } from "react";
 import { useHistory } from "react-router";
-
+import { createSubSection } from "lily-utils";
 
 const FormView = (props: any) => {
     const { vue } = props;
@@ -66,6 +64,13 @@ const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
             <div className="description">
                 <MarkdownPreview.Markdown source={subSection.body} />
             </div>
+            <div 
+                className="add-item li-item hover"
+                style={{ display: 'flex', justifyContent: 'center'}}
+                onClick={() => createSubSection(context, subSection)}
+            >
+                + Sub-section
+            </div>
         </SubSectionViewContainer>
     </EditContainer>
 }
@@ -81,10 +86,17 @@ const EditActivePageComponent = ({ context, activePage }: { context: BookContext
     return <span className="edit-click hover" onClick={() => editActivePage(context, activePage)}>Edit</span>
 }
 
-const ActivePageChildComponents = ({activePage}: {activePage: Page | Section }) => {
+const ActivePageChildComponents = ({activePage, context}: {activePage: Page | Section, context: BookContextType }) => {
     if (activePage.identity === 104) return null;
 
     return <SubSectionsViewContainer>
+        <div 
+            className="add-item li-item hover"
+            style={{ display: 'flex', justifyContent: 'center'}}
+            onClick={() => createSubSection(context, undefined)}
+        >
+            + Sub-section
+        </div>
         {activePage.child.map((subSection: SubSection, subSectionIndex: number) => {
             return <SubSectionComponent subSection={subSection} key={subSectionIndex} />
         })} 
@@ -106,6 +118,14 @@ const FormComponent = (vue: any) => {
             </DocumentViewContainer>
         </BodyViewContainer>
     );
+}
+
+const Title = (props: { activePage: any }) => {
+    const { activePage } = props;
+    if (activePage.identity === 101) {
+        return <h1 className="book-title">{activePage.title}</h1>
+    }
+    return <h1>{activePage.title}</h1>
 }
 
 const BodyComponent = () => {
@@ -133,7 +153,7 @@ const BodyComponent = () => {
             >
                 <EditTitleContainer>
                     <EditTitleContainer>
-                        <h2 className="h3">{activePage.title}</h2>
+                        <Title activePage={activePage} />
                     </EditTitleContainer>
                     <EditTitleIcons>
                         <EditActivePageComponent context={context} activePage={activePage as Page | Section} />
@@ -143,7 +163,7 @@ const BodyComponent = () => {
                 <div className="description">
                     <MarkdownPreview.Markdown source={activePage.body} />
                 </div>
-                <ActivePageChildComponents activePage={activePage as Page | Section} />
+                <ActivePageChildComponents context={context} activePage={activePage as Page | Section} />
             </EditContainer>
         </DocumentViewContainer>
     </BodyViewContainer>
