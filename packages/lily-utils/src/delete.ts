@@ -217,9 +217,20 @@ const DeleteSubSection = async (
 	})
 }
 
-const DeleteBook = async (context: BookContextType, deleteId: string) => {
-	const url = DELETE_BOOK(deleteId);
-	await postNoDataQuery({url});
+const DeleteBook = async (context: BookContextType, deleteId: string, history: any) => {
+	const { dispatch } = context;
+	dispatch({
+		keys: ['modal'],
+		values: [{
+			title: 'Are you sure you want to delete Book.',
+			body: [],
+			delete: async () => {
+				const url = DELETE_BOOK(deleteId);
+				await postNoDataQuery({url});
+				history.push("/");
+			}
+		}]
+	})
 }
 
 export const Delete = async ({
@@ -229,8 +240,7 @@ export const Delete = async ({
 }: DeleteParams) => {
 	const { uniqueId, identity } = data;
 	if (identity === 101) {
-		await DeleteBook(context, uniqueId);
-		history.push("/");
+		await DeleteBook(context, uniqueId, history);
 	} else if (identity === 104) {
 		await DeletePage(context);
 	} else if (identity === 105) {
