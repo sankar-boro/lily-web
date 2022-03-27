@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import Card from "./Card";
 import { useHomeContext, useAuthContext } from "lily-service";
-import { GET_BOOK_ALL, getQueryAuth } from "lily-query";
+import { GET_BOOK_ALL, GET_BLOG_ALL, getQueryAuth } from "lily-query";
 
 const Home = () => {
-    const { books, dispatch } = useHomeContext();
+    const { books, blogs, dispatch } = useHomeContext();
     const { dispatch: authDispatch } = useAuthContext();
     useEffect(() => { 
         if (!localStorage.getItem('auth')) {
@@ -37,8 +37,30 @@ const Home = () => {
         });
     }, []);
 
-    if (books.length === 0) return null;
+    useEffect(() => {
+        getQueryAuth({ url: GET_BLOG_ALL})
+        .then((res: any) => {
+            if (
+                res.status &&
+                typeof res.status === "number" &&
+                res.status === 200
+            ) {
+                dispatch({
+                    keys: ['blogs'],
+                    values: [res.data]
+                })
+            }
+        })
+        .catch((err) => {
+        });
+    }, []);
 
+    if (books.length === 0 && blogs.length === 0) {
+        return <div className="container-sm flex">
+            Nothing to show.
+        </div>
+    }
+    
     return (
         <div className="container-sm flex">
             {books

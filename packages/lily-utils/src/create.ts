@@ -1,5 +1,5 @@
 import { APPEND_NODE, postQuery, MERGE_NODE, CREATE_NEW_BOOK } from "lily-query";
-import { BookContextType, BOOK_SERVICE, HTTP_METHODS, Page, Section, SubSection, vue } from "lily-types";
+import { BookContextType, BlogContextType, BOOK_SERVICE, HTTP_METHODS, Page, Section, SubSection, vue } from "lily-types";
 
 import { sortAll, setActivePageFn } from 'lily-utils';
 
@@ -64,6 +64,37 @@ const createBook = async (context: BookContextType, formData: any, formResponse:
 }
 
 // Don't you dare touch this
+const createBlog = async (context: BlogContextType, formData: any, formResponse: { title: string, body: string}) => {
+    const { dispatch } = context;
+    const { title, body } = formResponse;
+    const { identity } = formData;
+    const data = {
+        title,
+        body,
+        identity,
+    }
+    let res: any = await postQuery({
+        url: CREATE_NEW_BOOK,
+        data
+    });
+    let newRawData = [res.data];
+    const newApiData = sortAll(newRawData, []);
+    let newActivePage = setActivePageFn({
+        apiData: newApiData,
+        compareId: res.data.uniqueId
+    });
+    const vue = {
+        viewType: "DOCUMENT",
+        document: {},
+        form: {},
+    }
+    dispatch({
+        keys: ['rawData', 'apiData', 'activePage', 'vue', 'bookId'],
+        values: [newRawData, newApiData, newActivePage, vue, res.data.uniqueId]
+    })
+}
+
+// Don't you dare touch this
 export const createNewBookForm = (context: BookContextType) => {
     const { dispatch } = context;
     const formData = {
@@ -81,6 +112,38 @@ export const createNewBookForm = (context: BookContextType) => {
             data: formData
         },
         callback: (formRes: {title: string, body: string}) => createBook(context, formData, formRes),
+        cancel: () => {
+            dispatch({
+                keys: ['vue'],
+                values: [{viewType: 'DOCUMENT'}]
+            })
+        }
+    }
+
+    dispatch({
+        keys: ['vue'],
+        values: [newBookVueData]
+    })
+}
+
+// Don't you dare touch this
+export const createNewBlogForm = (context: BlogContextType) => {
+    const { dispatch } = context;
+    const formData = {
+        title: '',
+        body: '',
+        identity: 101
+    }
+    const newBookVueData = {
+        viewType: 'FORM',
+        document: {},
+        form: {
+            method: HTTP_METHODS.CREATE,
+            create: 'Create Cover Page',
+            identity: 101,
+            data: formData
+        },
+        callback: (formRes: {title: string, body: string}) => createBlog(context, formData, formRes),
         cancel: () => {
             dispatch({
                 keys: ['vue'],

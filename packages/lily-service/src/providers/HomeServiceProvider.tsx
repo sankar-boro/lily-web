@@ -5,18 +5,21 @@ import { setters } from './ProvidersCommon';
 
 export type HomeState = {
     books: Node[],
+    blogs: Node[],
     title: null | string,
     dispatch: (data: any) => void,
 };
 
 export const HomeContext = React.createContext<HomeState>({
     books: [],
+    blogs: [],
     title: null,
     dispatch: (data: any): void => {}
 });
 
 const homeState: HomeState = {
     books: [],
+    blogs: [],
     title: null,
     dispatch: (data: any) => {}
 }

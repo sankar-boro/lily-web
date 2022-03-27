@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { BookContextType, VUE } from "lily-types";
-import { useBookContext} from "lily-service";
+import { BlogContextType, VUE } from "lily-types";
+import { useBlogContext} from "lily-service";
 import MarkDownForm from './MarkDownForm';
 
 export default function FormComponent() {
-    const context: BookContextType = useBookContext();
+    const context: BlogContextType = useBlogContext();
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [required, setRequired] = useState('');

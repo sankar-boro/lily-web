@@ -2,7 +2,8 @@ import { Switch, Route } from "react-router-dom";
 import Header from "./Header";
 import ViewBook from "../read";
 import Profile from "../profile";
-import NewBook from "../create";
+import NewBook from "../book";
+import NewBlog from "../blog/index";
 import EditBook from "../edit/index";
 import Home from "./Home";
 import { HomeServiceProvider } from "lily-service";
@@ -24,7 +25,7 @@ const Main = () => {
                             <NewBook />
                         </Route>
                         <Route path="/new/blog">
-                            <></>
+                            <NewBlog />
                         </Route>
                         <Route path="/book/edit/:bookId">
                             <EditBook />

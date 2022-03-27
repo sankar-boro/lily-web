@@ -1,9 +1,8 @@
-import { BookContextType, BOOK_SERVICE, vue } from "./book";
-
 export * from "./book";
 export * from "./form";
 export * from "./auth";
 export * from "./home";
+export * from "./blog";
 
 export const constants = {
     IDLE: 100,
@@ -91,4 +90,16 @@ export const getFormType = (num: number) => {
         default:
             return "NONE";
     }
+}
+export type vue = {
+    viewType: string,
+    document?: any,
+    form?: {
+        method: string,
+        create: string,
+        update: string,
+        data: any | null,
+    },
+    callback?: (res: any) => void,
+    cancel?: () => void,
 }

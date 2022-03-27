@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useReducer } from "react";
 import { VUE } from "lily-types";
-import { BookHandler } from "../BookService";
-import { BookActionType, BookContextType, vue, BOOK_SERVICE } from 'lily-types';
+import { BlogHandler } from "../BlogService";
+import { BlogActionType, BlogContextType, vue, BOOK_SERVICE } from 'lily-types';
 import { useHistory } from "react-router";
 import { setters } from './ProvidersCommon';
 import { Dispatcher, SetModalData } from "../index";
 
-const initBookState = {
+const initBlogState = {
     rawData: null,
     apiData: null,
-    bookId: '',
+    blogId: '',
     formData: {},
     viewData: {},
     editData: {},
@@ -27,18 +27,18 @@ const initBookState = {
         },
         callback: (res: any) => {}
     },
-    service: new BookHandler(),
+    service: new BlogHandler(),
     notifications: null,
     modal: null,
     error: '',
     dispatcher: null,
 }
 
-export const BookContext = React.createContext<BookContextType>({
+export const BlogContext = React.createContext<BlogContextType>({
     rawData: null,
     apiData: null,
-    service: new BookHandler(),
-    bookId: '',
+    service: new BlogHandler(),
+    blogId: '',
     formData: {},
     viewData: {},
     editData: {},
@@ -63,22 +63,22 @@ export const BookContext = React.createContext<BookContextType>({
     dispatcher: null,
 });
 
-export const useBookContext = () => useContext(BookContext);
+export const useBlogContext = () => useContext(BlogContext);
 
-const reducer = (state: BookContextType, action: BookActionType) => {
+const reducer = (state: BlogContextType, action: BlogActionType) => {
     return setters(state, action);
 }
 
-const getBookId = (dispatch: any, location: any) => {
+const getBlogId = (dispatch: any, location: any) => {
     const { state: historyState, pathname }: any = location;
     if (!historyState && pathname) {
         const splitPathName = pathname.split('/').filter((t: string) => t);            
         if (splitPathName.length === 3) {
-            dispatch.setBookId(splitPathName[2]);
+            dispatch.setBlogId(splitPathName[2]);
         }
     }
-    if (historyState && historyState.bookId) {
-        dispatch.setBookId(historyState.bookId);
+    if (historyState && historyState.blogId) {
+        dispatch.setBlogId(historyState.blogId);
     }
 }
 
@@ -101,8 +101,8 @@ class DispatcherImpl implements Dispatcher {
         this.__dispatch(['apiData'], [val]);
     }
 
-    setBookId(val: any) {
-        this.__dispatch(['bookId'], [val]);
+    setBlogId(val: any) {
+        this.__dispatch(['blogId'], [val]);
     }
 
     setKeyVal(key: string, val: any) {
@@ -129,14 +129,14 @@ class DispatcherImpl implements Dispatcher {
     }
 }
 
-export const BookServiceProvider = (props: { children: object }) => {
-    const [state, dispatch] = useReducer(reducer, initBookState);
+export const BlogServiceProvider = (props: { children: object }) => {
+    const [state, dispatch] = useReducer(reducer, initBlogState);
     const dispatcher = new DispatcherImpl(state, dispatch);
     const { location } = useHistory();
-    useEffect(() => getBookId(dispatcher, location), []);
+    useEffect(() => getBlogId(dispatcher, location), []);
 
     return (
-        <BookContext.Provider
+        <BlogContext.Provider
             value={{
                 ...state,
                 dispatch,
@@ -144,6 +144,6 @@ export const BookServiceProvider = (props: { children: object }) => {
             }}
         >
             {props.children}
-        </BookContext.Provider>
+        </BlogContext.Provider>
     );
 };

@@ -1,11 +1,11 @@
-import { useBookContext } from "lily-service";
+import { useBlogContext } from "lily-service";
 import { Delete } from "lily-utils";
 import { editActivePage, editSubSection } from "lily-utils";
 import {
     VUE,
     Section,
     SubSection,
-    BookContextType,
+    BlogContextType,
     Page,
 } from "lily-types";
 import MarkDownForm from "lily-web/forms";
@@ -34,19 +34,19 @@ const FormView = (props: any) => {
 
 
 const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
-    const context: BookContextType = useBookContext();
+    const context: BlogContextType = useBlogContext();
     const history = useHistory();
 
     const { uniqueId, identity} = subSection;
     const __delete = async () => {
-        await Delete({
-            context,
-            data: { uniqueId, identity },
-            history
-        })
+        // await Delete({
+        //     context,
+        //     data: { uniqueId, identity },
+        //     history
+        // })
     }
     const __create = () => {
-        createSubSection(context, subSection)
+        // createSubSection(context, subSection)
     }
     return <SubSectionViewContainer>
         <EditTitleContainer>
@@ -55,7 +55,7 @@ const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
             </EditTitle>
             <EditTitleIcons>
                 <span className="edit-click hover" onClick={() => {
-                    editSubSection(context, subSection)
+                    // editSubSection(context, subSection)
                 }}>Edit</span>
                 <span className="delete-click hover" onClick={__delete}>Delete</span>
             </EditTitleIcons>
@@ -73,7 +73,7 @@ const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
     </SubSectionViewContainer>
 }
 
-const DeleteActivePageComponent = ({ context }: { context: BookContextType }) => {
+const DeleteActivePageComponent = ({ context }: { context: BlogContextType }) => {
     const history = useHistory();
     const { activePage } = context;
     if (!activePage) return null;
@@ -81,30 +81,30 @@ const DeleteActivePageComponent = ({ context }: { context: BookContextType }) =>
     if (identity === 101) return null;
 
     const __delete = async () => {
-        await Delete({
-            context,
-            data: activePage,
-            history
-        })
+        // await Delete({
+        //     context,
+        //     data: activePage,
+        //     history
+        // })
     }
     return <span className="delete-click hover" onClick={__delete}>Delete</span>
 }
 
-const EditActivePageComponent = ({ context, activePage }: { context: BookContextType, activePage: Page | Section}) => {
+const EditActivePageComponent = ({ context, activePage }: { context: BlogContextType, activePage: Page | Section}) => {
     const __edit = () => {
-        editActivePage(context, activePage)
+        // editActivePage(context, activePage)
     }
     return <span className="edit-click hover" onClick={__edit}>Edit</span>
 }
 
-const ActivePageChildComponents = ({context}: {context: BookContextType }) => {
+const ActivePageChildComponents = ({context}: {context: BlogContextType }) => {
     const { activePage }: any = context;
     if (!activePage) return null;
     const { identity } = activePage as Page | Section;
     if (identity < 105) return null;
 
     const __create = () => {
-        createSubSection(context, undefined)
+        // createSubSection(context, undefined)
     }
 
     return <SubSectionsViewContainer>
@@ -128,6 +128,7 @@ const SearchInputComponent = () => {
 }
 
 const FormComponent = (vue: any) => {
+    console.log('formCom')
     return (
         <BodyViewContainer>
             <SearchInputComponent />
@@ -147,9 +148,8 @@ const Title = (props: { activePage: any }) => {
 }
 
 const BodyComponent = () => {
-    const context: BookContextType = useBookContext();
+    const context: BlogContextType = useBlogContext();
     const { activePage, vue } = context;
-
     if (vue.viewType === VUE.FORM) return <FormComponent vue={vue} />
     if (!activePage) return null;
 
