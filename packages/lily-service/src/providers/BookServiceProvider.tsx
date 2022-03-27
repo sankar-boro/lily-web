@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { VUE } from "lily-types";
 import { BookHandler } from "../BookService";
-import { BookActionType, BookContextType, vue, BOOK_SERVICE } from 'lily-types';
+import { BookContextType, vue } from 'lily-types';
 import { useHistory } from "react-router";
 import { setters } from './ProvidersCommon';
 import { Dispatcher, SetModalData } from "../index";
@@ -65,10 +64,6 @@ export const BookContext = React.createContext<BookContextType>({
 
 export const useBookContext = () => useContext(BookContext);
 
-const reducer = (state: BookContextType, action: BookActionType) => {
-    return setters(state, action);
-}
-
 const getBookId = (dispatch: any, location: any) => {
     const { state: historyState, pathname }: any = location;
     if (!historyState && pathname) {
@@ -130,7 +125,7 @@ class DispatcherImpl implements Dispatcher {
 }
 
 export const BookServiceProvider = (props: { children: object }) => {
-    const [state, dispatch] = useReducer(reducer, initBookState);
+    const [state, dispatch] = useReducer(setters, initBookState);
     const dispatcher = new DispatcherImpl(state, dispatch);
     const { location } = useHistory();
     useEffect(() => getBookId(dispatcher, location), []);

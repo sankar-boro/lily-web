@@ -15,7 +15,6 @@ const Main = () => {
         }
     }, []);
 
-    console.log(context);
     if (vue.viewType === VUE.NONE) return null;
     return <RenderComponent />
 }

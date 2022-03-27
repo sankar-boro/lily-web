@@ -3,8 +3,9 @@ import Home from "./home";
 import Login from "./auth/Login";
 import Signup from "./auth/Signup";
 import { useAuthContext, AuthServiceProvider } from "lily-service";
+import { useEffect } from "react";
+import { useAuthQuery } from "lily-utils";
 
-//
 const AuthRoute = () => {
     return (
         <Router>
@@ -15,9 +16,8 @@ const AuthRoute = () => {
             </Switch>
         </Router>
     );
-};
+}
 
-//
 const NotAuthRoute = () => {
     return (
         <Router>
@@ -31,26 +31,26 @@ const NotAuthRoute = () => {
             </Switch>
         </Router>
     );
-};
+}
 
-//
 const CurrentComponents = () => {
     const context = useAuthContext();
     const { auth } = context;
-    if (auth === 'loading') return <div>Loding...</div>;
+
+    useEffect(() => {useAuthQuery(context)}, []);
+
+    if (auth === 'init') return <div>Loding...</div>;
     if (auth === 'false') return <NotAuthRoute />;
     if (auth === 'true') return <AuthRoute />;
     return null;
-};
+}
 
-//
 const AppRoute = () => {
     return (
         <AuthServiceProvider>
             <CurrentComponents />
         </AuthServiceProvider>
     );
-};
+}
 
-//
 export default AppRoute;

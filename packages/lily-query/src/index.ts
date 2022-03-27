@@ -42,7 +42,7 @@ type GetQueryData = {
 }
 
 export const postQuery = (postQueryData: PostQueryData) => {
-  const { url, data} = postQueryData;
+  const { url, data } = postQueryData;
   return new Promise((resolve, reject) => {
     axios.post(url,data,authCreds)
     .then((res: AxiosResponse<any>) => {
@@ -60,7 +60,6 @@ export const postNoDataQuery = (postNoQueryData: any) => {
   return new Promise((resolve, reject) => {
     axios.post(url,{}, authCreds)
     .then((res: AxiosResponse<any>) => {
-        console.log('res', res)
         resolve(res);
     })
     .catch((err: AxiosError<any>) => {
@@ -80,4 +79,15 @@ export const getQueryAuth = async (getQueryData: GetQueryData) => {
         reject(err)
     })
   });
+}
+
+export const callAxios = async (props: any) => {
+  const { url, callBack } = props;
+  axios.get(url, authCreds)
+  .then((res: AxiosResponse<any>) => {
+      callBack({ isTrue: true, ...res })
+  })
+  .catch((err: AxiosError<any>) => {
+    callBack({ isTrue: false, ...err })
+  })
 }

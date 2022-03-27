@@ -51,6 +51,7 @@ const Login = () => {
             email, 
             password
         }).then((res: any) => {
+            console.log('res', res);
             if (res.type === 'SUCCESS') {
                 localStorage.setItem('auth', res.data);
                 dispatch({
