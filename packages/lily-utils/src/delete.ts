@@ -155,37 +155,66 @@ const Run = (context: BookContextType, deleteData: string[], updateData: TopBotU
 const DeletePage = async (
 	context: BookContextType
 ) => {
-	const { activePage, apiData, bookId } = context;
+	const { activePage, apiData, bookId, rawData, dispatch } = context;
 	if (!activePage || !apiData) return;
 	const deleteData: string[] = [activePage.uniqueId, ...__pageChildIds(activePage as Page)];
 	const updateData = TopBotId().page(apiData as ApiData, activePage as Page);
-	await updateOrDelete({updateData, deleteData}, bookId as string);
-	Run(context, deleteData, updateData);
+	const deleteItems = rawData && rawData.filter((d: any) => deleteData.includes(d.uniqueId))
+	dispatch({
+		keys: ['modal'],
+		values: [{
+			title: 'You are about to delete a Page that contains following Sections and Sub Sections.',
+			body: deleteItems,
+			delete: async () => {
+				await updateOrDelete({updateData, deleteData}, bookId as string);
+				Run(context, deleteData, updateData);
+			}
+		}]
+	})
 }
 
 const DeleteSection = async (
 	context: BookContextType
 ) => {
-	const { activePage, apiData, bookId } = context;
+	const { activePage, apiData, bookId, rawData, dispatch } = context;
 	if (!activePage || !apiData) return;
 	const { uniqueId } = activePage;
 	const deleteData = [uniqueId, ...__sectionChildIds(activePage as Section)];
-	let updateData = TopBotId().section(apiData as ApiData, activePage as Page);			
-	await updateOrDelete({updateData, deleteData}, bookId as string);
-	Run(context, deleteData, updateData);
+	let updateData = TopBotId().section(apiData as ApiData, activePage as Page);
+	const deleteItems = rawData && rawData.filter((d: any) => deleteData.includes(d.uniqueId))
+	dispatch({
+		keys: ['modal'],
+		values: [{
+			title: 'You are about to delete a Section that contains following Sub Sections.',
+			body: deleteItems,
+			delete: async () => {
+				await updateOrDelete({updateData, deleteData}, bookId as string);
+				Run(context, deleteData, updateData);
+			}
+		}]
+	})
 }
 
 const DeleteSubSection = async (
 	context: BookContextType,
-	event: any
+	uniqueId: string
 ) => {
-	const { activePage, bookId } = context;
-	const { deleteId } = event;
-	if (!deleteId) return;
-	let deleteData = [deleteId];
-	let updateData = TopBotId().subSection(activePage as Section, deleteId);
-	await updateOrDelete({updateData, deleteData}, bookId as string);
-	Run(context, deleteData, updateData);
+	const { activePage, bookId, dispatch, rawData } = context;
+	if (!uniqueId) return;
+	let deleteData = [uniqueId];
+	let updateData = TopBotId().subSection(activePage as Section, uniqueId);
+	const deleteItems = rawData && rawData.filter((d: any) => deleteData.includes(d.uniqueId))
+	dispatch({
+		keys: ['modal'],
+		values: [{
+			title: 'Are you sure you want to delete Section.',
+			body: deleteItems,
+			delete: async () => {
+				await updateOrDelete({updateData, deleteData}, bookId as string);
+				Run(context, deleteData, updateData);
+			}
+		}]
+	})
 }
 
 const DeleteBook = async (context: BookContextType, deleteId: string) => {
@@ -198,16 +227,15 @@ export const Delete = async ({
 	data,
 	history
 }: DeleteParams) => {
-	console.log(data, 'data');
 	const { uniqueId, identity } = data;
 	if (identity === 101) {
 		await DeleteBook(context, uniqueId);
 		history.push("/");
-	} else if (identity === 'PAGE') {
+	} else if (identity === 104) {
 		await DeletePage(context);
-	} else if (identity === 'SECTION') {
+	} else if (identity === 105) {
 		await DeleteSection(context);
-	} else if (identity === 'SUB_SECTION') {
+	} else if (identity ===106) {
 		await DeleteSubSection(context, uniqueId);
 	}
 }

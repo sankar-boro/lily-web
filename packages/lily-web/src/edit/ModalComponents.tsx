@@ -4,14 +4,22 @@ import { BookContextType } from "lily-types";
 export const DeleteComponent = () => {
     const context = useBookContext();
     const { modal, dispatch }: BookContextType = context;
-    console.log('modal', modal);
+
     if (modal === null) return null;
     
     return <div>
         <div>
-            Are your sure you want to delete {modal.title}?
+            {modal.title}
         </div>
         <div className="margin-top-50"/>
+        <div>
+            {modal.body && modal.body.map((body: any) => {
+                return <div style={{marginBottom: 10 }}>
+                    <h4>{body.title}</h4>
+                    <div>{body.body}</div>
+                </div>
+            })}
+        </div>
         <div>
             <button onClick={() => {
                 modal.delete();
