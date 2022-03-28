@@ -1,6 +1,7 @@
 import { Switch, Route } from "react-router-dom";
 import Header from "./Header";
-import ViewBook from "../read";
+import ViewBook from "../read/book";
+import ViewBlog from "../read/blog";
 import Profile from "../profile";
 import NewBook from "../edit/book";
 import NewBlog from "../edit/blog";
@@ -17,6 +18,9 @@ const Main = () => {
                     <Switch>
                         <Route path="/book/view/:bookId">
                             <ViewBook />
+                        </Route>
+                        <Route path="/blog/view/:bookId">
+                            <ViewBlog />
                         </Route>
                         <Route path="/profile">
                             <Profile />

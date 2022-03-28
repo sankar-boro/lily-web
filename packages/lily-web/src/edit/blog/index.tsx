@@ -43,11 +43,11 @@ const getBlogData = (blogId: string | null, context: any) => {
         service.fetch(blogId)
         .then((res) => res.map_res())
         .then((res) => {
-            const { rawData, apiData, activePage } = res;
-            if (rawData && apiData && activePage) {
+            const { rawData, apiData } = res;
+            if (rawData && apiData) {
                 dispatch({
-                    keys: ['rawData', 'apiData', 'activePage', 'blogId', 'vue'],
-                    values: [rawData, apiData, activePage, blogId, VUE.DOCUMENT]
+                    keys: ['rawData', 'apiData', 'blogId', 'vue'],
+                    values: [rawData, apiData, blogId, VUE.DOCUMENT]
                 })
             } else {
                 dispatch({

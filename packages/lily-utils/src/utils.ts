@@ -89,6 +89,20 @@ function groups(book_data: RawData) {
     return gs;
 }
 
+function groupBlogs(book_data: RawData) {
+    let gs: any = {
+        101: [],
+        102: []
+    };
+
+    book_data.forEach((d: any) => {
+        if (gs[d.identity]) {
+            gs[d.identity].push(d);
+        }
+    });
+    return gs;
+}
+
 const groupChapters = (parentId: string, chapters: any) => {
     let currentParentId = parentId;
     let orders: any = [];
@@ -132,6 +146,42 @@ export const sortAll = (_data: RawData, removeIds: any[] = []) => {
         chapters = [...chapters, ...a];
     });
     return chapters;
+};
+
+function groupBlog(p: any, b: any) {
+    let pId = p.uniqueId;
+    let blogs: any[] = [p];
+    let c = 0;
+
+    while (c !== b.length) {
+        // eslint-disable-next-line no-loop-func
+        b.forEach((ss: any) => {
+            if (ss.parentId === pId) {
+                blogs.push(ss);
+                pId = ss.uniqueId;
+            }
+        });
+        c++;
+    }
+    return blogs;
+
+}
+
+export const sortBlog = (_data: any, removeIds: any[] = []) => {
+    let data: RawData = _data;
+    const p = data[0];
+    if (removeIds.length > 0) {
+        data = _data.filter((d: any) => {
+            if (removeIds.includes(d.uniqueId)) {
+                return false;
+            }
+            return true;
+        });
+    }
+
+    // let gs = groupBlogs(data);
+
+    return groupBlog(p, data);
 };
 
 export const setActivePageFn = (props: {

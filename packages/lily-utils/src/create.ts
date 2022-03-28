@@ -1,7 +1,8 @@
-import { APPEND_NODE, postQuery, MERGE_NODE, CREATE_NEW_BOOK } from "lily-query";
+import { APPEND_NODE, postQuery, MERGE_NODE, CREATE_NEW_BOOK, CREATE_NEW_BLOG } from "lily-query";
 import { BookContextType, BlogContextType, BOOK_SERVICE, HTTP_METHODS, Page, Section, SubSection, vue } from "lily-types";
 
 import { sortAll, setActivePageFn } from 'lily-utils';
+import { sortBlog } from "./utils";
 
 const log = false;
 
@@ -74,23 +75,19 @@ const createBlog = async (context: BlogContextType, formData: any, formResponse:
         identity,
     }
     let res: any = await postQuery({
-        url: CREATE_NEW_BOOK,
+        url: CREATE_NEW_BLOG,
         data
     });
     let newRawData = [res.data];
-    const newApiData = sortAll(newRawData, []);
-    let newActivePage = setActivePageFn({
-        apiData: newApiData,
-        compareId: res.data.uniqueId
-    });
+    const newApiData = sortBlog(newRawData, []);
     const vue = {
         viewType: "DOCUMENT",
         document: {},
         form: {},
     }
     dispatch({
-        keys: ['rawData', 'apiData', 'activePage', 'vue', 'bookId'],
-        values: [newRawData, newApiData, newActivePage, vue, res.data.uniqueId]
+        keys: ['rawData', 'apiData', 'vue', 'bookId'],
+        values: [newRawData, newApiData, vue, res.data.uniqueId]
     })
 }
 

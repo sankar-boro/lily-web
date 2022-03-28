@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { useBookContext } from "lily-service";
 import { BookContextType, Section, SubSection } from "lily-types";
-import { DividerContainer } from "../components"
+import { DividerContainer } from "../../components"
 
 const Divider = () => {
     const history = useHistory();

@@ -1,14 +1,13 @@
-import { GET_BOOK_FROM_ID, getQueryAuth } from "lily-query";
+import { GET_BLOG_FROM_ID, getQueryAuth } from "lily-query";
 import { RawData, ApiData, ActivePage } from "lily-types";
-import { sortAll } from 'lily-utils';
+import { sortBlog } from 'lily-utils';
 
 interface BlogService {
     readonly blogId: any;
-    readonly apiData: null | RawData;
+    readonly apiData: null | any[];
     readonly err: any;
     payload: any;
     rawData: any;
-    activePage: any;
 
     fetch(blogId: string): any;
     map_res(): any;
@@ -17,8 +16,7 @@ interface BlogService {
 
 class BlogHandler implements BlogService {
     rawData: null | RawData = null;
-    apiData: null | ApiData = null;
-    activePage: null | ActivePage = null;
+    apiData: null | any[] = null;
     blogId: null | string = null;
     err: any;
     payload: any;
@@ -26,8 +24,9 @@ class BlogHandler implements BlogService {
     fetch = (blogId: string): Promise<BlogHandler> => {
         this.blogId = blogId;
         return new Promise(async (resolve, reject) => {
-            await getQueryAuth({ url: GET_BOOK_FROM_ID(blogId) })
+            await getQueryAuth({ url: GET_BLOG_FROM_ID(blogId) })
             .then((res) => {
+                console.log(res);
                 this.payload = res;
                 resolve(this);
             })
@@ -44,12 +43,7 @@ class BlogHandler implements BlogService {
         if (status && data && status === 200) {
             this.rawData = data;
             if (data.length > 0) {
-                this.apiData = sortAll(data);
-                this.apiData.forEach((page: any) => {
-                    if (page.uniqueId === this.blogId) {
-                        this.activePage = page;
-                    }
-                });
+                this.apiData = sortBlog(data);
             }
         }
         return this;

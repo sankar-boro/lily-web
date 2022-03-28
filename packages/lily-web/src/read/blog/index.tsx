@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import BodyComponent from "./BodyComponent";
 import NavigationComponent from "./NavigationComponent";
-import { BookHandler } from "lily-service/BookService";
-import { useBookContext, BookServiceProvider, FormServiceProvider, useHomeContext, useAuthContext } from "lily-service";
+import { BlogHandler } from "lily-service/BlogService";
+import { useBlogContext, BlogServiceProvider, FormServiceProvider, useHomeContext, useAuthContext } from "lily-service";
 import {  updatePage } from "lily-utils";
-import { AUTH_SERVICE, BookContextType, BOOK_SERVICE, HOME_SERVICE, VUE } from "lily-types";
+import { AUTH_SERVICE, BlogContextType, BOOK_SERVICE, HOME_SERVICE, VUE } from "lily-types";
 import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
 import Divider from "./Divider";
 
@@ -20,32 +20,32 @@ const RenderComponent = () => {
     </MainContainer>
 }
 
-const useBookFetch = (bookId: string | null) => {
+const useBlogFetch = (blogId: string | null) => {
     const [data, setData] = useState<any>(null);
     const [err, setErr] = useState(false);
     useEffect(() => {
-        if (!bookId) return;
-        const service = new BookHandler();
-        service.fetch(bookId)
+        if (!blogId) return;
+        const service = new BlogHandler();
+        service.fetch(blogId)
         .then((res) => res.map_res())
         .then((res) => {
-            const { rawData, apiData, activePage } = res;
+            const { rawData, apiData } = res;
             setData({
-                rawData, apiData, activePage
+                rawData, apiData
             })
         })
         .catch((err: any) => {
             setErr(true);
             console.log(JSON.parse(JSON.stringify(err)))
         })
-    }, [bookId]);
+    }, [blogId]);
     return [data, err];
 }
 
 const Main = () => {
-    const context: BookContextType = useBookContext();
-    const { vue, bookId, notifications, dispatcher } = context;
-    const [bookData, err] = useBookFetch(bookId);
+    const context: BlogContextType = useBlogContext();
+    const { vue, blogId, notifications, dispatcher } = context;
+    const [blogData, err] = useBlogFetch(blogId);
     const { dispatch: homeDispatch } = useHomeContext();
     const { dispatch: authDispatch } = useAuthContext();
     useEffect(() => {
@@ -57,31 +57,31 @@ const Main = () => {
                 values: ['false', null]
             })
         }
-        if (!bookData) return;
-        dispatcher?.setFrom(bookData);
+        if (!blogData) return;
+        dispatcher?.setFrom(blogData);
         dispatcher?.setFrom({
-            bookId,
+            blogId,
             vue: VUE.DOCUMENT
         })
         homeDispatch({
             keys: ['title'],
-            values: [bookData?.activePage?.title]
+            values: [blogData?.activePage?.title]
         })
-    }, [bookData, err]);
+    }, [blogData, err]);
 
     useEffect(() => {
         updatePage(context);
     }, [notifications]);
 
     if (vue.viewType === VUE.NONE) return null;
-    if (!bookId || !context.activePage) return null;
+    if (!blogId) return null;
     return <RenderComponent />;
 }
 
 export default function ReadComponent(){
-    return <BookServiceProvider>
+    return <BlogServiceProvider>
         <FormServiceProvider>
             <Main />
         </FormServiceProvider>
-    </BookServiceProvider>
+    </BlogServiceProvider>
 }

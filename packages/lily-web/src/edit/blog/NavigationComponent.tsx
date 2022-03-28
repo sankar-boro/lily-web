@@ -1,7 +1,7 @@
-import { useBookContext } from "lily-service";
+import { useBlogContext } from "lily-service";
 import { getPageProps, createNewPage, createNewSection, setActivePage, setActiveSection } from "lily-utils";
 
-import { BookContextType, Section} from "lily-types";
+import { BlogContextType, Section} from "lily-types";
 import { 
     AddSectionUpperContainer, 
     AddSectionInnerContainer,
@@ -14,7 +14,7 @@ import {
     SectionTitleContainer
 } from "lily-web/components";
 
-const AddChapter = (props: any) => {
+const AddNode = (props: any) => {
     const { pageIndex, page, context } = props;
     if (pageIndex === 0) return null;
 
@@ -30,45 +30,24 @@ const PageNavComponent = (props: {
     pageIndex: number,
     pages: any
 }) => {
-    const context = useBookContext();
+    const context = useBlogContext();
     const { pageIndex, pages, page } = props;
     const allSections = page.child;
     
     return (
         <PageNavContainer>
             <PageTitleContainer>
-                <div onClick={() => setActivePage(context, page)}>
+                <div>
                     {page.title}
                 </div>
             </PageTitleContainer>
-            <AddChapter pageIndex={pageIndex} page={page} context={context} />
-            <SectionsNavContainer>
-                {allSections && allSections.map((section: Section, sectionIndex: number) => {
-                    return <SectionNavContainer key={sectionIndex}>
-                    <SectionTitleContainer>
-                        <div onClick={() => setActiveSection(context, section)}>
-                            {section.title}
-                        </div>
-                    </SectionTitleContainer>
-                    <AddSectionInnerContainer>
-                        <div className="add-item" onClick={() => createNewSection(context, page, section)}>
-                            + Add section
-                        </div>
-                    </AddSectionInnerContainer>
-                </SectionNavContainer>;
-                })} 
-            </SectionsNavContainer>
-            <AddChapterUpperContainer>
-                <div className="add-item" onClick={() => createNewPage(context, { page, pages })}>
-                    + Add chapter
-                </div>
-            </AddChapterUpperContainer>
+            <AddNode pageIndex={pageIndex} page={page} context={context} />
         </PageNavContainer>
     )
 }
 
 const Main = () => {
-    const { apiData: pages }: BookContextType = useBookContext();
+    const { apiData: pages }: BlogContextType = useBlogContext();
     if (pages === null) return null;
     return (
         <PagesNavContainer>

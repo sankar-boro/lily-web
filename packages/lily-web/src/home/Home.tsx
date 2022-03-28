@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Card from "./Card";
+import BlogCard from "./BlogCard";
 import { useHomeContext, useAuthContext } from "lily-service";
 import { GET_BOOK_ALL, GET_BLOG_ALL, getQueryAuth } from "lily-query";
 
@@ -66,6 +67,11 @@ const Home = () => {
             {books
                 .map((book: any) => {
                     return <Card book={book} key={book.bookId} />;
+                })}
+
+            {blogs
+                .map((blog: any) => {
+                    return <BlogCard blog={blog} key={blog.bookId} />;
                 })}
         </div>
     );
