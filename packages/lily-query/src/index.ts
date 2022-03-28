@@ -85,9 +85,20 @@ export const callAxios = async (props: any) => {
   const { url, callBack } = props;
   axios.get(url, authCreds)
   .then((res: AxiosResponse<any>) => {
-      callBack({ isTrue: true, ...res })
+      callBack(res)
   })
   .catch((err: AxiosError<any>) => {
-    callBack({ isTrue: false, ...err })
+    callBack(err)
+  })
+}
+
+export const postAxios = async (props: any) => {
+  const { url, data, callBack } = props;
+  axios.post(url, data, authCreds)
+  .then((res: AxiosResponse<any>) => {
+      callBack(res, null)
+  })
+  .catch((err: AxiosError<any>) => {
+    callBack(null, err)
   })
 }

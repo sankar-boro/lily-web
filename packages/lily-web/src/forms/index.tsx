@@ -3,17 +3,17 @@ import { BlogContextType, VUE } from "lily-types";
 import { useBlogContext} from "lily-service";
 import MarkDownForm from './MarkDownForm';
 
-export default function FormComponent() {
-    const context: BlogContextType = useBlogContext();
+export default function FormComponent(props: any) {
+    const { context } = props;
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [required, setRequired] = useState('');
     const [requiredBody, setRequiredBody] = useState('');
     const { vue } = context;
     
+    console.log('vue', vue);
     if (!vue.form || !vue.callback) return null;
     if (vue.viewType !== VUE.FORM) return null;
-
     const { data, method, create, update } = vue.form;
     const { callback, cancel } = vue;
     

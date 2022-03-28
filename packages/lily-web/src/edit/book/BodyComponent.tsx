@@ -26,8 +26,10 @@ import { createSubSection } from "lily-utils";
 
 const FormView = (props: any) => {
     const { vue } = props;
+    const context: BookContextType = useBookContext();
+
     if (vue.viewType === VUE.FORM) {
-        return <MarkDownForm />;
+        return <MarkDownForm context={context} />;
     }
     return null;
 };
@@ -127,7 +129,8 @@ const SearchInputComponent = () => {
     </div>
 }
 
-const FormComponent = (vue: any) => {
+export const FormComponent = (vue: any) => {
+    console.log('vueee', vue);
     return (
         <BodyViewContainer>
             <SearchInputComponent />

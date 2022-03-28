@@ -7,7 +7,7 @@ export const useAuthQuery = (context: AuthContextType) => {
     const callBack = (res: any) => {
         let auth = 'false'; 
         let data = null;
-        if (res.isTrue) {
+        if (res.status === 200 && res.data) {
             auth = 'true';
             data = res.data;
         }

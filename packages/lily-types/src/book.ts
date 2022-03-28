@@ -27,7 +27,6 @@ export type BookContextType = {
     error: null | string,
     vue: vue,
     service: BookHandler,
-    notifications: null,
     dispatch: (res: any) => void,
     modal: any,
     dispatcher: null | Dispatcher

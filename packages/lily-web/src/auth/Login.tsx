@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "lily-service";
-import { AUTH_SERVICE } from "lily-types";
-import { LOGIN, postQuery } from 'lily-query';
+import { LOGIN, postAxios, postQuery } from 'lily-query';
 
 const inputs = {
     email: {
@@ -17,28 +16,6 @@ const inputs = {
     },
 };
 
-function login(userInfo: any) {
-    return new Promise((resolve, reject) => {
-        postQuery({ url: LOGIN, data: userInfo})
-        .then((res: any) => {
-            if (res && res.data) {
-                resolve({
-                    type: 'SUCCESS',
-                    data: res.data,
-                });
-            }
-        })
-        .catch((err: any) => {
-            let _err = JSON.parse(JSON.stringify(err));
-            reject({
-                type: 'ERROR',
-                data: _err,
-            })
-        })
-    })
-};
-
-//
 const Login = () => {
     const { dispatch } = useAuthContext();
     const [email, setEmail] = useState("");
@@ -47,20 +24,25 @@ const Login = () => {
 
     const loginDispatch = (e: any) => {
         e.preventDefault();
-        login({
-            email, 
-            password
-        }).then((res: any) => {
-            console.log('res', res);
-            if (res.type === 'SUCCESS') {
+        const callBack = (res: any, err: any) => {
+            if (res.status === 200) {
                 localStorage.setItem('auth', res.data);
                 dispatch({
                     keys: ['auth', 'authUserData'],
                     values: ['true', res.data]
                 })
             }
-        }).catch((err) => {
-            setError(err.data.message);
+            if (err && err.data && err.data.message) {
+                setError(err.data.message);
+            }
+        }
+        postAxios({
+            url: LOGIN,
+            data: {
+                email,
+                password,
+            },
+            callBack
         })
     }
 

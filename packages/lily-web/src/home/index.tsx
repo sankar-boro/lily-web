@@ -2,9 +2,9 @@ import { Switch, Route } from "react-router-dom";
 import Header from "./Header";
 import ViewBook from "../read";
 import Profile from "../profile";
-import NewBook from "../book";
-import NewBlog from "../blog/index";
-import EditBook from "../edit/index";
+import NewBook from "../edit/book";
+import NewBlog from "../edit/blog";
+import EditBook from "../edit/book";
 import Home from "./Home";
 import { HomeServiceProvider } from "lily-service";
 
