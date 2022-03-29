@@ -70,7 +70,7 @@ const NodeComponent = ({ node }: { node: any}) => {
             style={{ display: 'flex', justifyContent: 'center'}}
             onClick={__create}
         >
-            + Sub-section
+            + Add node
         </div>
     </SubSectionViewContainer>
 }
@@ -83,13 +83,6 @@ const ActivePageChildComponents = ({context}: {context: BlogContextType }) => {
     }
 
     return <SubSectionsViewContainer>
-        <div 
-            className="add-item li-item hover"
-            style={{ display: 'flex', justifyContent: 'center'}}
-            onClick={__create}
-        >
-            + Sub-section
-        </div>
         {apiData.map((node: SubSection, subSectionIndex: number) => {
             return <NodeComponent node={node} key={subSectionIndex} />
         })} 

@@ -63,16 +63,20 @@ const Home = () => {
     }
     
     return (
-        <div className="container-sm flex">
-            {books
-                .map((book: any) => {
-                    return <Card book={book} key={book.bookId} />;
-                })}
-
-            {blogs
-                .map((blog: any) => {
-                    return <BlogCard blog={blog} key={blog.bookId} />;
-                })}
+        <div className="container-sm">
+            <div>
+                {books
+                    .map((book: any) => {
+                        return <Card book={book} key={book.bookId} />;
+                    })}
+            </div>
+            <div style={{marginBottom: 20}}/>
+            <div>
+                {blogs
+                    .map((blog: any) => {
+                        return <BlogCard blog={blog} key={blog.bookId} />;
+                    })}
+            </div>
         </div>
     );
 };

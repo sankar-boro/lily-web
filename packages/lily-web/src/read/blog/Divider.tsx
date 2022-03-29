@@ -9,7 +9,7 @@ const Divider = () => {
 
     const onClickEdit = () => {
         history.push({
-            pathname: `/book/edit/${blogId}`,
+            pathname: `/blog/edit/${blogId}`,
             state: history.location.state,
         });
     }

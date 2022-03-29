@@ -3,8 +3,7 @@ import Header from "./Header";
 import ViewBook from "../read/book";
 import ViewBlog from "../read/blog";
 import Profile from "../profile";
-import NewBook from "../edit/book";
-import NewBlog from "../edit/blog";
+import EditBlog from "../edit/blog";
 import EditBook from "../edit/book";
 import Home from "./Home";
 import { HomeServiceProvider } from "lily-service";
@@ -26,13 +25,16 @@ const Main = () => {
                             <Profile />
                         </Route>
                         <Route path="/new/book">
-                            <NewBook />
+                            <EditBook />
                         </Route>
                         <Route path="/new/blog">
-                            <NewBlog />
+                            <EditBlog />
                         </Route>
                         <Route path="/book/edit/:bookId">
                             <EditBook />
+                        </Route>
+                        <Route path="/blog/edit/:blogId">
+                            <EditBlog />
                         </Route>
                         <Route path="/">
                             <Home />
