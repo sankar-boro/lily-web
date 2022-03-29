@@ -1,8 +1,6 @@
-import { APPEND_NODE, postQuery, MERGE_NODE, CREATE_NEW_BOOK, CREATE_NEW_BLOG } from "lily-query";
-import { BookContextType, BlogContextType, BOOK_SERVICE, HTTP_METHODS, Page, Section, SubSection, vue } from "lily-types";
-
 import { sortAll, setActivePageFn } from 'lily-utils';
-import { sortBlog } from "./utils";
+import { APPEND_BOOK_NODE, postQuery, MERGE_BOOK_NODE, CREATE_NEW_BOOK } from "lily-query";
+import { BookContextType, HTTP_METHODS, Page, Section, SubSection, vue } from "lily-types";
 
 const log = false;
 
@@ -25,7 +23,7 @@ export const createNode = async (context: any, formData: any) => {
         return null;
     }
 
-    let url = botUniqueId ? MERGE_NODE : APPEND_NODE;
+    let url = botUniqueId ? MERGE_BOOK_NODE : APPEND_BOOK_NODE;
     if (!activePage) url = formData.url;
     return await postQuery({
         url,
@@ -64,32 +62,6 @@ const createBook = async (context: BookContextType, formData: any, formResponse:
     })
 }
 
-// Don't you dare touch this
-const createBlog = async (context: BlogContextType, formData: any, formResponse: { title: string, body: string}) => {
-    const { dispatch } = context;
-    const { title, body } = formResponse;
-    const { identity } = formData;
-    const data = {
-        title,
-        body,
-        identity,
-    }
-    let res: any = await postQuery({
-        url: CREATE_NEW_BLOG,
-        data
-    });
-    let newRawData = [res.data];
-    const newApiData = sortBlog(newRawData, []);
-    const vue = {
-        viewType: "DOCUMENT",
-        document: {},
-        form: {},
-    }
-    dispatch({
-        keys: ['rawData', 'apiData', 'vue', 'bookId'],
-        values: [newRawData, newApiData, vue, res.data.uniqueId]
-    })
-}
 
 // Don't you dare touch this
 export const createNewBookForm = (context: BookContextType) => {
@@ -109,38 +81,6 @@ export const createNewBookForm = (context: BookContextType) => {
             data: formData
         },
         callback: (formRes: {title: string, body: string}) => createBook(context, formData, formRes),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
-    }
-
-    dispatch({
-        keys: ['vue'],
-        values: [newBookVueData]
-    })
-}
-
-// Don't you dare touch this
-export const createNewBlogForm = (context: BlogContextType) => {
-    const { dispatch } = context;
-    const formData = {
-        title: '',
-        body: '',
-        identity: 101
-    }
-    const newBookVueData = {
-        viewType: 'FORM',
-        document: {},
-        form: {
-            method: HTTP_METHODS.CREATE,
-            create: 'Create Cover Page',
-            identity: 101,
-            data: formData
-        },
-        callback: (formRes: {title: string, body: string}) => createBlog(context, formData, formRes),
         cancel: () => {
             dispatch({
                 keys: ['vue'],
@@ -179,7 +119,7 @@ const updateRawData = async (
         botUniqueId,
     }
     let res: any = await postQuery({
-        url: botUniqueId ? MERGE_NODE : APPEND_NODE,
+        url: botUniqueId ? MERGE_BOOK_NODE : APPEND_BOOK_NODE,
         data
     });
     const {
@@ -401,3 +341,4 @@ export const createSubSection = (context: BookContextType, subSection: SubSectio
         values: [vue]
     })
 }
+

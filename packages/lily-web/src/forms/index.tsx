@@ -11,7 +11,6 @@ export default function FormComponent(props: any) {
     const [requiredBody, setRequiredBody] = useState('');
     const { vue } = context;
     
-    console.log('vue', vue);
     if (!vue.form || !vue.callback) return null;
     if (vue.viewType !== VUE.FORM) return null;
     const { data, method, create, update } = vue.form;

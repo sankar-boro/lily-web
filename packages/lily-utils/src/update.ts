@@ -1,6 +1,6 @@
 import { BOOK_SERVICE, Chapter, VUE } from "lily-types";
 import { sortAll, setActivePageFn } from "lily-utils";
-import { postQuery, UPDATE_BOOK, UPDATE_NODE } from "lily-query";
+import { postQuery, UPDATE_BOOK, UPDATE_BOOK_NODE } from "lily-query";
 import { BookContextType, Section, vue, SubSection, Page, HTTP_METHODS } from "lily-types";
 
 
@@ -369,7 +369,7 @@ const updateNode = async (context: BookContextType, page: Chapter | Page | Secti
     if (identity === 101) {
         __URL = UPDATE_BOOK
     } else {
-        __URL = UPDATE_NODE
+        __URL = UPDATE_BOOK_NODE
     }
 
     await postQuery({

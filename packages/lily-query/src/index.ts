@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { DELETE_NODE, DELETE_AND_UPDATE_NODE } from './url';
+import { DELETE_BOOK_NODE, DELETE_AND_UPDATE_BOOK_NODE } from './url';
 export * from './url';
 
 const log = false;
@@ -14,7 +14,7 @@ export const updateOrDelete = async (
     }, 
     bookId: string
 ) => {
-    let __URL = data.updateData === null ? DELETE_NODE : DELETE_AND_UPDATE_NODE; 
+    let __URL = data.updateData === null ? DELETE_BOOK_NODE : DELETE_AND_UPDATE_BOOK_NODE; 
     if (log) {
       console.log(data);
       console.log(__URL);

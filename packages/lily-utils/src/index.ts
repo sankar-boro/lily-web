@@ -4,3 +4,4 @@ export * from './delete';
 export * from './utils';
 export * from './view';
 export * from "./auth";
+export * from "./blog";

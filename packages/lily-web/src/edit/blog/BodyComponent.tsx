@@ -22,7 +22,7 @@ import {
 import MarkdownPreview from '@uiw/react-md-editor';
 import { useState } from "react";
 import { useHistory } from "react-router";
-import { createSubSection } from "lily-utils";
+import { createNewNodeBlog } from "lily-utils";
 
 const FormView = (props: any) => {
     const { vue } = props;
@@ -34,12 +34,20 @@ const FormView = (props: any) => {
     return null;
 };
 
+const Title = (props: any) => {
+    const { node } = props;
+    if (node.identity === 101) {
+        return <h1>{node.title}</h1>
+    }
+    return <h3>{node.title}</h3>
+}
 
 const NodeComponent = ({ node }: { node: any}) => {
     const context: BlogContextType = useBlogContext();
     const history = useHistory();
 
     const { uniqueId, identity} = node;
+    
     const __delete = async () => {
         // await Delete({
         //     context,
@@ -47,13 +55,15 @@ const NodeComponent = ({ node }: { node: any}) => {
         //     history
         // })
     }
+    
     const __create = () => {
-        // createSubSection(context, subSection)
+        createNewNodeBlog(context, node)
     }
+
     return <SubSectionViewContainer>
         <EditTitleContainer>
             <EditTitle>
-                <h3>{node.title}</h3>
+                <Title node={node} />
             </EditTitle>
             <EditTitleIcons>
                 <span className="edit-click hover" onClick={() => {
