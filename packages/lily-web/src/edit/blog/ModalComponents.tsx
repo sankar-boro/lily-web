@@ -1,9 +1,9 @@
-import { useBookContext } from "lily-service"
-import { BookContextType } from "lily-types";
+import { useBlogContext } from "lily-service"
+import { BlogContextType } from "lily-types";
 
 export const DeleteComponent = () => {
-    const context = useBookContext();
-    const { modal, dispatch }: BookContextType = context;
+    const context = useBlogContext();
+    const { modal, dispatch }: BlogContextType = context;
 
     if (modal === null) return null;
     

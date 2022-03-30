@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { DELETE_BOOK_NODE, DELETE_AND_UPDATE_BOOK_NODE } from './url';
+import { DELETE_BOOK_NODE, DELETE_AND_UPDATE_BOOK_NODE, DELETE_AND_UPDATE_BLOG_NODE, DELETE_BLOG_NODE } from './url';
 export * from './url';
 
-const log = false;
+const log = true;
 const authCreds = {
   withCredentials: true,
 }
@@ -29,6 +29,30 @@ export const updateOrDelete = async (
     .then((res: any) => {
       return res;
     });
+}
+
+export const updateOrDeleteNode = async (
+  data: {
+      deleteData: any,
+      updateData: any,
+  }, 
+  blogId: string
+) => {
+  let __URL = data.updateData === null ? DELETE_BLOG_NODE : DELETE_AND_UPDATE_BLOG_NODE; 
+  if (log) {
+    console.log(data);
+    console.log(__URL);
+    return;
+  }
+  await axios.post(__URL, {
+    blogId,
+    ...data,
+  }, {
+    withCredentials: true,
+  })
+  .then((res: any) => {
+    return res;
+  });
 }
 
 

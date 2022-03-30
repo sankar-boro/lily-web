@@ -1,12 +1,9 @@
 import { useBlogContext } from "lily-service";
-import { Delete } from "lily-utils";
-import { editActivePage, editSubSection } from "lily-utils";
+import { editBlog, deleteBlog } from "lily-utils";
 import {
     VUE,
-    Section,
     SubSection,
     BlogContextType,
-    Page,
 } from "lily-types";
 import MarkDownForm from "lily-web/forms";
 import { 
@@ -14,14 +11,11 @@ import {
     DocumentViewContainer,
     EditTitle,
     EditTitleContainer,
-    EditContainer,
     EditTitleIcons,
     SubSectionsViewContainer,
     SubSectionViewContainer 
 } from "lily-web/components";
 import MarkdownPreview from '@uiw/react-md-editor';
-import { useState } from "react";
-import { useHistory } from "react-router";
 import { createNewNodeBlog } from "lily-utils";
 
 const FormView = (props: any) => {
@@ -44,20 +38,22 @@ const Title = (props: any) => {
 
 const NodeComponent = ({ node }: { node: any}) => {
     const context: BlogContextType = useBlogContext();
-    const history = useHistory();
-
-    const { uniqueId, identity} = node;
+    const { uniqueId, identity } = node;
     
     const __delete = async () => {
-        // await Delete({
-        //     context,
-        //     data: { uniqueId, identity },
-        //     history
-        // })
+        await deleteBlog({
+            context,
+            data: { uniqueId, identity },
+            history
+        })
     }
     
     const __create = () => {
         createNewNodeBlog(context, node)
+    }
+
+    const __edit = () => {
+        editBlog(context, node)
     }
 
     return <SubSectionViewContainer>
@@ -66,9 +62,11 @@ const NodeComponent = ({ node }: { node: any}) => {
                 <Title node={node} />
             </EditTitle>
             <EditTitleIcons>
-                <span className="edit-click hover" onClick={() => {
-                    // editSubSection(context, subSection)
-                }}>Edit</span>
+                <span 
+                className="edit-click hover" 
+                onClick={__edit}>
+                    Edit
+                </span>
                 <span className="delete-click hover" onClick={__delete}>Delete</span>
             </EditTitleIcons>
         </EditTitleContainer>
@@ -87,10 +85,6 @@ const NodeComponent = ({ node }: { node: any}) => {
 
 const ActivePageChildComponents = ({context}: {context: BlogContextType }) => {
     const { apiData }: any = context;
-
-    const __create = () => {
-        // createSubSection(context, undefined)
-    }
 
     return <SubSectionsViewContainer>
         {apiData.map((node: SubSection, subSectionIndex: number) => {

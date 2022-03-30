@@ -114,13 +114,13 @@ export const createNewNodeBlog = (context: BlogContextType, givenode: any) => {
     let topUniqueId: any = null;
     let botUniqueId: any = null;
 
+    topUniqueId = apiData[0].uniqueId;
     for (let i=0; i < apiData.length; i++) {
         if (apiData[i].uniqueId === givenode.uniqueId) {
             if (apiData[i + 1]) {
-                topUniqueId = apiData[i].uniqueId;
                 botUniqueId = apiData[i + 1].uniqueId;
-                break;
             }
+            break;
         }
         topUniqueId = apiData[i].uniqueId;
     }
