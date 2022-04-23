@@ -12,6 +12,8 @@ export type UserInfo = {
 export type AuthContextType = {
     auth: string;
     authUserData: null | UserInfo;
-    dispatch: (e: any) => void,
+    error: any,
+    login: (e: any) => void,
+    signup: (e: any) => void,
 }
 export type AuthActionType = DefaultActionType;

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "lily-service";
-import { LOGIN, postAxios, postQuery } from 'lily-query';
 
 const inputs = {
     email: {
@@ -17,33 +16,13 @@ const inputs = {
 };
 
 const Login = () => {
-    const { dispatch } = useAuthContext();
+    const { error, login } = useAuthContext();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(null);
 
-    const loginDispatch = (e: any) => {
+    const __login = (e: any) => {
         e.preventDefault();
-        const callBack = (res: any, err: any) => {
-            if (res.status === 200) {
-                localStorage.setItem('auth', res.data);
-                dispatch({
-                    keys: ['auth', 'authUserData'],
-                    values: ['true', res.data]
-                })
-            }
-            if (err && err.data && err.data.message) {
-                setError(err.data.message);
-            }
-        }
-        postAxios({
-            url: LOGIN,
-            data: {
-                email,
-                password,
-            },
-            callBack
-        })
+        login({email, password})
     }
 
     return (
@@ -87,7 +66,7 @@ const Login = () => {
                                     type="submit"
                                     name="Submit"
                                     className="button"
-                                    onClick={loginDispatch}
+                                    onClick={__login}
                                     >
                                     Submit
                                 </button>

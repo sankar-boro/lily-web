@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import {SIGNUP, postQuery } from 'lily-query';
 import { useAuthContext } from "lily-service";
-import { AUTH_SERVICE } from "lily-types";
 
 function signup(userInfo: any, dispatch: any | undefined) {
     postQuery({ url: SIGNUP, data: userInfo})
@@ -22,26 +21,22 @@ function signup(userInfo: any, dispatch: any | undefined) {
     })
 };
 
-const Login = () => {
-    const { dispatch } = useAuthContext();
+const Signup = () => {
+    const { signup, error } = useAuthContext();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
-    const [error, setError] = useState(null);
-    const history = useHistory();
 
-    const signDispatch = (loginData: any) => {
-        if (loginData.type === 'ERROR') {
-            setError(loginData.data);
-        }
-        if (loginData.type === 'SUCCESS') {
-            localStorage.setItem('auth', loginData.data);
-            dispatch({
-                keys: ['auth', 'authUserData'],
-                values: ['true', loginData.data]
-            })
-        }
+    const __register = (e: any) => {
+        e.preventDefault();
+        const props = {
+            email,
+            password,
+            fname,
+            lname
+        };
+        signup(props);
     }
     return (
         <div className="container container-center">
@@ -110,16 +105,7 @@ const Login = () => {
                                     type="button"
                                     value="Submit"
                                     className="button button-relative button-secondary"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        signup({
-                                            email,
-                                            password,
-                                            fname,
-                                            lname,
-                                            history,
-                                        }, signDispatch);
-                                    }}
+                                    onClick={__register}
                                     >
                                     Submit
                                 </button>
@@ -141,4 +127,4 @@ const styles = {
     footer: {display: "flex",justifyContent:"space-between", alignItems: "center"}
 }
 
-export default Login;
+export default Signup;
