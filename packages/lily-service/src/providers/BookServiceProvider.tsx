@@ -57,7 +57,6 @@ export const BookContext = React.createContext<BookContextType>({
         },
         callback: (res: any) => {}
     },
-    notifications: null,
     modal: null,
     dispatcher: null,
 });

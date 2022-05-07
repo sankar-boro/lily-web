@@ -5,3 +5,4 @@ export * from './utils';
 export * from './view';
 export * from "./auth";
 export * from "./blog";
+export * from "./get";

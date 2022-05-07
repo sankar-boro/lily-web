@@ -15,5 +15,6 @@ export type AuthContextType = {
     error: any,
     login: (e: any) => void,
     signup: (e: any) => void,
+    dispatch: (e: any) => void,
 }
 export type AuthActionType = DefaultActionType;

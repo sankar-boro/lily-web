@@ -1,5 +1,6 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext, useReducer, useEffect } from "react";
 import { HomeContextType, HomeActionType } from "lily-types";
+import { getBooks, getBlogs } from "lily-utils";
 
 import { setters } from './ProvidersCommon';
 
@@ -33,6 +34,9 @@ const reducer = (state: HomeContextType, action: HomeActionType) => {
 
 export const HomeServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, homeState);
+
+    useEffect(() => getBooks(dispatch), []);
+    useEffect(() => getBlogs(dispatch), []);
 
     return (
         <HomeContext.Provider

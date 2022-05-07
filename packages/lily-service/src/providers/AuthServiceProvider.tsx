@@ -1,7 +1,6 @@
 import React, { useContext, useReducer } from "react";
 import { AuthContextType } from "lily-types";
 import { LOGIN, SIGNUP, postQuery, postAxios } from 'lily-query';
-
 import { setters } from './ProvidersCommon';
 
 const __login = async (props: any, dispatch: any) => {
@@ -45,13 +44,13 @@ const __signup = (props: any, dispatch: any) => {
         })
     })
 }
-
 const initAuthState: AuthContextType = {
     auth: 'init',
     authUserData: null,
     error: null,
     login: (e: any) => {},
-    signup: (e: any) => {}
+    signup: (e: any) => {},
+    dispatch: (e: any) => {}
 }
 
 const AuthContext = React.createContext<AuthContextType>({
@@ -59,7 +58,8 @@ const AuthContext = React.createContext<AuthContextType>({
     authUserData: null,
     error: null,
     login: (e: any) => {},
-    signup: (e: any) => {}
+    signup: (e: any) => {},
+    dispatch: (e: any) => {}
 });
 
 export const useAuthContext = () => useContext(AuthContext);
@@ -72,6 +72,7 @@ export const AuthServiceProvider = (props: { children: object }) => {
     const signup = (props: any) => {
         __signup(props, dispatch);
     }
+
     return (
         <AuthContext.Provider
             value={{
