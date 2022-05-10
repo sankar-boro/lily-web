@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { BlogContextType, VUE } from "lily-types";
-import { useBlogContext} from "lily-service";
 import MarkDownForm from './MarkDownForm';
 
 export default function FormComponent(props: any) {
@@ -11,11 +9,7 @@ export default function FormComponent(props: any) {
     const [requiredBody, setRequiredBody] = useState('');
     const { vue } = context;
     
-    if (!vue.form || !vue.callback) return null;
-    if (vue.viewType !== VUE.FORM) return null;
-    const { data, method, create, update } = vue.form;
-    const { callback, cancel } = vue;
-    
+    const { data, formTitle, callback, cancel } = vue.form;
     useEffect(() => {
         setTitle(data.title);
         setBody(data.body);
@@ -35,13 +29,9 @@ export default function FormComponent(props: any) {
         callback({title, body});
     }
 
-    const __cancel = () => {
-        if (cancel) cancel();
-    }
-
     return <div>
         <div>
-            <h1>{method === 'CREATE' ? create : update}</h1>
+            <h1>{formTitle}</h1>
         </div>
         <div className="form-section">
             <div className='form-label h4'>Title <span className='required'>required?</span></div>
@@ -80,7 +70,7 @@ export default function FormComponent(props: any) {
                 type="button"
                 name="Submit"
                 className="button"
-                onClick={__cancel}
+                onClick={cancel}
                 >
                 Cancel
             </button>

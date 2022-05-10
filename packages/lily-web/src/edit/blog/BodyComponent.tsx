@@ -21,8 +21,7 @@ import { createNewNodeBlog } from "lily-utils";
 const FormView = (props: any) => {
     const { vue } = props;
     const context: BlogContextType = useBlogContext();
-
-    if (vue.viewType === VUE.FORM) {
+    if (vue.isForm) {
         return <MarkDownForm context={context} />;
     }
     return null;
@@ -113,8 +112,7 @@ export const FormComponent = (vue: any) => {
 const BodyComponent = () => {
     const context: BlogContextType = useBlogContext();
     const { vue } = context;
-
-    if (vue.viewType === VUE.FORM) return <FormComponent vue={vue} />
+    if (vue.isForm) return <FormComponent vue={vue} />
     if (context.apiData === null) return null;
     
     return <BodyViewContainer>

@@ -1,5 +1,5 @@
 import { GET_BLOG_FROM_ID, getQueryAuth } from "lily-query";
-import { RawData, ApiData, ActivePage } from "lily-types";
+import { RawData } from "lily-types";
 import { sortBlog } from 'lily-utils';
 
 interface BlogService {

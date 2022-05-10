@@ -75,30 +75,35 @@ const updateRawData = async (
     })
 }
 
+const formView = () => {
+    return {
+        isForm: true,
+        isDoc: false,
+        isNull: false,
+    }
+}
+
 // Don't you dare touch this
-export const createNewBlogForm = (context: BlogContextType) => {
-    const { dispatch } = context;
+export const createNewBlogForm = (dispatch: any) => {
     const formData = {
         title: '',
         body: '',
         identity: 101
     }
     const newBlogVueData = {
-        viewType: 'FORM',
         document: {},
         form: {
-            method: HTTP_METHODS.CREATE,
-            create: 'Create Cover Page',
-            identity: 101,
-            data: formData
+            formTitle: 'Create Cover Page',
+            data: formData,
+            callback: (formRes: {title: string, body: string}) => createBlog(dispatch, formData, formRes),
+            cancel: () => {
+                dispatch({
+                    keys: ['vue'],
+                    values: [{viewType: 'DOCUMENT'}]
+                })
+            }
         },
-        callback: (formRes: {title: string, body: string}) => createBlog(context, formData, formRes),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
+        ...formView()
     }
 
     dispatch({
@@ -162,8 +167,7 @@ export const createNewNodeBlog = (context: BlogContextType, givenode: any) => {
 
 
 // Don't you dare touch this
-const createBlog = async (context: BlogContextType, formData: any, formResponse: { title: string, body: string}) => {
-    const { dispatch } = context;
+const createBlog = async (dispatch: any, formData: any, formResponse: { title: string, body: string}) => {
     const { title, body } = formResponse;
     const { identity } = formData;
     const data = {

@@ -1,10 +1,15 @@
-import React, { useContext, useEffect, useReducer } from "react";
-import { VUE } from "lily-types";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { BlogHandler } from "../BlogService";
-import { BlogActionType, BlogContextType, vue, BOOK_SERVICE } from 'lily-types';
+import { BlogActionType, BlogContextType } from 'lily-types';
 import { useHistory } from "react-router";
 import { setters } from './ProvidersCommon';
-import { Dispatcher, SetModalData } from "../index";
+import { createNewBlogForm } from "lily-utils";
+
+const initVue = {
+    isDoc: true,
+    isForm: false,
+    isNull: false
+}
 
 const initBlogState = {
     rawData: null,
@@ -15,18 +20,7 @@ const initBlogState = {
     editData: {},
     activePage: null,
     dispatch: (data: any): void => {},
-    vue: {
-        type: 'NONE',
-        document: {
-            type: null,
-        },
-        form: {
-            method: null,
-            data: null,
-            url: null,
-        },
-        callback: (res: any) => {}
-    },
+    vue: initVue,
     service: new BlogHandler(),
     notifications: null,
     modal: null,
@@ -37,7 +31,6 @@ const initBlogState = {
 export const BlogContext = React.createContext<BlogContextType>({
     rawData: null,
     apiData: null,
-    service: new BlogHandler(),
     blogId: '',
     formData: {},
     viewData: {},
@@ -45,22 +38,9 @@ export const BlogContext = React.createContext<BlogContextType>({
     activePage: null,
     error: '',
     dispatch: (data: any): void => {},
-    vue: {
-        viewType: 'NONE',
-        document: {
-            type: null,
-        },
-        form: {
-            method: '',
-            data: null,
-            create: '',
-            update: ''
-        },
-        callback: (res: any) => {}
-    },
+    vue: initVue,
     notifications: null,
-    modal: null,
-    dispatcher: null,
+    modal: null
 });
 
 export const useBlogContext = () => useContext(BlogContext);
@@ -69,78 +49,79 @@ const reducer = (state: BlogContextType, action: BlogActionType) => {
     return setters(state, action);
 }
 
-const getBlogId = (dispatch: any, location: any) => {
-    const { state: historyState, pathname }: any = location;
-    if (!historyState && pathname) {
-        const splitPathName = pathname.split('/').filter((t: string) => t);            
-        if (splitPathName.length === 3) {
-            dispatch.setBlogId(splitPathName[2]);
+const getBlogId = (location: any, dispatch: any) => {
+    const [blogId, setBlogId] = useState();
+    
+    useEffect(() => {
+        const { state: historyState, pathname }: any = location;
+        if (!historyState && pathname) {
+            const splitPathName = pathname.split('/').filter((t: string) => t);            
+            if (splitPathName.length === 3) {
+                dispatch({ keys: ['blogId'], values: [splitPathName[2]]})
+                setBlogId(splitPathName[2]);
+            }
+        } else if (historyState && historyState.blogId) {
+            dispatch({ keys: ['blogId'], values: [historyState.blogId]})
+            setBlogId(historyState.blogId);
         }
-    }
-    if (historyState && historyState.blogId) {
-        dispatch.setBlogId(historyState.blogId);
-    }
+        if (pathname.includes('new/blog')) {
+            createNewBlogForm(dispatch);
+        }
+    }, [])
+    return [blogId];
 }
 
-class DispatcherImpl implements Dispatcher {
-    state: any = null;
-    dispatch: any = null;
-    constructor(state: any, dispatch: any) {
-        this.state = state;
-        this.dispatch = dispatch;
-    }
-
-    __dispatch(keys: any, values: any) {
-        this.dispatch({
-            keys,
-            values
+const useBlogFetch = (blogId: string | null | undefined, dispatch: any) => {
+    const [hasBlogData, setHasBlogData] = useState('null');
+    useEffect(() => {
+        if (!blogId) return;
+        const service = new BlogHandler();
+        service.fetch(blogId)
+        .then((res) => res.map_res())
+        .then((res) => {
+            const { rawData, apiData } = res;
+            dispatch({
+                keys: ['rawData', 'apiData'],
+                values: [ rawData, apiData ]
+            })
+            setHasBlogData('true');
         })
-    }
-
-    setApiData(val: any) {
-        this.__dispatch(['apiData'], [val]);
-    }
-
-    setBlogId(val: any) {
-        this.__dispatch(['blogId'], [val]);
-    }
-
-    setKeyVal(key: string, val: any) {
-        this.__dispatch([key], [val]);
-    }
-
-    setVue(data: vue) {
-        this.__dispatch(['vue'], [data]);
-    }
-
-    setFrom(obj: any) {
-        let keys: any = [];
-        let vals: any = [];
-        Object.entries(obj).forEach((entry: any) => {
-            const [key, val] = entry;
-            keys.push(key);
-            vals.push(val);
+        .catch((err: any) => {
+            dispatch({
+                keys: ['error'],
+                values: [ err ]
+            })
+            setHasBlogData('false');
         })
-        this.__dispatch(keys, vals);
-    }
+    }, [blogId]);
+    return [hasBlogData];
+}
 
-    setModal(modalData: SetModalData) {
-        this.__dispatch(['modal'], [modalData])
-    }
+const useVue = (hasBlogData: any, dispatch: any) => {
+    useEffect(() => {
+        if (hasBlogData === 'true') {
+            dispatch({
+                keys: ['vue'],
+                values: [initVue]
+            });
+        }
+    }, [hasBlogData]);
 }
 
 export const BlogServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(reducer, initBlogState);
-    const dispatcher = new DispatcherImpl(state, dispatch);
     const { location } = useHistory();
-    useEffect(() => getBlogId(dispatcher, location), []);
+    
+    const [blogId] = getBlogId(location, dispatch);
+    const [hasBlogData] = useBlogFetch(blogId, dispatch);
+    useVue(hasBlogData, dispatch);
 
     return (
         <BlogContext.Provider
             value={{
                 ...state,
-                dispatch,
-                dispatcher,
+                blogId,
+                dispatch
             }}
         >
             {props.children}

@@ -1,5 +1,5 @@
 import { useBlogContext } from "lily-service";
-import { BlogContextType, Section, SubSection } from "lily-types";
+import { BlogContextType } from "lily-types";
 import MarkdownPreview from '@uiw/react-md-editor';
 import { BodyViewContainer, DocumentViewContainer, SubSectionsViewContainer, SubSectionViewContainer } from "lily-web/components";
 
@@ -12,7 +12,8 @@ const Title = (props: any) => {
 }
 
 const ActivePageChildComponents = () => {
-    const { apiData }: BlogContextType = useBlogContext();
+    const context: BlogContextType = useBlogContext();
+    const { apiData } = context;
     if (!apiData) return null;
 
     return <SubSectionsViewContainer>
