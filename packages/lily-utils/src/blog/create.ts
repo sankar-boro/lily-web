@@ -1,6 +1,6 @@
 import { BlogContextType } from "lily-types";
 import { APPEND_BLOG_NODE, postQuery, MERGE_BLOG_NODE, CREATE_NEW_BLOG } from "lily-query";
-import { formView, docView } from "../constants";
+import { formView, docView, defaultDocView, defaultFormView } from "../constants";
 import { sortBlog } from "./utils";
 
 const updateRawData = async (
@@ -65,14 +65,9 @@ const updateRawData = async (
     let newRawData = __rawData;
     newRawData.push(newResData);
     let newApiData = sortBlog(newRawData, []);
-    let vue = {
-        document: {},
-        form: {},
-        ...docView(),
-    }
     dispatch({
         keys: ['rawData', 'apiData', 'vue'],
-        values: [newRawData, newApiData, vue]
+        values: [newRawData, newApiData, defaultDocView]
     })
 }
 
@@ -92,15 +87,11 @@ export const createNewBlogForm = (dispatch: any) => {
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{
-                        document: {},
-                        form: {},
-                        ...docView()
-                    }]
+                    values: [defaultDocView]
                 })
             }
         },
-        ...formView()
+        ...formView
     }
 
     dispatch({
@@ -148,15 +139,11 @@ export const createNewNodeBlog = (context: BlogContextType, givenode: any) => {
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{
-                        document: {},
-                        form: {},
-                        ...docView()
-                    }]
+                    values: [defaultDocView]
                 })
             }
         },
-        ...formView()
+        ...formView
     }
     dispatch({
         keys: ['vue'],
@@ -180,13 +167,8 @@ const createBlog = async (dispatch: any, formData: any, formResponse: { title: s
     });
     let newRawData = [res.data];
     const newApiData = sortBlog(newRawData, []);
-    const vue = {
-        document: {},
-        form: {},
-        ...docView()
-    }
     dispatch({
         keys: ['rawData', 'apiData', 'vue', 'blogId'],
-        values: [newRawData, newApiData, vue, res.data.uniqueId]
+        values: [newRawData, newApiData, defaultDocView, res.data.uniqueId]
     })
 }

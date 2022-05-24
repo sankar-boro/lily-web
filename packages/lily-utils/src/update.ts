@@ -2,7 +2,7 @@ import { Chapter, VUE } from "lily-types";
 import { sortAll, setActivePageFn } from "lily-utils";
 import { postQuery, UPDATE_BOOK, UPDATE_BOOK_NODE } from "lily-query";
 import { BookContextType, Section, SubSection, Page } from "lily-types";
-import { formView, docView } from "./constants";
+import { formView, defaultDocView } from "./constants";
 
 export const updateData = (data: any, props: any) => {
     const {
@@ -97,14 +97,9 @@ export const updatePage = (context: any) => {
                     apiData: newApiData,
                     compareId: activePage.uniqueId
                 });
-                const vue = {
-                    document: {},
-                    form: {},
-                    ...docView()
-                }
                 dispatch({
                     keys: ['rawData', 'apiData', 'activePage', 'notifications', 'formData', 'vue'],
-                    values: [newRawData, newApiData, newActivePage, null, null, vue]
+                    values: [newRawData, newApiData, newActivePage, null, null, defaultDocView]
                 })
             }
         }
@@ -183,14 +178,9 @@ const updateRawData = (context: BookContextType, newFormData: any, formResponse:
         apiData: newApiData,
         compareId: activePage.uniqueId
     });
-    let vue = {
-        document: {},
-        form: {},
-        ...docView()
-    }
     dispatch({
         keys: ['rawData', 'apiData', 'activePage', 'vue'],
-        values: [newRawData, newApiData, newActivePage, vue]
+        values: [newRawData, newApiData, newActivePage, defaultDocView]
     })
 }
 
@@ -210,15 +200,11 @@ export const editSubSection = (context: BookContextType, subSection: SubSection)
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{
-                        document: {},
-                        form: {},
-                        ...docView()
-                    }]
+                    values: [defaultDocView]
                 })
             }
         },
-        ...formView()
+        ...formView
     }
     dispatch({
         keys: ['vue'],
@@ -266,14 +252,9 @@ const updateNode = async (context: BookContextType, page: Chapter | Page | Secti
         apiData: newApiData,
         compareId: activePage.uniqueId
     });
-    let vue = {
-        document: {},
-        form: {},
-        ...docView()
-    }
     dispatch({
         keys: ['rawData', 'apiData', 'activePage', 'vue'],
-        values: [newRawData, newApiData, newActivePage, vue]
+        values: [newRawData, newApiData, newActivePage, defaultDocView]
     })
 }
 
@@ -294,14 +275,10 @@ export const editActivePage = (context: BookContextType, page: Chapter | Page | 
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{
-                        document: {},
-                        form: {},
-                        ...docView()
-                    }]
+                    values: [defaultDocView]
                 })
             },
-            ...formView()
+            ...formView
         },
     }
     dispatch({

@@ -1,6 +1,6 @@
 import { sortBlog } from "../utils";
 import { BlogContextType } from "lily-types";
-import { formView, docView } from "../constants";
+import { formView, docView, defaultDocView, defaultFormView } from "../constants";
 import { postQuery, UPDATE_BLOG, UPDATE_BLOG_NODE } from "lily-query";
 
 // export const updateData = (data: any, props: any) => {
@@ -257,14 +257,9 @@ const updateNode = async (context: BlogContextType, node: any, formResponse: any
         return page;
     });
     const newApiData = sortBlog(newRawData, []);
-    let vue = {
-        document: {},
-        form: {},
-        ...docView()
-    }
     dispatch({
         keys: ['rawData', 'apiData', 'vue'],
-        values: [newRawData, newApiData, vue]
+        values: [newRawData, newApiData, defaultDocView]
     })
 }
 
@@ -285,15 +280,11 @@ export const editBlog = (context: BlogContextType, node: any) => {
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{
-                        document: {},
-                        form: {},
-                        ...docView()
-                    }]
+                    values: [defaultDocView]
                 })
             },
         },
-        ...formView()
+        ...formView
     }
     dispatch({
         keys: ['vue'],

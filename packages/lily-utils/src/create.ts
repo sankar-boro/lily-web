@@ -1,7 +1,7 @@
 import { sortAll, setActivePageFn } from 'lily-utils';
 import { APPEND_BOOK_NODE, postQuery, MERGE_BOOK_NODE, CREATE_NEW_BOOK } from "lily-query";
 import { BookContextType, Page, Section, SubSection } from "lily-types";
-import { formView, docView } from "./constants";
+import { formView, defaultDocView } from "./constants";
 
 const log = false;
 
@@ -52,14 +52,9 @@ const createBook = async (context: BookContextType, formData: any, formResponse:
         apiData: newApiData,
         compareId: res.data.uniqueId
     });
-    const vue = {
-        document: {},
-        form: {},
-        ...docView()
-    }
     dispatch({
         keys: ['rawData', 'apiData', 'activePage', 'vue', 'bookId'],
-        values: [newRawData, newApiData, newActivePage, vue, res.data.uniqueId]
+        values: [newRawData, newApiData, newActivePage, defaultDocView, res.data.uniqueId]
     })
 }
 
@@ -81,15 +76,11 @@ export const createNewBookForm = (context: BookContextType) => {
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{
-                        document: {},
-                        form: {},
-                        ...docView()
-                    }]
+                    values: [defaultDocView]
                 })
             }
         },
-        ...formView()
+        ...formView
     }
 
     dispatch({
@@ -164,14 +155,9 @@ const updateRawData = async (
         apiData: newApiData,
         compareId: activePage?.uniqueId
     });
-    let vue = {
-        document: {},
-        form: {},
-        ...docView()
-    }
     dispatch({
         keys: ['rawData', 'apiData', 'activePage', 'vue'],
-        values: [newRawData, newApiData, newActivePage, vue]
+        values: [newRawData, newApiData, newActivePage, defaultDocView]
     })
 }
 
@@ -216,15 +202,11 @@ export const createNewPage = (
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{
-                        document: {},
-                        form: {},
-                        ...docView()
-                    }]
+                    values: [defaultDocView]
                 })
             }
         },
-        ...formView(),
+        ...formView,
     }
 
     dispatch({
@@ -276,15 +258,11 @@ export const createNewSection = (context: BookContextType, page: Page, section: 
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{
-                        document: {},
-                        form: {},
-                        ...docView()
-                    }]
+                    values: [defaultDocView]
                 })
             }
         },
-        ...formView(),
+        ...formView,
     }
     dispatch({
         keys: ['vue'],
@@ -337,15 +315,11 @@ export const createSubSection = (context: BookContextType, node: SubSection | un
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{
-                        document: {},
-                        form: {},
-                        ...docView()
-                    }]
+                    values: [defaultDocView]
                 })
             }
         },
-        ...formView()
+        ...formView
     }
     dispatch({
         keys: ['vue'],

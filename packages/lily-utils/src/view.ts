@@ -1,21 +1,16 @@
 import { BookContextType, Page, Section } from "lily-types";
 import { setActivePageFn } from "./utils";
-import { docView } from "./constants";
+import { defaultDocView } from "./constants";
 
 export const setActivePage = (context: BookContextType, page: Page) => {
-    const { activePage, apiData, dispatch } = context;
+    const { apiData, dispatch } = context;
     const newActivePage = setActivePageFn({
         apiData,
         compareId: page.uniqueId
     });
-    let vue = { 
-        document: {},
-        form: {},
-        ...docView()
-    }
     dispatch({
         keys: ['activePage', 'vue'],
-        values: [newActivePage, vue]
+        values: [newActivePage, defaultDocView]
     })
 }
 
@@ -25,13 +20,8 @@ export const setActiveSection = (context: BookContextType, section: Section) => 
         apiData,
         compareId: section.uniqueId
     });
-    let vue = { 
-        document: {},
-        form: {},
-        ...docView()
-    }
     dispatch({
         keys: ['activePage', 'vue'],
-        values: [newActivePage, vue]
+        values: [newActivePage, defaultDocView]
     })
 }
