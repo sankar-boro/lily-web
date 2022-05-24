@@ -1,7 +1,5 @@
 import { useBlogContext } from "lily-service";
-import { editBlog, deleteBlog } from "lily-utils";
 import {
-    VUE,
     SubSection,
     BlogContextType,
 } from "lily-types";
@@ -16,7 +14,8 @@ import {
     SubSectionViewContainer 
 } from "lily-web/components";
 import MarkdownPreview from '@uiw/react-md-editor';
-import { createNewNodeBlog } from "lily-utils";
+import { editBlog, deleteBlog, createNewNodeBlog } from "lily-utils";
+import { useHistory } from "react-router";
 
 const FormView = (props: any) => {
     const { vue } = props;
@@ -35,25 +34,24 @@ const Title = (props: any) => {
     return <h3>{node.title}</h3>
 }
 
+const createMethods = (context: BlogContextType, node: any, history: any) => {
+    return {
+        __delete: async () => {
+            await deleteBlog(context, node, history)
+        },
+        __create: () => {
+            createNewNodeBlog(context, node)
+        },
+        __edit: () => {
+            editBlog(context, node)
+        }
+    }
+}
+
 const NodeComponent = ({ node }: { node: any}) => {
     const context: BlogContextType = useBlogContext();
-    const { uniqueId, identity } = node;
-    
-    const __delete = async () => {
-        await deleteBlog({
-            context,
-            data: { uniqueId, identity },
-            history
-        })
-    }
-    
-    const __create = () => {
-        createNewNodeBlog(context, node)
-    }
-
-    const __edit = () => {
-        editBlog(context, node)
-    }
+    const history = useHistory();
+    const { __delete, __create, __edit } = createMethods(context, node, history);
 
     return <SubSectionViewContainer>
         <EditTitleContainer>
@@ -111,16 +109,17 @@ export const FormComponent = (vue: any) => {
 
 const BodyComponent = () => {
     const context: BlogContextType = useBlogContext();
-    const { vue } = context;
+    const { vue, apiData } = context;
     if (vue.isForm) return <FormComponent vue={vue} />
-    if (context.apiData === null) return null;
-    
-    return <BodyViewContainer>
-        <SearchInputComponent />
-        <DocumentViewContainer>
-            <ActivePageChildComponents context={context} />
-        </DocumentViewContainer>
-    </BodyViewContainer>
+    if (vue.isDoc && apiData) {
+        return <BodyViewContainer>
+            <SearchInputComponent />
+            <DocumentViewContainer>
+                <ActivePageChildComponents context={context} />
+            </DocumentViewContainer>
+        </BodyViewContainer>
+    }
+    return null;
 }
 
 export default BodyComponent;

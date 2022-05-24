@@ -1,6 +1,6 @@
 import BodyComponent from "./BodyComponent";
 import NavigationComponent from "./NavigationComponent";
-import { BlogContextType, VUE } from "lily-types";
+import { BlogContextType } from "lily-types";
 import { useBlogContext, BlogServiceProvider } from 'lily-service';
 import { DeleteComponent } from "./ModalComponents";
 import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";

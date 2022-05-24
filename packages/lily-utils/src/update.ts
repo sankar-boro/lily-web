@@ -183,8 +183,10 @@ const updateRawData = (context: BookContextType, newFormData: any, formResponse:
         apiData: newApiData,
         compareId: activePage.uniqueId
     });
-    let vue: vue = {
-        viewType: "DOCUMENT"
+    let vue = {
+        document: {},
+        form: {},
+        ...docView()
     }
     dispatch({
         keys: ['rawData', 'apiData', 'activePage', 'vue'],
@@ -199,22 +201,24 @@ export const editSubSection = (context: BookContextType, subSection: SubSection)
         body: subSection.body,
         identity: subSection.identity
     }
-    let vue: vue = {
-        viewType: 'FORM',
-        document: {type: null},
+    let vue = {
+        document: {},
         form: {
-            method: HTTP_METHODS.UPDATE,
-            create: '',
-            update: 'Update Sub Section',
-            data: formData
+            formTitle: 'Edit Sub Section',
+            data: formData,
+            callback: (formResponse: any) => updateNode(context, subSection, formResponse),
+            cancel: () => {
+                dispatch({
+                    keys: ['vue'],
+                    values: [{
+                        document: {},
+                        form: {},
+                        ...docView()
+                    }]
+                })
+            }
         },
-        callback: (formResponse: any) => updateNode(context, subSection, formResponse),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
+        ...formView()
     }
     dispatch({
         keys: ['vue'],
@@ -262,8 +266,10 @@ const updateNode = async (context: BookContextType, page: Chapter | Page | Secti
         apiData: newApiData,
         compareId: activePage.uniqueId
     });
-    let vue: vue = {
-        viewType: "DOCUMENT"
+    let vue = {
+        document: {},
+        form: {},
+        ...docView()
     }
     dispatch({
         keys: ['rawData', 'apiData', 'activePage', 'vue'],
@@ -271,30 +277,48 @@ const updateNode = async (context: BookContextType, page: Chapter | Page | Secti
     })
 }
 
+const formView = () => {
+    return {
+        isForm: true,
+        isDoc: false,
+        isNull: false,
+    }
+}
+
+const docView = () => {
+    return {
+        isForm: false,
+        isDoc: true,
+        isNull: false,
+    }
+}
+
 export const editActivePage = (context: BookContextType, page: Chapter | Page | Section) => {
     const { dispatch } = context;
-    let formData = {
+    let newFormData = {
         title: page.title,
         body: page.body,
         identity: page.identity
     }
 
-    let vue: vue = {
-        viewType: 'FORM',
-        document: {type: null},
+    let vue = {
+        document: {},
         form: {
-            method: HTTP_METHODS.UPDATE, 
-            create: '',
-            update: 'Update Page',
-            data: formData
+            formTitle: 'Create New Node',
+            data: newFormData,
+            callback: (formResponse: any) => updateNode(context, page, formResponse),
+            cancel: () => {
+                dispatch({
+                    keys: ['vue'],
+                    values: [{
+                        document: {},
+                        form: {},
+                        ...docView()
+                    }]
+                })
+            },
+            ...formView()
         },
-        callback: (formResponse: any) => updateNode(context, page, formResponse),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
     }
     dispatch({
         keys: ['vue'],

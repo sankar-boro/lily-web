@@ -7,11 +7,31 @@ export const setActivePage = (context: BookContextType, page: Page) => {
         apiData,
         compareId: page.uniqueId
     });
-    let vue = { vue: 'DOCUMENT'}
+    let vue = { 
+        document: {},
+        form: {},
+        ...docView()
+    }
     dispatch({
         keys: ['activePage', 'vue'],
         values: [newActivePage, vue]
     })
+}
+
+const formView = () => {
+    return {
+        isForm: true,
+        isDoc: false,
+        isNull: false,
+    }
+}
+
+const docView = () => {
+    return {
+        isForm: false,
+        isDoc: true,
+        isNull: false,
+    }
 }
 
 export const setActiveSection = (context: BookContextType, section: Section) => {
@@ -20,7 +40,11 @@ export const setActiveSection = (context: BookContextType, section: Section) => 
         apiData,
         compareId: section.uniqueId
     });
-    let vue = { vue: 'DOCUMENT'}
+    let vue = { 
+        document: {},
+        form: {},
+        ...docView()
+    }
     dispatch({
         keys: ['activePage', 'vue'],
         values: [newActivePage, vue]

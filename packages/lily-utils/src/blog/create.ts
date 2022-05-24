@@ -66,8 +66,10 @@ const updateRawData = async (
     let newRawData = __rawData;
     newRawData.push(newResData);
     let newApiData = sortBlog(newRawData, []);
-    let vue: vue = {
-        viewType: "DOCUMENT",
+    let vue = {
+        document: {},
+        form: {},
+        ...docView(),
     }
     dispatch({
         keys: ['rawData', 'apiData', 'vue'],
@@ -79,6 +81,14 @@ const formView = () => {
     return {
         isForm: true,
         isDoc: false,
+        isNull: false,
+    }
+}
+
+const docView = () => {
+    return {
+        isForm: false,
+        isDoc: true,
         isNull: false,
     }
 }
@@ -99,7 +109,11 @@ export const createNewBlogForm = (dispatch: any) => {
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
-                    values: [{viewType: 'DOCUMENT'}]
+                    values: [{
+                        document: {},
+                        form: {},
+                        ...docView()
+                    }]
                 })
             }
         },
@@ -137,27 +151,29 @@ export const createNewNodeBlog = (context: BlogContextType, givenode: any) => {
         topUniqueId,
         botUniqueId
     }
-    let vue: vue = {
-        viewType: 'FORM',
-        document: { type: null },
+    let vue = {
+        document: {},
         form: {
-            method: HTTP_METHODS.CREATE,
-            create: 'Create New Node',
-            update: '', 
-            data: newFormData
-        },
-        callback: (
-            formResponse: {
-                title: string, 
-                body: string
+            formTitle: 'Create New Node',
+            data: newFormData,
+            callback: (
+                formResponse: {
+                    title: string, 
+                    body: string
+                }
+            ) => updateRawData(context, newFormData, formResponse),
+            cancel: () => {
+                dispatch({
+                    keys: ['vue'],
+                    values: [{
+                        document: {},
+                        form: {},
+                        ...docView()
+                    }]
+                })
             }
-        ) => updateRawData(context, newFormData, formResponse),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
+        },
+        ...formView()
     }
     dispatch({
         keys: ['vue'],

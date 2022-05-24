@@ -22,7 +22,7 @@ export default null;
 export const GET_BLOG_ALL = `${http}/blogs`;
 export const CREATE_NEW_BLOG = `${http}/blog/create`;
 export const UPDATE_BLOG = `${http}/blog/update`;
-export const DELETE_BLOG = (deleteId: string) => `${http}/blog/delete/${deleteId}`;
+export const DELETE_BLOG_URL = (deleteId: string) => `${http}/blog/delete/${deleteId}`;
 
 export const GET_BLOG_FROM_ID = (bookId: string) => `${http}/blog/get/${bookId}`;
 export const DELETE_BLOG_NODE = `${http}/blognode/delete`;

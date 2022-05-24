@@ -24,7 +24,7 @@ const BlogsContainer = (props: any) => {
             <div>
                 {blogs
                     .map((blog: any) => {
-                        return <BlogCard blog={blog} key={blog.bookId} />;
+                        return <BlogCard blog={blog} key={blog.blogId} />;
                     })}
             </div>
         )

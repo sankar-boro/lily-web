@@ -26,7 +26,7 @@ const __pageChildIds = (page: Page): string[] => {
 	return deleteIds;
 }
 
-const TopBotId = () => {
+const getUpdateData = () => {
 	let topData: any = null;
 	let botData: any = null;
 	const final = () => {
@@ -39,9 +39,7 @@ const TopBotId = () => {
 		return null;
 	}
 	return {
-		page: (apiData: ApiData, activePage: Page) => {
-			if (!activePage) return null;
-			const { uniqueId: deletePageId } = activePage;
+		page: (apiData: ApiData, deletePageId: string) => {
 			topData = apiData[0];
 			for (let i = 1; i < apiData.length; i++) {
 				if (apiData[i].uniqueId === deletePageId) {
@@ -55,6 +53,10 @@ const TopBotId = () => {
 			return final();
 		},
 		section: (apiData: ApiData, activePage: Page) => {
+			/**
+			 * For section delete we do not loop through sub-sections.
+			 * 
+			 */
 			if (!activePage) return null;
 			const { uniqueId: deleteSectionId } = activePage;
 			let break_ = false;
@@ -77,9 +79,12 @@ const TopBotId = () => {
 			return final();
 		},
 		subSection: (section: Section, deleteSubSectionId: string) => {
-			topData = section;
+			topData = section; // init topUniqueId
 			const subSections = section.child;
 			for (let i = 0; i < subSections.length; i++) {
+				/** 
+				 * If current subSectionId is deleteId, check if next subSection exist.
+				 */
 				if (subSections[i].uniqueId === deleteSubSectionId) {
 					if (subSections[i + 1]) {
 						botData = subSections[i + 1];
@@ -158,17 +163,18 @@ const DeletePage = async (
 	const { activePage, apiData, bookId, rawData, dispatch } = context;
 	if (!activePage || !apiData) return;
 	const deleteData: string[] = [activePage.uniqueId, ...__pageChildIds(activePage as Page)];
-	const updateData = TopBotId().page(apiData as ApiData, activePage as Page);
+	const updateData = getUpdateData().page(apiData as ApiData, activePage.uniqueId);
 	const deleteItems = rawData && rawData.filter((d: any) => deleteData.includes(d.uniqueId))
+	const callBack = async () => {
+		await updateOrDelete({updateData, deleteData}, bookId as string);
+		Run(context, deleteData, updateData);
+	}
 	dispatch({
 		keys: ['modal'],
 		values: [{
 			title: 'You are about to delete a Page that contains following Sections and Sub Sections.',
 			body: deleteItems,
-			delete: async () => {
-				await updateOrDelete({updateData, deleteData}, bookId as string);
-				Run(context, deleteData, updateData);
-			}
+			delete: callBack
 		}]
 	})
 }
@@ -180,39 +186,44 @@ const DeleteSection = async (
 	if (!activePage || !apiData) return;
 	const { uniqueId } = activePage;
 	const deleteData = [uniqueId, ...__sectionChildIds(activePage as Section)];
-	let updateData = TopBotId().section(apiData as ApiData, activePage as Page);
+	let updateData = getUpdateData().section(apiData as ApiData, activePage as Page);
 	const deleteItems = rawData && rawData.filter((d: any) => deleteData.includes(d.uniqueId))
+	const callBack = async () => {
+		await updateOrDelete({updateData, deleteData}, bookId as string);
+		Run(context, deleteData, updateData);
+	}
 	dispatch({
 		keys: ['modal'],
 		values: [{
 			title: 'You are about to delete a Section that contains following Sub Sections.',
 			body: deleteItems,
-			delete: async () => {
-				await updateOrDelete({updateData, deleteData}, bookId as string);
-				Run(context, deleteData, updateData);
-			}
+			delete: callBack
 		}]
 	})
 }
 
+
+
 const DeleteSubSection = async (
 	context: BookContextType,
-	uniqueId: string
+	node: any
 ) => {
 	const { activePage, bookId, dispatch, rawData } = context;
-	if (!uniqueId) return;
+	const { uniqueId } = node;
 	let deleteData = [uniqueId];
-	let updateData = TopBotId().subSection(activePage as Section, uniqueId);
 	const deleteItems = rawData && rawData.filter((d: any) => deleteData.includes(d.uniqueId))
+	const onDeleteSubSectionConfirm = async () => {
+		if (!uniqueId) return;
+		let updateData = getUpdateData().subSection(activePage as Section, uniqueId);
+		await updateOrDelete({updateData, deleteData}, bookId as string);
+		Run(context, deleteData, updateData);
+	}
 	dispatch({
 		keys: ['modal'],
 		values: [{
 			title: 'Are you sure you want to delete Section.',
 			body: deleteItems,
-			delete: async () => {
-				await updateOrDelete({updateData, deleteData}, bookId as string);
-				Run(context, deleteData, updateData);
-			}
+			delete: onDeleteSubSectionConfirm
 		}]
 	})
 }
@@ -246,6 +257,6 @@ export const Delete = async ({
 	} else if (identity === 105) {
 		await DeleteSection(context);
 	} else if (identity ===106) {
-		await DeleteSubSection(context, uniqueId);
+		await DeleteSubSection(context, data);
 	}
 }

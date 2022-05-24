@@ -259,13 +259,32 @@ const updateNode = async (context: BlogContextType, node: any, formResponse: any
         return page;
     });
     const newApiData = sortBlog(newRawData, []);
-    let vue: vue = {
-        viewType: "DOCUMENT"
+    let vue = {
+        document: {},
+        form: {},
+        ...docView()
     }
     dispatch({
         keys: ['rawData', 'apiData', 'vue'],
         values: [newRawData, newApiData, vue]
     })
+}
+
+
+const formView = () => {
+    return {
+        isForm: true,
+        isDoc: false,
+        isNull: false,
+    }
+}
+
+const docView = () => {
+    return {
+        isForm: false,
+        isDoc: true,
+        isNull: false,
+    }
 }
 
 export const editBlog = (context: BlogContextType, node: any) => {
@@ -276,22 +295,24 @@ export const editBlog = (context: BlogContextType, node: any) => {
         identity: node.identity
     }
 
-    let vue: vue = {
-        viewType: 'FORM',
-        document: {type: null},
+    let vue = {
+        document: {},
         form: {
-            method: HTTP_METHODS.UPDATE, 
-            create: '',
-            update: 'Update Page',
-            data: formData
+            formTitle: "Edit Blog",
+            data: formData,
+            callback: (formResponse: any) => updateNode(context, node, formResponse),
+            cancel: () => {
+                dispatch({
+                    keys: ['vue'],
+                    values: [{
+                        document: {},
+                        form: {},
+                        ...docView()
+                    }]
+                })
+            },
         },
-        callback: (formResponse: any) => updateNode(context, node, formResponse),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
+        ...formView()
     }
     dispatch({
         keys: ['vue'],

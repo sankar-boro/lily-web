@@ -72,21 +72,23 @@ export const createNewBookForm = (context: BookContextType) => {
         identity: 101
     }
     const newBookVueData = {
-        viewType: 'FORM',
         document: {},
         form: {
-            method: HTTP_METHODS.CREATE,
-            create: 'Create Cover Page',
-            identity: 101,
-            data: formData
+            formTitle: 'Create New Book Form',
+            data: formData,
+            callback: (formRes: {title: string, body: string}) => createBook(context, formData, formRes),
+            cancel: () => {
+                dispatch({
+                    keys: ['vue'],
+                    values: [{
+                        document: {},
+                        form: {},
+                        ...docView()
+                    }]
+                })
+            }
         },
-        callback: (formRes: {title: string, body: string}) => createBook(context, formData, formRes),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
+        ...formView()
     }
 
     dispatch({
@@ -161,8 +163,10 @@ const updateRawData = async (
         apiData: newApiData,
         compareId: activePage?.uniqueId
     });
-    let vue: vue = {
-        viewType: "DOCUMENT",
+    let vue = {
+        document: {},
+        form: {},
+        ...docView()
     }
     dispatch({
         keys: ['rawData', 'apiData', 'activePage', 'vue'],
@@ -203,21 +207,23 @@ export const createNewPage = (
     }
 
     const newBookVueData = {
-        viewType: 'FORM',
         document: {},
         form: {
-            method: HTTP_METHODS.CREATE,
-            create: 'Create New Page',
-            identity,
-            data: formData
+            formTitle: 'Create New Page',
+            data: formData,
+            callback: (formRes: {title: string, body: string}) => updateRawData(context, formData, formRes),
+            cancel: () => {
+                dispatch({
+                    keys: ['vue'],
+                    values: [{
+                        document: {},
+                        form: {},
+                        ...docView()
+                    }]
+                })
+            }
         },
-        callback: (formRes: {title: string, body: string}) => updateRawData(context, formData, formRes),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
+        ...formView(),
     }
 
     dispatch({
@@ -255,27 +261,29 @@ export const createNewSection = (context: BookContextType, page: Page, section: 
         topUniqueId,
         botUniqueId
     }
-    let vue: vue = {
-        viewType: 'FORM',
-        document: {type: null},
+    let vue = {
+        document: {},
         form: {
-            method: HTTP_METHODS.CREATE,
-            create: 'Create New Section',
-            update: '', 
-            data: newFormData
-        },
-        callback: (
-            formResponse: {
-                title: string, 
-                body: string
+            formTitle: 'Create New Section',
+            data: newFormData,
+            callback: (
+                formResponse: {
+                    title: string, 
+                    body: string
+                }
+            ) => updateRawData(context, newFormData, formResponse),
+            cancel: () => {
+                dispatch({
+                    keys: ['vue'],
+                    values: [{
+                        document: {},
+                        form: {},
+                        ...docView()
+                    }]
+                })
             }
-        ) => updateRawData(context, newFormData, formResponse),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
+        },
+        ...formView(),
     }
     dispatch({
         keys: ['vue'],
@@ -283,20 +291,36 @@ export const createNewSection = (context: BookContextType, page: Page, section: 
     })
 }
 
-export const createSubSection = (context: BookContextType, subSection: SubSection | undefined) => {
+const formView = () => {
+    return {
+        isForm: true,
+        isDoc: false,
+        isNull: false,
+    }
+}
+
+const docView = () => {
+    return {
+        isForm: false,
+        isDoc: true,
+        isNull: false,
+    }
+}
+
+export const createSubSection = (context: BookContextType, node: SubSection | undefined) => {
     const { activePage, dispatch } = context;
     if (!activePage) return;
     const { child: subSections } = activePage as Section;
 
     let topUniqueId: any = null;
     let botUniqueId: any = null;
-    if (!subSection) {
+    if (!node) {
         topUniqueId = activePage.uniqueId;
         if (subSections.length > 0) {
             botUniqueId = subSections[0].uniqueId;
         }
-    } else if (subSection) {
-        topUniqueId = subSection.uniqueId;
+    } else if (node) {
+        topUniqueId = node.uniqueId;
         if (subSections.length > 0) {
             for (let i = 0; i < subSections.length; i++) {
                 if (subSections[i].uniqueId === topUniqueId && subSections[i + 1]) {
@@ -314,27 +338,29 @@ export const createSubSection = (context: BookContextType, subSection: SubSectio
         topUniqueId,
         botUniqueId
     }
-    let vue: vue = {
-        viewType: 'FORM',
-        document: {type: null},
+    let vue = {
+        document: {},
         form: {
-            method: HTTP_METHODS.CREATE,
-            create: 'Create New Sub Section',
-            update: '', 
-            data: newFormData
-        },
-        callback: (
-            formResponse: {
-                title: string, 
-                body: string
+            formTitle: 'Create Sub Section',
+            data: newFormData,
+            callback: (
+                formResponse: {
+                    title: string, 
+                    body: string
+                }
+            ) => updateRawData(context, newFormData, formResponse),
+            cancel: () => {
+                dispatch({
+                    keys: ['vue'],
+                    values: [{
+                        document: {},
+                        form: {},
+                        ...docView()
+                    }]
+                })
             }
-        ) => updateRawData(context, newFormData, formResponse),
-        cancel: () => {
-            dispatch({
-                keys: ['vue'],
-                values: [{viewType: 'DOCUMENT'}]
-            })
-        }
+        },
+        ...formView()
     }
     dispatch({
         keys: ['vue'],

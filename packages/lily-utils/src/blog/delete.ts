@@ -1,5 +1,5 @@
 import { Common, ApiData, RawData, BlogContextType } from "lily-types";
-import { DELETE_BLOG, updateOrDeleteNode, postNoDataQuery } from "lily-query";
+import { DELETE_BLOG_URL, updateOrDeleteNode, postNoDataQuery } from "lily-query";
 import { sortBlog } from "../utils";
 
 type Keys = string[];
@@ -81,31 +81,29 @@ const DeleteNode = async (
 	})
 }
 
-const DeleteBlog = async (context: BlogContextType, deleteId: string, history: any) => {
+const onConfirmDelete = async (context: any, deleteId: string, history: any) => {
+	const url = DELETE_BLOG_URL(deleteId);
+	await postNoDataQuery({url});
+	history.push("/");
+}
+
+const confirmDeleteBlog = async (context: BlogContextType, deleteId: string, history: any) => {
 	const { dispatch } = context;
 	dispatch({
 		keys: ['modal'],
 		values: [{
 			title: 'Are you sure you want to delete Blog.',
 			body: [],
-			delete: async () => {
-				const url = DELETE_BLOG(deleteId);
-				await postNoDataQuery({url});
-				history.push("/");
-			}
+			delete: onConfirmDelete(context, deleteId, history)
 		}]
 	})
 }
 
-export const deleteBlog = async ({
-	context,
-	data,
-	history
-}: any) => {
-	const { uniqueId, identity } = data;
+export const deleteBlog = async (context: BlogContextType, node: any, history: any) => {
+	const { uniqueId, identity } = node;
 	if (identity === 101) {
-		await DeleteBlog(context, uniqueId, history);
+		await confirmDeleteBlog(context, uniqueId, history);
 	} else if (identity === 102) {
-		await DeleteNode(context, data);
+		await DeleteNode(context, node);
 	}
 }

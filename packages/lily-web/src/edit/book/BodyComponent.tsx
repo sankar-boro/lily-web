@@ -34,31 +34,32 @@ const FormView = (props: any) => {
     return null;
 };
 
+const createMethods = (context: BookContextType, node: any, history: any) => {
+    return {
+        __delete: async () => {
+            await Delete(context,node,history)
+        },
+        __create: () => {
+            createSubSection(context, node)
+        },
+        __edit: () => {
+            editSubSection(context, node);
+        }
+    }
+}
 
 const SubSectionComponent = ({ subSection }: { subSection: SubSection}) => {
     const context: BookContextType = useBookContext();
     const history = useHistory();
+    const { __create, __delete, __edit} = createMethods(context, subSection, history);
 
-    const { uniqueId, identity} = subSection;
-    const __delete = async () => {
-        await Delete({
-            context,
-            data: { uniqueId, identity },
-            history
-        })
-    }
-    const __create = () => {
-        createSubSection(context, subSection)
-    }
     return <SubSectionViewContainer>
         <EditTitleContainer>
             <EditTitle>
                 <h3>{subSection.title}</h3>
             </EditTitle>
             <EditTitleIcons>
-                <span className="edit-click hover" onClick={() => {
-                    editSubSection(context, subSection)
-                }}>Edit</span>
+                <span className="edit-click hover" onClick={__edit}>Edit</span>
                 <span className="delete-click hover" onClick={__delete}>Delete</span>
             </EditTitleIcons>
         </EditTitleContainer>
@@ -83,11 +84,7 @@ const DeleteActivePageComponent = ({ context }: { context: BookContextType }) =>
     if (identity === 101) return null;
 
     const __delete = async () => {
-        await Delete({
-            context,
-            data: activePage,
-            history
-        })
+        await Delete(context,activePage,history)
     }
     return <span className="delete-click hover" onClick={__delete}>Delete</span>
 }
