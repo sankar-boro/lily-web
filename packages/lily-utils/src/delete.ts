@@ -244,11 +244,11 @@ const DeleteBook = async (context: BookContextType, deleteId: string, history: a
 	})
 }
 
-export const Delete = async ({
-	context,
-	data,
-	history
-}: DeleteParams) => {
+export const Delete = async (
+	context: BookContextType,
+	data: any,
+	history: any
+) => {
 	const { uniqueId, identity } = data;
 	if (identity === 101) {
 		await DeleteBook(context, uniqueId, history);

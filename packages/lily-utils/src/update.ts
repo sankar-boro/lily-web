@@ -1,8 +1,8 @@
-import { BOOK_SERVICE, Chapter, VUE } from "lily-types";
+import { Chapter, VUE } from "lily-types";
 import { sortAll, setActivePageFn } from "lily-utils";
 import { postQuery, UPDATE_BOOK, UPDATE_BOOK_NODE } from "lily-query";
-import { BookContextType, Section, vue, SubSection, Page, HTTP_METHODS } from "lily-types";
-
+import { BookContextType, Section, SubSection, Page } from "lily-types";
+import { formView, docView } from "./constants";
 
 export const updateData = (data: any, props: any) => {
     const {
@@ -98,9 +98,9 @@ export const updatePage = (context: any) => {
                     compareId: activePage.uniqueId
                 });
                 const vue = {
-                    viewType: "DOCUMENT",
                     document: {},
                     form: {},
+                    ...docView()
                 }
                 dispatch({
                     keys: ['rawData', 'apiData', 'activePage', 'notifications', 'formData', 'vue'],
@@ -275,22 +275,6 @@ const updateNode = async (context: BookContextType, page: Chapter | Page | Secti
         keys: ['rawData', 'apiData', 'activePage', 'vue'],
         values: [newRawData, newApiData, newActivePage, vue]
     })
-}
-
-const formView = () => {
-    return {
-        isForm: true,
-        isDoc: false,
-        isNull: false,
-    }
-}
-
-const docView = () => {
-    return {
-        isForm: false,
-        isDoc: true,
-        isNull: false,
-    }
 }
 
 export const editActivePage = (context: BookContextType, page: Chapter | Page | Section) => {

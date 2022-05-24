@@ -15,16 +15,16 @@ const initBookState = {
     activePage: null,
     dispatch: (data: any): void => {},
     vue: {
-        type: 'NONE',
-        document: {
-            type: null,
-        },
+        document: {},
         form: {
-            method: null,
+            formTitle: '',
             data: null,
-            url: null,
+            callback: (res: any) => {},
+            cancel: () => {}
         },
-        callback: (res: any) => {}
+        isForm: false,
+        isDoc: false,
+        isNull: true,
     },
     service: new BookHandler(),
     notifications: null,
@@ -45,17 +45,16 @@ export const BookContext = React.createContext<BookContextType>({
     error: '',
     dispatch: (data: any): void => {},
     vue: {
-        viewType: 'NONE',
-        document: {
-            type: null,
-        },
+        document: {},
         form: {
-            method: '',
+            formTitle: '',
             data: null,
-            create: '',
-            update: ''
+            callback: (res: any) => {},
+            cancel: () => {}
         },
-        callback: (res: any) => {}
+        isForm: false,
+        isDoc: false,
+        isNull: true,
     },
     modal: null,
     dispatcher: null,

@@ -1,7 +1,6 @@
-import { sortAll, setActivePageFn } from 'lily-utils';
+import { BlogContextType } from "lily-types";
 import { APPEND_BLOG_NODE, postQuery, MERGE_BLOG_NODE, CREATE_NEW_BLOG } from "lily-query";
-import { BlogContextType, HTTP_METHODS, vue } from "lily-types";
-
+import { formView, docView } from "../constants";
 import { sortBlog } from "./utils";
 
 const updateRawData = async (
@@ -75,22 +74,6 @@ const updateRawData = async (
         keys: ['rawData', 'apiData', 'vue'],
         values: [newRawData, newApiData, vue]
     })
-}
-
-const formView = () => {
-    return {
-        isForm: true,
-        isDoc: false,
-        isNull: false,
-    }
-}
-
-const docView = () => {
-    return {
-        isForm: false,
-        isDoc: true,
-        isNull: false,
-    }
 }
 
 // Don't you dare touch this
@@ -198,9 +181,9 @@ const createBlog = async (dispatch: any, formData: any, formResponse: { title: s
     let newRawData = [res.data];
     const newApiData = sortBlog(newRawData, []);
     const vue = {
-        viewType: "DOCUMENT",
         document: {},
         form: {},
+        ...docView()
     }
     dispatch({
         keys: ['rawData', 'apiData', 'vue', 'blogId'],

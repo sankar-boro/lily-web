@@ -1,9 +1,7 @@
-import { BLOG_SERVICE, Chapter, VUE } from "lily-types";
-import { sortAll, setActivePageFn } from "lily-utils";
-import { postQuery, UPDATE_BLOG, UPDATE_BLOG_NODE } from "lily-query";
-import { BlogContextType, Section, vue, SubSection, Page, HTTP_METHODS } from "lily-types";
 import { sortBlog } from "../utils";
-
+import { BlogContextType } from "lily-types";
+import { formView, docView } from "../constants";
+import { postQuery, UPDATE_BLOG, UPDATE_BLOG_NODE } from "lily-query";
 
 // export const updateData = (data: any, props: any) => {
 //     const {
@@ -268,23 +266,6 @@ const updateNode = async (context: BlogContextType, node: any, formResponse: any
         keys: ['rawData', 'apiData', 'vue'],
         values: [newRawData, newApiData, vue]
     })
-}
-
-
-const formView = () => {
-    return {
-        isForm: true,
-        isDoc: false,
-        isNull: false,
-    }
-}
-
-const docView = () => {
-    return {
-        isForm: false,
-        isDoc: true,
-        isNull: false,
-    }
 }
 
 export const editBlog = (context: BlogContextType, node: any) => {

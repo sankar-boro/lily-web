@@ -2,7 +2,6 @@ import { useBookContext } from "lily-service";
 import { Delete } from "lily-utils";
 import { editActivePage, editSubSection } from "lily-utils";
 import {
-    VUE,
     Section,
     SubSection,
     BookContextType,
@@ -14,13 +13,11 @@ import {
     DocumentViewContainer,
     EditTitle,
     EditTitleContainer,
-    EditContainer,
     EditTitleIcons,
     SubSectionsViewContainer,
     SubSectionViewContainer 
 } from "lily-web/components";
 import MarkdownPreview from '@uiw/react-md-editor';
-import { useState } from "react";
 import { useHistory } from "react-router";
 import { createSubSection } from "lily-utils";
 
@@ -28,7 +25,7 @@ const FormView = (props: any) => {
     const { vue } = props;
     const context: BookContextType = useBookContext();
 
-    if (vue.viewType === VUE.FORM) {
+    if (vue.isForm) {
         return <MarkDownForm context={context} />;
     }
     return null;
@@ -127,7 +124,6 @@ const SearchInputComponent = () => {
 }
 
 export const FormComponent = (vue: any) => {
-    console.log('vueee', vue);
     return (
         <BodyViewContainer>
             <SearchInputComponent />
@@ -150,7 +146,7 @@ const BodyComponent = () => {
     const context: BookContextType = useBookContext();
     const { activePage, vue } = context;
 
-    if (vue.viewType === VUE.FORM) return <FormComponent vue={vue} />
+    if (vue.isForm) return <FormComponent vue={vue} />
     if (!activePage) return null;
 
     return <BodyViewContainer>

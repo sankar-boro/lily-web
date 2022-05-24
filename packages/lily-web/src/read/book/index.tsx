@@ -3,8 +3,7 @@ import BodyComponent from "./BodyComponent";
 import NavigationComponent from "./NavigationComponent";
 import { BookHandler } from "lily-service/BookService";
 import { useBookContext, BookServiceProvider, FormServiceProvider, useHomeContext, useAuthContext } from "lily-service";
-import {  updatePage } from "lily-utils";
-import { AUTH_SERVICE, BookContextType, BOOK_SERVICE, HOME_SERVICE, VUE } from "lily-types";
+import { BookContextType, VUE } from "lily-types";
 import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
 import Divider from "./Divider";
 
@@ -69,7 +68,7 @@ const Main = () => {
         })
     }, [bookData, err]);
 
-    if (vue.viewType === VUE.NONE) return null;
+    if (vue.isNull) return null;
     if (!bookId || !context.activePage) return null;
     return <RenderComponent />;
 }

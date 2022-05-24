@@ -92,14 +92,14 @@ export const getFormType = (num: number) => {
     }
 }
 export type vue = {
-    viewType: string,
     document?: any,
     form?: {
-        method: string,
-        create: string,
-        update: string,
+        formTitle: string,
         data: any | null,
+        callback?: (res: any) => void,
+        cancel?: () => void,
     },
-    callback?: (res: any) => void,
-    cancel?: () => void,
+    isForm: boolean,
+    isDoc: boolean,
+    isNull: boolean,
 }

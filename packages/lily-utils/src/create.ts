@@ -1,6 +1,7 @@
 import { sortAll, setActivePageFn } from 'lily-utils';
 import { APPEND_BOOK_NODE, postQuery, MERGE_BOOK_NODE, CREATE_NEW_BOOK } from "lily-query";
-import { BookContextType, HTTP_METHODS, Page, Section, SubSection, vue } from "lily-types";
+import { BookContextType, Page, Section, SubSection } from "lily-types";
+import { formView, docView } from "./constants";
 
 const log = false;
 
@@ -52,9 +53,9 @@ const createBook = async (context: BookContextType, formData: any, formResponse:
         compareId: res.data.uniqueId
     });
     const vue = {
-        viewType: "DOCUMENT",
         document: {},
         form: {},
+        ...docView()
     }
     dispatch({
         keys: ['rawData', 'apiData', 'activePage', 'vue', 'bookId'],
@@ -289,22 +290,6 @@ export const createNewSection = (context: BookContextType, page: Page, section: 
         keys: ['vue'],
         values: [vue]
     })
-}
-
-const formView = () => {
-    return {
-        isForm: true,
-        isDoc: false,
-        isNull: false,
-    }
-}
-
-const docView = () => {
-    return {
-        isForm: false,
-        isDoc: true,
-        isNull: false,
-    }
 }
 
 export const createSubSection = (context: BookContextType, node: SubSection | undefined) => {
