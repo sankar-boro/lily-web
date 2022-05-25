@@ -14,7 +14,7 @@ export const DeleteComponent = () => {
         <div className="margin-top-50"/>
         <div>
             {modal.body && modal.body.map((body: any) => {
-                return <div style={{marginBottom: 10 }}>
+                return <div style={{marginBottom: 10 }} key={body.uniqueId}>
                     <h4>{body.title}</h4>
                     <div>{body.body}</div>
                 </div>

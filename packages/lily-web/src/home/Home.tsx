@@ -7,6 +7,7 @@ const BooksContainer = (props: any) => {
     if (books.length > 0) {
         return (
             <div>
+                <div>Books</div>
                 {books
                     .map((book: any) => {
                         return <Card book={book} key={book.bookId} />;
@@ -22,6 +23,7 @@ const BlogsContainer = (props: any) => {
     if (blogs.length > 0) {
         return (
             <div>
+                <div>Blogs</div>
                 {blogs
                     .map((blog: any) => {
                         return <BlogCard blog={blog} key={blog.blogId} />;

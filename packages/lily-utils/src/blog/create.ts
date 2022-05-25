@@ -1,35 +1,19 @@
 import { BlogContextType } from "lily-types";
 import { APPEND_BLOG_NODE, postQuery, MERGE_BLOG_NODE, CREATE_NEW_BLOG } from "lily-query";
-import { formView, docView, defaultDocView, defaultFormView } from "../constants";
+import { formView, defaultDocView } from "../constants";
 import { sortBlog } from "./utils";
 
-const updateRawData = async (
+const updateContextData = (
     context: BlogContextType, 
-    formData: {
-        identity: number,
-        topUniqueId: string | null,
-        botUniqueId: string | null,
-    }, 
-    formResponse: { 
-        title: string, 
-        body: string 
-    }
+    currentNode: any, 
+    formResponse: any,
+    res: any,
 ) => {
-    const { dispatch, rawData, blogId, activePage } = context;
+    const { dispatch, rawData, blogId, apiData } = context;
     const { title, body } = formResponse;
-    const { identity, topUniqueId, botUniqueId } = formData;
-    const data = {
-        blogId,
-        title,
-        body,
-        identity,
-        topUniqueId,
-        botUniqueId,
-    }
-    let res: any = await postQuery({
-        url: botUniqueId ? MERGE_BLOG_NODE : APPEND_BLOG_NODE,
-        data
-    });
+    const { topUniqueId, botUniqueId } = getUniqueIds(apiData, currentNode);
+    const { identity } = currentNode;
+
     const {
         uniqueId
     } = res.data;
@@ -41,14 +25,14 @@ const updateRawData = async (
     });
 
     if (topUniqueId && botUniqueId) {
-        __rawData = __rawData.map((__node: any) => {
-            if (__node.uniqueId === botUniqueId) {
+        __rawData = __rawData.map((node: any) => {
+            if (node.uniqueId === botUniqueId) {
                 return {
-                    ...__node,
+                    ...node,
                     parentId: uniqueId,
                 }
             }
-            return __node;
+            return node;
         })
     }
 
@@ -69,6 +53,34 @@ const updateRawData = async (
         keys: ['rawData', 'apiData', 'vue'],
         values: [newRawData, newApiData, defaultDocView]
     })
+}
+
+const updateRawData = async (
+    context: BlogContextType, 
+    currentNode: any, 
+    formResponse: any
+) => {
+    const { blogId, apiData } = context;
+    const { title, body } = formResponse;
+    const { identity } = currentNode;
+    const { topUniqueId, botUniqueId } = getUniqueIds(apiData, currentNode);
+    
+    const data = {
+        blogId,
+        title,
+        body,
+        identity,
+        topUniqueId,
+        botUniqueId,
+    }
+    let res: any = await postQuery({
+        url: botUniqueId ? MERGE_BLOG_NODE : APPEND_BLOG_NODE,
+        data
+    });
+
+    updateContextData(
+        context, currentNode, formResponse, res
+    );
 }
 
 // Don't you dare touch this
@@ -100,16 +112,12 @@ export const createNewBlogForm = (dispatch: any) => {
     })
 }
 
-
-export const createNewNodeBlog = (context: BlogContextType, givenode: any) => {
-    const { apiData, dispatch } = context;
-    if (!apiData) return;
+const getUniqueIds = (apiData: any, currentNode: any) => {
     let topUniqueId: any = null;
     let botUniqueId: any = null;
-
     topUniqueId = apiData[0].uniqueId;
     for (let i=0; i < apiData.length; i++) {
-        if (apiData[i].uniqueId === givenode.uniqueId) {
+        if (apiData[i].uniqueId === currentNode.uniqueId) {
             if (apiData[i + 1]) {
                 botUniqueId = apiData[i + 1].uniqueId;
             }
@@ -117,13 +125,19 @@ export const createNewNodeBlog = (context: BlogContextType, givenode: any) => {
         }
         topUniqueId = apiData[i].uniqueId;
     }
+    return {
+        topUniqueId,
+        botUniqueId
+    }
+}
+
+export const createNewNodeBlog = (context: BlogContextType, currentNode: any) => {
+    const { apiData, dispatch } = context;
+    if (!apiData) return;
 
     let newFormData = {
         title: '',
-        body: '',
-        identity: 102,
-        topUniqueId,
-        botUniqueId
+        body: ''
     }
     let vue = {
         document: {},
@@ -131,11 +145,8 @@ export const createNewNodeBlog = (context: BlogContextType, givenode: any) => {
             formTitle: 'Create New Node',
             data: newFormData,
             callback: (
-                formResponse: {
-                    title: string, 
-                    body: string
-                }
-            ) => updateRawData(context, newFormData, formResponse),
+                formResponse: any
+            ) => updateRawData(context, currentNode, formResponse),
             cancel: () => {
                 dispatch({
                     keys: ['vue'],
