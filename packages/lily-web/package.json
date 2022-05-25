@@ -5,7 +5,7 @@
   "author": "Sankar boro <sankar.boro@yahoo.com>",
   "license": "MIT",
   "dependencies": {
-    "@uiw/react-md-editor": "^3.9.4",
+    "@uiw/react-md-editor": "3.13.0",
     "draft-js": "^0.11.7",
     "lily-utils": "1.0.0",
     "lily-service": "1.0.0",

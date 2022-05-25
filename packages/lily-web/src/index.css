@@ -19,83 +19,11 @@ time, mark, audio, video, #root {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-    text-decoration: none;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-.required {
-    color: rgb(0, 130, 252);
-    font-size: 12px;
-}
-.form-label {
-    padding: 5px 0px 5px 0px;
-    font-size: 16px !important;
-}
-/* Reset css */
-
-/* Import fonts */
-@font-face {
-    font-family: "SSP-R";
-    src: local("SSP-R"),
-    url("./fonts/SourceSansPro-Regular.ttf") format("truetype");
 }
 
-@font-face {
-    font-family: "SSP-SB";
-    src: local("SSP-SB"),
-    url("./fonts/SourceSansPro-SemiBold.ttf") format("truetype");
-}
-
-@font-face {
-    font-family: "OS-L";
-    src: local("OS-L"),
-    url("./fonts/OpenSans-Light.ttf") format("truetype");
-}
-
-/* Works on Firefox */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: grey white;
-  }
-  
-/* Works on Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-    width: 12px;
-}
-  
-*::-webkit-scrollbar-track {
-    background: white;
-}
-  
-*::-webkit-scrollbar-thumb {
-    background-color: grey;
-    border-radius: 20px;
-    border: 3px solid white;
-}
-  
+/** 
+* @custom
+*/
 
 html, body, .home, .body {
     font-family: 'SSP-R', sans-serif;
@@ -303,6 +231,9 @@ input:focus, textarea:focus, select:focus {
     padding: 0px 10px;
     border-right: 0.1em solid #ccc;
 }
+.nav-section .link {
+    text-decoration: none;
+}
 
 /* Body */
 .body {
@@ -317,6 +248,8 @@ input:focus, textarea:focus, select:focus {
 }
 .card-title span {
     font-family: "SSP-SB";
+    font-weight: bold;
+    color:rgb(0, 81, 173);
 }
 
 /* Menu dropdown */

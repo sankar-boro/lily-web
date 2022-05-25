@@ -10,7 +10,7 @@ const boldText: ICommand = {
     execute: (state: TextState, api: TextAreaTextApi) => {
       let modifyText = `**${state.selectedText}**\n`;
       if (!state.selectedText) {
-        modifyText = `*bold text*`;
+        modifyText = `**bold text**`;
       }
       api.replaceSelection(modifyText);
     },

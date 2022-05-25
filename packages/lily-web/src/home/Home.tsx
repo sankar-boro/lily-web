@@ -7,7 +7,7 @@ const BooksContainer = (props: any) => {
     if (books.length > 0) {
         return (
             <div>
-                <div>Books</div>
+                <div style={{ borderBottom: "1px solid #ccc", padding: "0px 0px 10px 0px" }}>Books</div>
                 {books
                     .map((book: any) => {
                         return <Card book={book} key={book.bookId} />;
@@ -23,7 +23,7 @@ const BlogsContainer = (props: any) => {
     if (blogs.length > 0) {
         return (
             <div>
-                <div>Blogs</div>
+                <div style={{ borderBottom: "1px solid #ccc", padding: "0px 0px 10px 0px" }}>Blogs</div>
                 {blogs
                     .map((blog: any) => {
                         return <BlogCard blog={blog} key={blog.blogId} />;
@@ -37,7 +37,7 @@ const BlogsContainer = (props: any) => {
 const Home = () => {
     const { books, blogs } = useHomeContext();
     return (
-        <div className="container-sm">
+        <div className="container-sm" style={{ paddingTop: 20 }}>
             <BooksContainer books={books} />
             <div style={{marginBottom: 20}}/>
             <BlogsContainer blogs={blogs} />
