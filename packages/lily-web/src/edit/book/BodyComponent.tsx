@@ -32,6 +32,7 @@ const FormView = (props: any) => {
 };
 
 const createMethods = (context: BookContextType, node: any, history: any) => {
+    console.log(node);
     return {
         __delete: async () => {
             await Delete(context,node,history)

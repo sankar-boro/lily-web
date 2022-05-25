@@ -14,7 +14,7 @@ import {
     SubSectionViewContainer 
 } from "lily-web/components";
 import MarkdownPreview from '@uiw/react-md-editor';
-import { editBlog, deleteBlog, createNewNodeBlog } from "lily-utils";
+import { editBlog, DeleteBlog, createNewNodeBlog } from "lily-utils";
 import { useHistory } from "react-router";
 
 const FormView = (props: any) => {
@@ -37,7 +37,7 @@ const Title = (props: any) => {
 const createMethods = (context: BlogContextType, node: any, history: any) => {
     return {
         __delete: async () => {
-            await deleteBlog(context, node, history)
+            await DeleteBlog(context, node, history)
         },
         __create: () => {
             createNewNodeBlog(context, node)

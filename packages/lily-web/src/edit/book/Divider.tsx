@@ -19,11 +19,11 @@ const Divider = () => {
     }
 
     const deleteBook = async () => {
-        await Delete({
+        await Delete(
             context,
-            data: { uniqueId: bookId, identity: 101 },
+            { uniqueId: bookId, identity: 101 },
             history
-        })
+        )
     }
 
     return <DividerContainer>

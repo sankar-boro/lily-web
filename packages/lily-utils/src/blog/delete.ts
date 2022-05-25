@@ -81,25 +81,26 @@ const DeleteNode = async (
 	})
 }
 
-const onConfirmDelete = async (context: any, deleteId: string, history: any) => {
-	const url = DELETE_BLOG_URL(deleteId);
-	await postNoDataQuery({url});
-	history.push("/");
-}
 
 const confirmDeleteBlog = async (context: BlogContextType, deleteId: string, history: any) => {
 	const { dispatch } = context;
+	const onConfirmDelete = async () => {
+		const url = DELETE_BLOG_URL(deleteId);
+		await postNoDataQuery({url});
+		history.push("/");
+	}
+
 	dispatch({
 		keys: ['modal'],
 		values: [{
 			title: 'Are you sure you want to delete Blog.',
 			body: [],
-			delete: onConfirmDelete(context, deleteId, history)
+			delete: onConfirmDelete
 		}]
 	})
 }
 
-export const deleteBlog = async (context: BlogContextType, node: any, history: any) => {
+export const DeleteBlog = async (context: BlogContextType, node: any, history: any) => {
 	const { uniqueId, identity } = node;
 	if (identity === 101) {
 		await confirmDeleteBlog(context, uniqueId, history);
