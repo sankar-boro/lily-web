@@ -8,10 +8,12 @@ const BooksContainer = (props: any) => {
         return (
             <div>
                 <div style={{ borderBottom: "1px solid #ccc", padding: "0px 0px 10px 0px" }}>Books</div>
-                {books
-                    .map((book: any) => {
-                        return <Card book={book} key={book.bookId} />;
-                    })}
+                <div className="books-container">
+                    {books
+                        .map((book: any) => {
+                            return <Card book={book} key={book.bookId} />;
+                        })}
+                </div>
             </div>
         )
     }
@@ -24,10 +26,12 @@ const BlogsContainer = (props: any) => {
         return (
             <div>
                 <div style={{ borderBottom: "1px solid #ccc", padding: "0px 0px 10px 0px" }}>Blogs</div>
-                {blogs
-                    .map((blog: any) => {
-                        return <BlogCard blog={blog} key={blog.blogId} />;
-                    })}
+                <div className="blogs-container">
+                    {blogs
+                        .map((blog: any) => {
+                            return <BlogCard blog={blog} key={blog.blogId} />;
+                        })}
+                </div>
             </div>
         )
     }

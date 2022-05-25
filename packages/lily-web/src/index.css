@@ -400,6 +400,10 @@ input:focus, textarea:focus, select:focus {
     display: flex;
     flex-direction: row;
 }
+.books-container, .blogs-container {
+    display: flex;
+    flex-direction: row;
+}
 .navigation-container {
     height: 100%;
     width: 15%;
