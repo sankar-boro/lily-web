@@ -58,22 +58,28 @@ export default function FormComponent(props: any) {
             </div>
         </div>
         <div>
-            <button
-                type="submit"
-                name="Submit"
-                className="button"
-                onClick={__submit}
-                >
-                Submit
-            </button>
-            <button
-                type="button"
-                name="Submit"
-                className="button"
-                onClick={cancel}
-                >
-                Cancel
-            </button>
+            <div className="form-button">
+                <div className='div-button'>
+                    <button
+                        type="submit"
+                        name="Submit"
+                        className="button"
+                        onClick={__submit}
+                        >
+                        Submit
+                    </button>
+                </div>
+                <div className='div-button'>
+                    <button
+                        type="button"
+                        name="Submit"
+                        className="button"
+                        onClick={cancel}
+                        >
+                        Cancel
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 }

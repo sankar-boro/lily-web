@@ -1,5 +1,5 @@
 import { useHomeContext } from "lily-service";
-import { HomeContextType, HOME_SERVICE } from "lily-types";
+import { HomeContextType } from "lily-types";
 import { useHistory } from "react-router";
 
 const Card = (props: { blog: any }) => {

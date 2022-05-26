@@ -1,7 +1,6 @@
 import { useHomeContext } from "lily-service";
 import { HomeContextType } from "lily-types";
 import { useHistory } from "react-router";
-import MarkdownPreview from '@uiw/react-md-editor';
 
 const Card = (props: { book: any }) => {
     const history = useHistory();
@@ -26,7 +25,7 @@ const Card = (props: { book: any }) => {
             <div>
                 <div className="card-title hover"><span>{book.title}</span></div>
                 <div className="card-body hover">
-                    <MarkdownPreview.Markdown source={book.body.substr(0, 250)} />
+                    {book.body.substr(0, 250)}...
                 </div>
             </div>
         </div>

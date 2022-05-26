@@ -1,6 +1,7 @@
-import Card from "./Card";
+import BookCard from "./BookCard";
 import BlogCard from "./BlogCard";
 import { useHomeContext } from "lily-service";
+import { useEffect } from "react";
 
 const BooksContainer = (props: any) => {
     const { books } = props;
@@ -11,7 +12,7 @@ const BooksContainer = (props: any) => {
                 <div className="books-container">
                     {books
                         .map((book: any) => {
-                            return <Card book={book} key={book.bookId} />;
+                            return <BookCard book={book} key={book.bookId} />;
                         })}
                 </div>
             </div>
@@ -39,7 +40,13 @@ const BlogsContainer = (props: any) => {
 }
 
 const Home = () => {
-    const { books, blogs } = useHomeContext();
+    const { books, blogs, dispatch } = useHomeContext();
+    useEffect(() => {
+        dispatch({
+            keys: ['title'],
+            values: [null]
+        })
+    },[]);
     return (
         <div className="container-sm" style={{ paddingTop: 20 }}>
             <BooksContainer books={books} />

@@ -25,8 +25,23 @@ time, mark, audio, video, #root {
 * @custom
 */
 
+@font-face {
+    font-family: 'sourceSansProBold';
+    src: url('./fonts/SourceSansPro-Bold.ttf');
+}
+
+@font-face {
+    font-family: 'sourceSansProRegular';
+    src: url('./fonts/SourceSansPro-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'sourceSansProSemiBold';
+    src: url('./fonts/SourceSansPro-SemiBold.ttf');
+}
+
 html, body, .home, .body {
-    font-family: 'SSP-R', sans-serif;
+    font-family: 'sourceSansProRegular', sans-serif;
     height: 100%;
 }
 .home-page-container {
@@ -177,10 +192,31 @@ input:-webkit-autofill:active
 
 /* Button */
 .button {
-    padding: 5px 10px;
-    border: 1px solid #cccccc;
-    border-radius: 3px;
-    background-color: #f6f6f6;
+    background-color: #f8f9fa;
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    color: #3c4043;
+    cursor: pointer;
+    font-family: arial,sans-serif;
+    font-size: 14px;
+    height: 36px;
+    line-height: 27px;
+    min-width: 54px;
+    padding: 0 16px;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: pre;
+}
+.button:hover {
+    border-color: #dadce0;
+    box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
+    color: #202124;
+}
+.button:focus {
+    border-color: #4285f4;
+    outline: none;
 }
 .button-delete {
     background-color: red;
@@ -197,7 +233,13 @@ input:focus, textarea:focus, select:focus {
 .button:hover {
     cursor: pointer;
 }
-
+.form-button {
+    display: flex;
+    flex-direction: row;
+}
+.div-button {
+    margin-right: 10px;
+}
 /* Navigation */
 .navbar {
     position: fixed;
@@ -246,8 +288,13 @@ input:focus, textarea:focus, select:focus {
     padding: 5px 0px;
     margin-bottom: 10px;
 }
+.card-body {
+    color: #6b6b6b;
+    font-family: "sourceSansProRegular";
+}
 .card-title span {
-    font-family: "SSP-SB";
+    font-size: 19px;
+    font-family: "sourceSansProSemiBold";
     font-weight: bold;
     color:rgb(0, 81, 173);
 }
@@ -302,10 +349,10 @@ input:focus, textarea:focus, select:focus {
 .page-nav {
     line-height: 1.8em;
 }
-.description {
-    /* white-space: pre-wrap; */
+.description > * {
     font-size: 17px;
     line-height: 1.45em;
+    font-family: 'sourceSansProRegular' !important;
 }
 .divider-settings {
     margin-bottom: 20px;
@@ -529,7 +576,7 @@ input:focus, textarea:focus, select:focus {
     border: 1px solid red;
 }
 .book-title {
-    font-family: "SSP-SB";
+    font-family: "sourceSansProSemiBold";
     font-size: 4em;
     font-weight: bold;
 }
