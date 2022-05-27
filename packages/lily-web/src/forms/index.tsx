@@ -10,10 +10,12 @@ export default function FormComponent(props: any) {
     const { vue } = context;
     
     const { data, formTitle, callback, cancel } = vue.form;
+    const { titleValue, bodyValue, titleLabel, bodyLabel } = data;
+
     useEffect(() => {
-        setTitle(data.title);
-        setBody(data.body);
-    }, [data.title, data.body]);
+        setTitle(titleValue);
+        setBody(bodyValue);
+    }, [titleValue, bodyValue]);
 
     const __submit = () => {
         if (!title) {
@@ -34,7 +36,11 @@ export default function FormComponent(props: any) {
             <h1>{formTitle}</h1>
         </div>
         <div className="form-section">
-            <div className='form-label h4'>Title <span className='required'>required?</span></div>
+            <div className='form-label h4'>
+                { titleLabel ? titleLabel : 'Title'}
+                <span> </span>
+                <span className='required'>required?</span>
+            </div>
             <input
                 type="text"
                 placeholder="Title"
@@ -52,7 +58,11 @@ export default function FormComponent(props: any) {
             />
         </div>
         <div className="form-section">
-            <div className='form-label h4'>Body <span className='required'>required?</span></div>
+            <div className='form-label h4'>
+                { bodyLabel ? bodyLabel : 'Body'}
+                <span> </span>
+                <span className='required'>required?</span>
+            </div>
             <div>
                 <MarkDownForm body={body} setBody={setBody} setRequiredBody={setRequiredBody} requiredBody={requiredBody}/>
             </div>

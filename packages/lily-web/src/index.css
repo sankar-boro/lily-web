@@ -172,6 +172,7 @@ html, body, .home, .body {
 }
 .form-label {
     font-size: 14px;
+    padding: 10px 0px;
 }
 .group-form-input {
     margin-bottom: 10px;
@@ -290,7 +291,6 @@ input:focus, textarea:focus, select:focus {
 }
 .card-body {
     color: #6b6b6b;
-    font-family: "sourceSansProRegular";
 }
 .card-title span {
     font-size: 19px;
@@ -349,11 +349,11 @@ input:focus, textarea:focus, select:focus {
 .page-nav {
     line-height: 1.8em;
 }
-.description > * {
+/* .description > * {
     font-size: 17px;
     line-height: 1.45em;
     font-family: 'sourceSansProRegular' !important;
-}
+} */
 .divider-settings {
     margin-bottom: 20px;
 }
@@ -572,11 +572,13 @@ input:focus, textarea:focus, select:focus {
     font-size: 13px;
     color: rgb(0, 81, 173);
 }
-.required-imp {
-    border: 1px solid red;
+.required {
+    color: rgb(0, 81, 173);
 }
 .book-title {
     font-family: "sourceSansProSemiBold";
     font-size: 4em;
     font-weight: bold;
 }
+
+/* box-shadow: rgba(0, 0, 0, .1) 0 1px 1px; */

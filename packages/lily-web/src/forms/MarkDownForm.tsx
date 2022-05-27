@@ -78,12 +78,22 @@ export default function MarkDownForm(props: any) {
           commands.divider,
           codeText,
           commands.divider,
-          commands.group([commands.title4, commands.title5, commands.title6], {
-              name: 'h',
-              groupName: 'title',
-              buttonProps: { 'aria-label': 'Insert title'},
-              icon: (<img src={h3} alt="sidebar icon" className="sidebar__icon" />),
-          }),
+          commands.group(
+            [
+              commands.title1, 
+              commands.title2,
+              commands.title3,
+              commands.title4, 
+              commands.title5, 
+              commands.title6
+            ], 
+            {
+                name: 'h',
+                groupName: 'title',
+                buttonProps: { 'aria-label': 'Insert title'},
+                icon: (<img src={h3} alt="sidebar icon" className="sidebar__icon" />),
+            }
+          ),
         ]}
         height={500}
         className={`${requiredBody}`}

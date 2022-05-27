@@ -63,14 +63,16 @@ const createBook = async (context: BookContextType, formData: any, formResponse:
 export const createNewBookForm = (context: BookContextType) => {
     const { dispatch } = context;
     const formData = {
-        title: '',
-        body: '',
+        titleValue: '',
+        bodyValue: '',
+        titleLabel: 'Book name',
+        bodyLabel: 'Book description',
         identity: 101
     }
     const newBookVueData = {
         document: {},
         form: {
-            formTitle: 'Create New Book Form',
+            formTitle: 'Book',
             data: formData,
             callback: (formRes: {title: string, body: string}) => createBook(context, formData, formRes),
             cancel: () => {
@@ -183,6 +185,10 @@ export const createNewPage = (
         title: '',
         body: '',
         identity,
+        titleValue: '',
+        bodyValue: '',
+        titleLabel: 'Chapter name',
+        bodyLabel: 'Chapter description',
     }
 
     if (topUniqueId) {
@@ -196,7 +202,7 @@ export const createNewPage = (
     const newBookVueData = {
         document: {},
         form: {
-            formTitle: 'Create New Page',
+            formTitle: 'Chapter',
             data: formData,
             callback: (formRes: {title: string, body: string}) => updateRawData(context, formData, formRes),
             cancel: () => {
@@ -238,8 +244,10 @@ export const createNewSection = (context: BookContextType, page: Page, section: 
     }
 
     let newFormData = {
-        title: '',
-        body: '',
+        titleValue: '',
+        bodyValue: '',
+        titleLabel: 'Section name',
+        bodyLabel: 'Section description',
         identity: 105,
         topUniqueId,
         botUniqueId
@@ -247,7 +255,7 @@ export const createNewSection = (context: BookContextType, page: Page, section: 
     let vue = {
         document: {},
         form: {
-            formTitle: 'Create New Section',
+            formTitle: 'Section',
             data: newFormData,
             callback: (
                 formResponse: {
@@ -295,8 +303,10 @@ export const createSubSection = (context: BookContextType, node: SubSection | un
     }
 
     let newFormData = {
-        title: '',
-        body: '',
+        titleValue: '',
+        bodyValue: '',
+        titleLabel: 'Sub Section name',
+        bodyLabel: 'Sub Section description',
         identity: 106,
         topUniqueId,
         botUniqueId
@@ -304,7 +314,7 @@ export const createSubSection = (context: BookContextType, node: SubSection | un
     let vue = {
         document: {},
         form: {
-            formTitle: 'Create Sub Section',
+            formTitle: 'Sub Section',
             data: newFormData,
             callback: (
                 formResponse: {

@@ -86,14 +86,16 @@ const updateRawData = async (
 // Don't you dare touch this
 export const createNewBlogForm = (dispatch: any) => {
     const formData = {
-        title: '',
-        body: '',
+        titleValue: '',
+        bodyValue: '',
+        titleLabel: 'Blog title',
+        bodyLabel: 'Blog Introduction',
         identity: 101
     }
     const newBlogVueData = {
         document: {},
         form: {
-            formTitle: 'Create Cover Page',
+            formTitle: 'Blog',
             data: formData,
             callback: (formRes: {title: string, body: string}) => createBlog(dispatch, formData, formRes),
             cancel: () => {

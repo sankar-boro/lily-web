@@ -42,7 +42,7 @@ export const HomeServiceProvider = (props: { children: object }) => {
         <HomeContext.Provider
             value={{
                 ...state,
-                dispatch,
+                dispatch
             }}
         >
             {props.children}
