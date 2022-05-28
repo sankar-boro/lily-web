@@ -64,6 +64,12 @@ export const DocumentViewContainer = (props: any) => {
     </div>
 }
 
+export const ProfileViewContainer = (props: any) => {
+    return <div className="profile-view-container">
+        {props.children}
+    </div>
+}
+
 export const EditContainer = (props: any) => {
     const { deleteItem, deleteEvent, setDeleteItem } = props;
     const deleteButtons = () => {

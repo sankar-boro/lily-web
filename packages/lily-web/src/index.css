@@ -489,6 +489,12 @@ input:focus, textarea:focus, select:focus {
     margin-top: 20px;
     width: 100%;
 }
+.profile-view-container {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
 /* Modal */
 .modal {
     position: fixed;
