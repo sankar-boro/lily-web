@@ -1,7 +1,7 @@
 import BodyComponent from "./BodyComponent";
 import NavigationComponent from "./NavigationComponent";
 import { BlogContextType } from "lily-types";
-import { useBlogContext, BlogServiceProvider } from 'lily-service';
+import { useBlogContext, BlogServiceProvider, useAuthContext } from 'lily-service';
 import { DeleteComponent } from "./ModalComponents";
 import { BodyContainer, MainContainer, NavigationContainer } from "lily-web/components";
 import Divider from "./Divider";
@@ -38,6 +38,8 @@ const Main = () => {
 }
 
 export default function EditComponent(){
+    const { authUserData } = useAuthContext();
+    if (!authUserData) return "You need to be the owner";
     return <BlogServiceProvider>
         <Main />
     </BlogServiceProvider>

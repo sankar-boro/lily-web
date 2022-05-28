@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { createNewBookForm } from 'lily-utils';
 import { BookContextType, VUE } from "lily-types";
 import { BookHandler } from "lily-service/BookService";
-import { useBookContext, BookServiceProvider } from 'lily-service';
+import { useBookContext, BookServiceProvider, useAuthContext } from 'lily-service';
 
 import Divider from "./Divider";
 import BodyComponent from "./BodyComponent";
@@ -72,6 +72,9 @@ const Main = () => {
 }
 
 export default function EditComponent(){
+    const { authUserData } = useAuthContext();
+    if (!authUserData) return "You need to be the owner";
+    
     return <BookServiceProvider>
         <Main />
     </BookServiceProvider>
