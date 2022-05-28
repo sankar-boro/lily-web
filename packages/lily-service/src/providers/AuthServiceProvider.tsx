@@ -1,9 +1,10 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import { AuthContextType } from "lily-types";
 import { LOGIN, SIGNUP, postQuery, postAxios } from 'lily-query';
 import { setters } from './ProvidersCommon';
+import { useHistory } from "react-router";
 
-const __login = async (props: any, dispatch: any) => {
+const __login = async (props: any, authenticate: any, notifyError: any) => {
     const {email, password} = props;
     await postAxios({
         url: LOGIN,
@@ -13,35 +14,19 @@ const __login = async (props: any, dispatch: any) => {
         }
     })
     .then((res: any) => {
-        if (res && res.status === 200) {
-            localStorage.setItem('auth', res.data);
-            dispatch({
-                keys: ['auth', 'authUserData', 'error'],
-                values: ['true', res.data, null]
-            })
-        }
+        authenticate(res);
     }).catch((err: any) => {
-        dispatch({
-            keys: ['error'],
-            values: [err.message]
-        })
+        notifyError(err);
     })
 }
 
-const __signup = (props: any, dispatch: any) => {
+const __signup = (props: any, authenticate: any, notifyError: any) => {
     postQuery({ url: SIGNUP, data: props })
     .then((res: any) => {
-        localStorage.setItem('auth', res.data);
-        dispatch({
-            keys: ['auth', 'authUserData', 'error'],
-            values: ['true', res.data, null]
-        })
+        authenticate(res);
     })
     .catch((err: any) => {
-        dispatch({
-            type: 'error',
-            data: err.message,
-        })
+        notifyError(err);
     })
 }
 const initAuthState: AuthContextType = {
@@ -64,13 +49,52 @@ const AuthContext = React.createContext<AuthContextType>({
 
 export const useAuthContext = () => useContext(AuthContext);
 
+const authenticate = (res: any, dispatch: any, history: any) => {
+    if (res && res.status === 200) {
+        localStorage.setItem('auth', JSON.stringify(res.data));
+        dispatch({
+            keys: ['auth', 'authUserData', 'error'],
+            values: ['true', res.data, null]
+        })
+        history.push("/");
+    }
+}
+
+const notifyError = (err: any, dispatch: any, history: any) => {
+    dispatch({
+        keys: ['error'],
+        values: [err.message]
+    })
+}
+
+const useAuthenticate = (dispatch: any) => {
+    useEffect(() => {
+        const authUserData = localStorage.getItem('auth');
+        if (authUserData) {
+            dispatch({
+                keys: ['auth', 'authUserData', 'error'],
+                values: ['true', JSON.parse(authUserData), null]
+            })
+        }
+    }, []);
+}
+
 export const AuthServiceProvider = (props: { children: object }) => {
     const [state, dispatch] = useReducer(setters, initAuthState);
-    const login = (props: any) => {
-        __login(props, dispatch)
+    const  history = useHistory();
+    useAuthenticate(dispatch);
+
+    const __authenticate = (res: any) => {
+        authenticate(res, dispatch, history);
+    }
+    const __notifyError = (res: any) => {
+        notifyError(res, dispatch, history);
+    }
+    const login = (props: any) => {        
+        __login(props, __authenticate, __notifyError)
     }
     const signup = (props: any) => {
-        __signup(props, dispatch);
+        __signup(props, __authenticate, __notifyError);
     }
 
     return (

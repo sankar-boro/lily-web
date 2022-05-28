@@ -18,9 +18,47 @@ const logout = (cleanUpLocalStorage: any) => {
     });
 };
 
+const userInfo = (authUserData: any) => {
+    if (!authUserData) return {
+        routeName: "/login",
+        routeValue: "Login"
+    };
+    if (authUserData) {
+        return {
+            routeName: "/profile",
+            routeValue: `${authUserData?.fname} ${authUserData?.lname}`
+        }
+    }
+    return {
+        routeName: "",
+        routeValue: ""
+    }
+}
+
+const LoginComponent = (props: any) => {
+    const { authUserData, callBack } = props;
+    if (!authUserData) {
+        return null;
+    }
+    if (authUserData) {
+        return (
+            <div className="nav-section">
+                <div
+                    className="link hover"
+                    onClick={() => {logout(callBack)}}
+                >
+                    Logout
+                </div>
+            </div>
+        );
+    }
+    return null;
+}
+
 const Header = () => {
     const { title } = useHomeContext();
     const { authUserData, dispatch } = useAuthContext();
+    const { routeName, routeValue } = userInfo(authUserData);
 
     const cleanUpUi = () => {
         localStorage.removeItem('auth');
@@ -30,6 +68,7 @@ const Header = () => {
             values: ['false', null]
         })
     }
+
     return (
         <div className="navbar navbar-top">
             <div className="navbar-top-left">
@@ -55,18 +94,11 @@ const Header = () => {
                     </div>
                 </div>
                 <div className="nav-section">
-                    <Link to="/profile" className="link">
-                        {authUserData?.fname} {authUserData?.lname}
+                    <Link to={routeName} className="link">
+                        {routeValue}
                     </Link>
                 </div>
-                <div className="nav-section">
-                    <div
-                        className="link hover"
-                        onClick={() => {logout(cleanUpUi)}}
-                    >
-                        Logout
-                    </div>
-                </div>
+                <LoginComponent authUserData={authUserData} callBack={cleanUpUi} />
             </div>
         </div>
     );
