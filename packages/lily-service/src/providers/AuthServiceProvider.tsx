@@ -3,6 +3,7 @@ import { AuthContextType } from "lily-types";
 import { LOGIN, SIGNUP, postQuery, postAxios } from 'lily-query';
 import { setters } from './ProvidersCommon';
 import { useHistory } from "react-router";
+import { useAuthQuery } from "lily-utils";
 
 const __login = async (props: any, authenticate: any, notifyError: any) => {
     const {email, password} = props;
@@ -69,13 +70,7 @@ const notifyError = (err: any, dispatch: any, history: any) => {
 
 const useAuthenticate = (dispatch: any) => {
     useEffect(() => {
-        const authUserData = localStorage.getItem('auth');
-        if (authUserData) {
-            dispatch({
-                keys: ['auth', 'authUserData', 'error'],
-                values: ['true', JSON.parse(authUserData), null]
-            })
-        }
+        useAuthQuery(dispatch);
     }, []);
 }
 

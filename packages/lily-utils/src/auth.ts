@@ -1,8 +1,7 @@
 import { AuthContextType } from "lily-types";
 import { callAxios, USER_SESSION } from "lily-query";
 
-export const useAuthQuery = (context: AuthContextType) => {
-    const { dispatch } = context;
+export const useAuthQuery = (dispatch: any) => {
 
     const callBack = (res: any) => {
         let auth = 'false'; 

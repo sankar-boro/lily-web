@@ -39,7 +39,7 @@ const Main = () => {
 
 export default function EditComponent(){
     const { authUserData } = useAuthContext();
-    if (!authUserData) return "You need to be the owner";
+    if (!authUserData) return <div>You need to be the owner</div>;
     return <BlogServiceProvider>
         <Main />
     </BlogServiceProvider>
