@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { useAuthContext, useHomeContext } from "lily-service";
 import { LOGOUT, postQuery } from "lily-query";
+import { useState } from "react";
+import searchSvg from './search.svg';
 
 const logout = (cleanUpLocalStorage: any) => {
     postQuery({ url: LOGOUT, data: {} })
@@ -59,6 +61,7 @@ const Header = () => {
     const { title } = useHomeContext();
     const { authUserData, dispatch } = useAuthContext();
     const { routeName, routeValue } = userInfo(authUserData);
+    const [ search, setSearch ] = useState('');
 
     const cleanUpUi = () => {
         localStorage.removeItem('auth');
@@ -77,7 +80,20 @@ const Header = () => {
                         Lily
                     </Link>
                 </div>
-                <div className="nav-section hover">Search</div>
+                <div className="nav-section hover">
+                    <img src={searchSvg} alt="search icon" className="search__icon" />
+                    <input 
+                        type="text" 
+                        name="search"
+                        className="search__input"
+                        value={search} 
+                        placeholder="Search"
+                        onChange={(e) => {
+                            e.preventDefault();
+                            setSearch(e.target.value);
+                        }}
+                    />
+                </div>
             </div>
             <div className="navbar-top-center" style={{ fontSize: "1.5em"}}>
                 {title}

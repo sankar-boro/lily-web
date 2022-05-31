@@ -586,5 +586,9 @@ input:focus, textarea:focus, select:focus {
     font-size: 4em;
     font-weight: bold;
 }
-
 /* box-shadow: rgba(0, 0, 0, .1) 0 1px 1px; */
+
+.search__input {
+    border: none;
+    margin-left: 5px;
+}
