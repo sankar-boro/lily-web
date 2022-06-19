@@ -6,6 +6,9 @@ export enum HOME_SERVICE {
 export type HomeContextType = {
     books: any[],
     book?: null | RawData,
+    vue: {
+        isRead: boolean,
+    },
     dispatch: (data: any) => void,
 }
 export type HomeActionType = DefaultActionType;

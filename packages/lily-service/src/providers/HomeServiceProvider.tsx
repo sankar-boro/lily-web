@@ -8,13 +8,18 @@ export type HomeState = {
     books: Node[],
     blogs: Node[],
     title: null | string,
+    vue: {
+        isRead: boolean,
+    },
     dispatch: (data: any) => void,
 };
 
 export const HomeContext = React.createContext<HomeState>({
     books: [],
     blogs: [],
-    title: null,
+    title: null,vue: {
+        isRead: false,
+    },
     dispatch: (data: any): void => {}
 });
 
@@ -22,6 +27,9 @@ const homeState: HomeState = {
     books: [],
     blogs: [],
     title: null,
+    vue: {
+        isRead: false,
+    },
     dispatch: (data: any) => {}
 }
 
