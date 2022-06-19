@@ -279,9 +279,9 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* Body */
-.body {
+/* .body {
     margin-top: 32px;
-}
+} */
 .card {
     width: 23%;
 }

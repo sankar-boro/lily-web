@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
-import { useAuthContext, useBookContext } from "lily-service";
-import { BookContextType, Section, SubSection } from "lily-types";
+import { useAuthContext, useBookContext, useHomeContext } from "lily-service";
+import { BookContextType, HomeContextType, Section, SubSection } from "lily-types";
 import { DividerContainer } from "../../components"
 
 const AuthUserSettings = (props: any) => {
@@ -11,10 +11,23 @@ const AuthUserSettings = (props: any) => {
     return null;
 }
 
+const contextHandler = (context: HomeContextType) => {
+    const { dispatch, vue } = context;
+    return {
+        onClickRead: () => {
+            dispatch({
+                keys: ['vue'],
+                values: [{isRead: !vue.isRead}]
+            })
+        }
+    }
+}
+
 const Divider = () => {
     const history = useHistory();
     const { bookId, activePage }: BookContextType = useBookContext();
     const { authUserData } = useAuthContext();
+    const {onClickRead} = contextHandler(useHomeContext());
     if (!activePage) return <DividerContainer />;
     const section = activePage as Section;
     const { identity, child: subSections } = section;
@@ -35,6 +48,7 @@ const Divider = () => {
         <div className="divider-settings">
             <div className="hover settings-item" onClick={onClickBack}>&#x2190;</div>
             <AuthUserSettings onClickEdit={onClickEdit} authUserData={authUserData} />
+            <div className="hover settings-item" onClick={onClickRead}>Read</div>
         </div>
         <div className="divider-content">
             {identity === 105 && subSections.map((x: SubSection, subSectionIndex: number) => {

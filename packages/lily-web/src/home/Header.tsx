@@ -58,10 +58,12 @@ const LoginComponent = (props: any) => {
 }
 
 const Header = () => {
-    const { title } = useHomeContext();
+    const { title, vue } = useHomeContext();
     const { authUserData, dispatch } = useAuthContext();
     const { routeName, routeValue } = userInfo(authUserData);
     const [ search, setSearch ] = useState('');
+    
+    if (vue.isRead) return null;
 
     const cleanUpUi = () => {
         localStorage.removeItem('auth');

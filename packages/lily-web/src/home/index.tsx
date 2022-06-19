@@ -6,7 +6,7 @@ import Profile from "../profile";
 import EditBlog from "../edit/blog";
 import EditBook from "../edit/book";
 import Home from "./Home";
-import { HomeServiceProvider, useAuthContext } from "lily-service";
+import { HomeServiceProvider, useAuthContext, HomeContext } from "lily-service";
 import Login from "../auth/Login";
 import Signup from "../auth/Signup";
 
@@ -15,9 +15,11 @@ const Main = () => {
     console.log(auth);
     return (
         <HomeServiceProvider>
+            <HomeContext.Consumer>
+            {({ vue }) => (
                 <div className="home">
                     <Header />
-                    <div className="body">
+                    <div className="body" style={{ marginTop: vue.isRead ? 0 : 36 }}>
                         <Switch>
                             <Route path="/book/view/:bookId">
                                 <ViewBook />
@@ -52,6 +54,8 @@ const Main = () => {
                         </Switch>
                     </div>
                 </div>
+            )}
+            </HomeContext.Consumer>
         </HomeServiceProvider>
     );
 };
